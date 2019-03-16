@@ -1,5 +1,6 @@
 pg_config = {
 
+
     'user' : 'whitestoneadmin',
 
     'passwd' : 'capstone',
