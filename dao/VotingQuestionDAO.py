@@ -25,7 +25,7 @@ class VotingQuestionDAO:
         return result
 
 
-    def getVotingResults(self, vID):
+    def getVotingResultsByvID(self, vID):
         # Return the alternatives and their votes obtained
         cursor = self.conn.cursor()
         query = "SELECT choice, COUNT(*)" \

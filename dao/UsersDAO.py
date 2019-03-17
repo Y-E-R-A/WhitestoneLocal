@@ -50,12 +50,12 @@ class UsersDAO:
 
 
 
-    def insert(self,credentialID, ufisrtname, ulastname, udescription, urole, uclassification):
+    def insert(self,credentialID, ufirstname, ulastname, udescription, urole, uclassification):
         # Insert a new User and return its uID
         cursor = self.conn.cursor()
         query= "INSERT into Users(id, ufirstname, ulastname, udescription, urole, uclassification) " \
                "values(%s, %s, %s, %s, %s, %s);"
-        cursor.execute(query, (credentialID, ufisrtname, ulastname, udescription, urole, uclassification,))
+        cursor.execute(query, (credentialID, ufirstname, ulastname, udescription, urole, uclassification,))
         uID = cursor.fetchone()[0]
         self.conn.commit()
         return uID

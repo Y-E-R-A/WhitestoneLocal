@@ -29,7 +29,7 @@ class CredentialDAO:
     def getCredentialById(self, cid):
 
         cursor = self.conn.cursor()
-        query = "SELECT * from Credential WHERE cid = %s;"
+        query = "SELECT * FROM Credential WHERE cid = %s;"
         cursor.execute(query, (cid,))
         result = []
         for row in cursor:
