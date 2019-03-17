@@ -1,0 +1,25 @@
+--MAIN TABLES:
+
+Create Table Credential(ID serial primary key, email varchar(50), localpassword varchar(20));
+
+Create Table Users(uID serial primary key, ID integer references Credential(ID), ufirstname varchar(20), ulastname varchar(20), udescription varchar(150), urole varchar(50), uclassification varchar(50));
+
+Create Table ActivityLog(logID serial primary key, uID integer references Users(uID), logcreation timestamp, logmessage varchar(100));
+
+Create Table Meeting(mid serial primary key, creatorID integer references Users(uID), mdate varchar(15), mtime varchar(10),  mdescription varchar(200), mstatus mvarchar(10));
+
+Create Table VotingQuestion(vID serial primary key, creatorID integer references Users(uID),  mID integer references Meeting(mID), vdescription varchar(100),vdate varchar(20), vtime varchar(10), vquestion varchar(200), selectionlimit varchar(4), vstatus varchar(10));
+
+Create Table VotingChoice(altID serial primary key, vID integer references VotingQuestion(vID), choice varchar(200));
+
+Create Table Audio(aID serial primary key, uID integer references Users(uID),  mID integer references Meeting(mID), aname varchar(50), aaddress varchar(100), atype varchar(5));
+
+
+--RELATIONAL TABLES:
+
+
+Create Table VoteIn(uID integer references Users(uID), vID integer references VotingQuestion(vID), primary key (uID, vID));
+
+Create Table ParticipatesIn(uID integer references Users(uID), mID integer references Meeting(mID), primary key (uID, mID));
+
+Create Table Choose(uID integer references Users(uID), altID integer references VotingChoice(altID), primary key (uID, altID));
