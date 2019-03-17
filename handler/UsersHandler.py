@@ -4,12 +4,9 @@ from dao.UsersDAO import UsersDAO
 
 class UsersHandler:
 
-    # User dictionary
-
     def mapToUserInfoDict(self, row):
         # User info dictionary
         result = {}
-
         result['uid'] = row[0]
         result['cid'] = row[1]
         result['firstname'] = row[2]
@@ -19,7 +16,6 @@ class UsersHandler:
         result['classification'] = row[6]
         result['email'] = row[7]
         result['localpassword'] = row[8]
-
         return result
 
     def mapToUserNamesDict(self, row):
