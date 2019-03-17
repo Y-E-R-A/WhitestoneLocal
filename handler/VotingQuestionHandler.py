@@ -4,18 +4,18 @@ from dao.VotingQuestionDAO import VotingQuestionDAO
 
 class VotingQuestionsHandler:
 
-    def builtVotingQuestionDict(self, row):
+    def builtVotingQuestionDict(self, vID, creatorID, mID, vdescription, vdate, vtime, vquestion, selectionlimit, vstatus):
         # Voting Info dictionary
         result = {}
-        result['vID'] = row[0]
-        result['creatorID'] = row[1]
-        result['mID'] = row[2]
-        result['vdescription'] = row[3]
-        result['vdate'] = row[4]
-        result['vtime'] = row[5]
-        result['vquestion'] = row[6]
-        result['selectionlimit'] = row[7]
-        result['vtatus'] = row[8]
+        result['vID'] = vID
+        result['creatorID'] = creatorID
+        result['mID'] = mID
+        result['vdescription'] = vdescription
+        result['vdate'] = vdate
+        result['vtime'] = vtime
+        result['vquestion'] = vquestion
+        result['selectionlimit'] = selectionlimit
+        result['vtatus'] = vstatus
         return result
 
     def mapToVotingQuestionDict(self, row):
@@ -39,14 +39,13 @@ class VotingQuestionsHandler:
 
     def getVotingQuestionByID(self, vID):
         result = VotingQuestionDAO.getVotingQuestionByID(vID)
-        mapped_result = []
 
         if not result:
             return jsonify(Error="NOT FOUND"), 404
 
         else:
-            mapped_result.append(self.mapToVotingQuestionDict(0))
-            return jsonify(Voting=mapped_result)
+            mapped_result= self.mapToVotingQuestionDict(result)
+            return jsonify(Voting= mapped_result)
 
 
     def getVotingResultsByvID(self, vID):
@@ -65,3 +64,25 @@ class VotingQuestionsHandler:
             return jsonify(VotingResult=mapped_result)
 
 
+
+    def insertCredentialsJSON(self, json):
+
+        creatorID = json.get('creatorID')
+        mID = json.get('mID')
+        vdescription = json.get('vdescription')
+        vdate = json.get('vdate')
+        vtime = json.get('vtime')
+        vquestion = json.get('vquestion')
+        selectionlimit = json.get('selectionlimit')
+        vstatus = json.get('vstatus')
+
+
+        if creatorID and mID and vdate and vtime and vquestion and selectionlimit and vstatus:
+
+            vID = VotingQuestionDAO().insert(creatorID, mID, vdescription, vdate, vtime, vquestion, selectionlimit, vstatus)
+            mapped_result = self.builtVotingQuestionDict(vID, creatorID, mID, vdescription, vdate, vtime, vquestion, selectionlimit, vstatus)
+            return jsonify(Voting=mapped_result), 201
+
+        else:
+
+            return jsonify(Error="Unexpected attributes in post request"), 404

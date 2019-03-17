@@ -39,7 +39,7 @@ class UsersHandler:
 
 
     def getAllUserNames(self):
-        #
+
         result = UsersDAO.getAllUserNames()
         mapped_result = []
 
@@ -55,7 +55,7 @@ class UsersHandler:
 
 
     def getUserbyEmail(self, email):
-        #
+
         result = UsersDAO.getUserbyEmail(email)
         mapped_result = []
 
@@ -70,7 +70,7 @@ class UsersHandler:
 
 
     def getUserByFullName(self, firstname, lastname):
-        #
+
         result = UsersDAO.getUserByFullName(firstname, lastname)
         mapped_result = []
 
