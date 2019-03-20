@@ -1,5 +1,5 @@
 from flask import jsonify, request
-from dao.UsersDAO import UsersDAO
+from dao.usersDAO import UsersDAO
 
 
 class UsersHandler:
@@ -38,7 +38,7 @@ class UsersHandler:
         return result
 
 
-    def getAllUserNames(self):
+    def getAllUsersNames(self):
 
         result = UsersDAO.getAllUserNames()
         mapped_result = []
