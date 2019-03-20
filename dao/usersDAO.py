@@ -1,8 +1,6 @@
 from configs.dbconfig import pg_config
 import psycopg2
 
-
-
 class UsersDAO:
 
     def __init__(self):
@@ -14,6 +12,7 @@ class UsersDAO:
 
     def getAllUserNames(self):
         # Return a list of all registered users.
+
         cursor = self.conn.cursor()
         query = "SELECT ufirstname, ulastname" \
                 "FROM Users;"

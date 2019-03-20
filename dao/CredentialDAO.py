@@ -14,8 +14,6 @@ class CredentialDAO:
         self.conn = psycopg2._connect(connection_url)
 
 
-
-
     def getAllCredentials(self):
         cursor = self.conn.cursor()
         query = "SELECT * FROM Credential;"
