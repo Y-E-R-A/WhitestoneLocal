@@ -16,9 +16,20 @@ class UsersDAO:
         # Return the user information corresponding to an email.
         cursor = self.conn.cursor()
         query = "SELECT ufirstname, ulastname, udescription, urole, uclassification, email, localpassword " \
-                "FROM Users natural inner join Credential" \
+                "FROM Users natural inner join Credential " \
                 "WHERE email= %s;"
         cursor.execute(query, (email,))
+        result = cursor.fetchone()
+        return result
+
+
+    def getUserByuID(self, uID):
+        # Return the user information corresponding to a uID.
+        cursor = self.conn.cursor()
+        query = "SELECT ufirstname, ulastname, udescription, urole, uclassification, email, localpassword " \
+                "FROM Users natural inner join Credential " \
+                "WHERE uID= %s;"
+        cursor.execute(query, (uID,))
         result = cursor.fetchone()
         return result
 
@@ -35,6 +46,77 @@ class UsersDAO:
 
         return result
 
+    def getAllSenators(self):
+        # Return all users that have urole= senators including the chancellor (senator too)
+
+        cursor = self.conn.cursor()
+        query = "SELECT uid " \
+                "FROM Users " \
+                "WHERE urole= 'Senator' " \
+                "OR urole= 'Chancellor'; "
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+
+        return result
+
+    def getAllElectSenators(self):
+        # Return all users that have are classified as elect senators
+
+        cursor = self.conn.cursor()
+        query = "SELECT uid " \
+                "FROM Users " \
+                "WHERE uclassification= 'Elect Senator';"
+
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+
+        return result
+
+    def getAllElectStudentSenators(self):
+        # Return all users that are classified as elect student senators
+        cursor = self.conn.cursor()
+        query = "SELECT uid " \
+                "FROM Users " \
+                "WHERE uclassification= 'Elect Student Senator';"
+
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+
+        return result
+
+    def getAllExOfficioSenators(self):
+        # Return all users that are classified as Ex-Officio senators
+        cursor = self.conn.cursor()
+        query = "SELECT uid " \
+                "FROM Users " \
+                "WHERE uclassification= 'Ex-Officio Senator';"
+
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+
+        return result
+
+    def getAllExOfficioStudentSenators(self):
+        # Return all users that are classified as Ex-Officio student senators
+        cursor = self.conn.cursor()
+        query = "SELECT uid " \
+                "FROM Users " \
+                "WHERE uclassification= 'Ex-Officio Student Senator';"
+
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+
+        return result
 
 
     def insert(self,credentialID, ufirstname, ulastname, udescription, urole, uclassification):
@@ -48,7 +130,7 @@ class UsersDAO:
         return uID
 
 
-    def update(self, uID, ufirstname, ulastname, udescription, urole, uclassification):
+    def update(self, uID,  ufirstname, ulastname, udescription, urole, uclassification):
         # Update user information using the uid
         cursor = self.conn.cursor()
         query= "UPDATE Users "\

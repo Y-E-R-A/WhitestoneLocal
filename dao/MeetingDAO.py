@@ -37,6 +37,15 @@ class MeetingDAO:
             result.append(row)
         return result
 
+    def updateMeetingStatus(self, mID, mstatus):
+        # Modify the meeting status (Active or Inactive)
+        cursor = self.conn.cursor()
+        query = "UPDATE Meeting " \
+                "SET mstatus = %s " \
+                "WHERE mID = %s"
+        cursor.execute(query, (mstatus, mID, ))
+        self.conn.commit()
+
 
     def insert(self, creatorID, mdate, mtime, mdescription, mstatus):
         # Insert a new meeting session in the table Meeting

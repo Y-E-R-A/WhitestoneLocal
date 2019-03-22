@@ -54,6 +54,16 @@ class VotingQuestionDAO:
         return result
 
 
+    def updateVotingStatus(self, vID, vstatus):
+        # Modify the voting status (Active or Inactive)
+        cursor = self.conn.cursor()
+        query = "UPDATE VotingQuestion " \
+                "SET vstatus = %s " \
+                "WHERE vID = %s"
+        cursor.execute(query, (vstatus, vID,))
+        self.conn.commit()
+
+
     def insert(self, creatorID, mID, vdescription, vdate, vtime, vquestion, selectionlimit, vstatus):
         # Insert new voting question and return its vID
         cursor = self.conn.cursor()
