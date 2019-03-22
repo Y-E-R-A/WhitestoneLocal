@@ -1,0 +1,53 @@
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<body ng-app="">
+<table bgcolor="#FFFFFF">
+    <tbody>
+        <tr>
+            <th><label> <b>Name:  </b></label><input ng-model="createUserCtrl.meeting_name" placeholder="Enter Meeting Name"></th>
+        </tr>
+        <tr>
+            <th><label> <b>Last:  </b></label><input ng-model="createUserCtrl.meeting_desc" placeholder="Enter Meeting_description" ></th>
+        </tr>
+        <tr>
+            <th><label> <b>About:  </b></label><input ng-model="createUserCtrl.meeting_month" placeholder= "MM" ></th>
+        </tr>
+        <tr>
+            <th><label> <b>UPR email:  </b></label><input ng-model="createUserCtrl.meeting_date" placeholder="DD"></th>
+        </tr>
+        <tr>
+            
+            <th><label> <b>Select The User Role:  </b></label><br>
+
+                <input type="radio" ng-model="role" value="Senator">Senator
+                <br>
+                <input type="radio" ng-model="role" value="Chancellor">Chancellor
+                <br>
+                <input type="radio" ng-model="role" value="Secretary">Secretary
+                <br>
+                <input type="radio" ng-model="role" value="Administrator">Administrator
+
+            </th>
+        </tr>
+        <tr>
+            <th><label> <b>Select The User Classification:  </b></label><br>
+
+                <input type="radio" ng-model="title" value="Ex-Officio Student">Ex-Officio Student
+                <br>
+                <input type="radio" ng-model="title" value="Elect Student">Elect Student
+                <br>
+                <input type="radio" ng-model="title" value="Elect">Elect
+                <br>
+                <input type="radio" ng-model="title" value="Ex-Officio">Ex-Officio
+                <br>
+                <input type="radio" ng-model="title" value="Staff">Staff
+
+            </th>
+        </tr>
+        <tr>
+            <th>
+            <button type="submit" name="action" ng-click="createUserCtrl.createNewUser()">Create</button> 
+        </th>
+        </tr>
+    </tbody>
+</table>
+</body>

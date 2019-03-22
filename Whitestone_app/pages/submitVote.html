@@ -1,0 +1,70 @@
+<head>
+        <title>Bootstrap Example</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+      </head>
+<div ng-app="myapp" ng-controller="submitVoteSenController">
+<div class="container">
+  
+    <div class="row">
+      <div class="col-sm-4"  style="background-color:rgba(246, 245, 250, 1);color:black;padding:20px 20px 20px 20px">
+          
+      </div>
+
+      <div class="col-sm-4">
+            <table>
+                <tbody>
+                    <tr>                                     
+                        <th> 
+                            {{submitVoteSenCtrl.votingquestion[0].voting_question}}
+
+                        </th>
+                    </tr>
+                    <tr>                                     
+                        <th> 
+                            {{submitVoteSenCtrl.votingquestion[0].Voting_desc}}
+                                
+                        </th>
+                    </tr>
+                    <tr>                                     
+                        <th> 
+                            {{submitVoteSenCtrl.votingquestion[0].voting_question}}                                    
+                        </th>
+                    </tr>    
+                    <tr>                                     
+                        <th> 
+                            <div ng-repeat="choices in submitVoteSenCtrl.newChoiceList">
+                                <input 
+                                      type="checkbox" 
+                                      name="mycheckbox" 
+                                      ng-model= "choices.checked"
+                                      ng-click="checkChoice(choice.alt)"
+                                      ng-disabled="submitVoteSenCtrl.count >= submitVoteSenCtrl.Limit && choice.checked"
+                                      ng-value='choice.alt'
+                                                    ng-checked='choice.checked'/>  
+                                                {{choice.alt}}
+                            </div>
+                        </th>
+                    </tr>
+                    <tr>                                     
+                        <th> 
+                            <button class="btn btn-primary" style="padding:1px 10px;border-radius: 5px;" ng-click="submitVoteSenCtrl.checkSubmit()">Submit</button>
+                        </th>
+                    </tr>
+
+                </tbody>
+            </table>
+                
+      </div>
+      
+      <div class="col-sm-4" style="background-color:rgba(246, 245, 250, 1);color:black;padding:20px 20px 20px 20px">
+        
+      </div>
+    </div>
+  </div>
+  
+  </body>
+  </div>

@@ -1,0 +1,49 @@
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="text-center">
+  <h1>Whitestone</h1>
+</div>
+  
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+    </div>
+    <div class="col-sm-4">
+	<table>
+                  <tbody>
+                            <tr>                                     
+                               
+                            <th> 
+                                <label> <b>Username </b></label>
+                                <input ng-model="loginCtrl.user" placeholder="Enter email"></th>
+                            </tr>
+                            <tr>
+                                                          
+                            <th>
+                                <label> <b>Password </b></label>
+                                <input ng-model="loginCtrl.password" placeholder="Enter Password"></th>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                <br>
+                                <button class="btn btn-primary btn-block" type="submit" name="action" ng-click="loginCtrl.loginUser()">Login</button> 
+                            </th>
+                            </tr>
+                        </tbody>
+                    </table>
+    </div>
+    <div class="col-sm-4">
+    </div>
+  </div>
+</div>
+
+</body>
+
