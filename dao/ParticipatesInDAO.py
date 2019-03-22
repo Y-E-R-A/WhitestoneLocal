@@ -27,5 +27,9 @@ class ParticipatesInDAO:
                 "FROM ParticipatesIn natural inner join Users natural inner join Credential " \
                 "WHERE ParticipatesIn.mID = %s;"
         cursor.execute(query, (mID,))
-        self.conn.commit()
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
 

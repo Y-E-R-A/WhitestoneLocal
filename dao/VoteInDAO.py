@@ -16,10 +16,13 @@ class VoteInDAO:
         cursor = self.conn.cursor()
         query = "SELECT uID, ufirstname, ulastname, email " \
                 "FROM VoteIn natural inner join Users natural inner join Credential " \
-                "WHERE VoteIn.vID = %s;"
+                "WHERE VoteIn.vID = %s ;"
         cursor.execute(query, (vID,))
-        self.conn.commit()
+        result = []
+        for row in cursor:
+            result.append(row)
 
+        return result
 
     def insert(self, uid, vid):
         #Insert the uid of the person who is permitted to vote in a voting with  a specific vID
