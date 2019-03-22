@@ -21,6 +21,7 @@ class VoteInHandler:
 
 
     def getVotingParticipants(self, vID):
+        print(vID)
         result = VoteInDAO().getVotingParticipants(vID)
         mapped_result = []
 
