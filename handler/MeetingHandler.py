@@ -59,6 +59,28 @@ class MeetingHandler:
 
 
 
+    def updateMeetingStatus(self, form):
+
+        if not MeetingHandler().getActiveMeeting():
+            return jsonify(Error="Meeting not found."), 404
+        else:
+            if len(form) != 6:
+                return jsonify(Error="Malformed update request"), 400
+            else:
+
+                mID = form['mID']
+                creatorID= form['creatorID']
+                mdate = form['mdate']
+                mtime = form['mtime']
+                mdescription = form['mdescription']
+                mstatus = form['mstatus']
+
+                if mID and creatorID and mdate and mtime and mdescription and mstatus:
+                    MeetingDAO().updateMeetingStatus(mID, mstatus)
+                    result = self.buildMeetingDict(mID, creatorID, mdate, mtime, mdescription, mstatus)
+                    return jsonify(Meeting=result), 201
+                else:
+                    return jsonify(Error="Unexpected attributes in update request"), 400
 
 
     def insertCredentialsJSON(self,json):

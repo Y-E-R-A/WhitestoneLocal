@@ -78,6 +78,32 @@ class VotingQuestionHandler:
             return jsonify(VotingResult=mapped_result)
 
 
+    def updateVotingStatus(self, vID, form):
+
+        if not VotingQuestionHandler().getVotingQuestionByID(vID):
+            return jsonify(Error="Voting not found."), 404
+        else:
+            if len(form) != 8:
+                return jsonify(Error="Malformed update request"), 400
+            else:
+
+                vID= form['vID']
+                creatorID= form['creatorID']
+                mID = form['mID']
+                vdescription= form['vdescription']
+                vdate = form['vdate']
+                vtime= form['vtime']
+                vquestion = form['vquestion']
+                selectionlimit= form['selectionlimit']
+                vstatus= form['vtatus']
+
+                if vstatus:
+                    VotingQuestionHandler.updateVotingStatus(vID, vstatus)
+                    result = self.builtVotingQuestionDict(vID, creatorID,mID, vdescription, vdate, vtime, vquestion, selectionlimit, vstatus)
+                    return jsonify(Voting=result), 201
+                else:
+                    return jsonify(Error="Unexpected attributes in update request"), 400
+
 
     def insertCredentialsJSON(self, json):
 

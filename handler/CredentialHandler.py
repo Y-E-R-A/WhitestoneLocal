@@ -1,5 +1,6 @@
 from flask import jsonify, request
 from dao.CredentialDAO import CredentialDAO
+from dao.UsersDAO import UsersDAO
 
 
 class CredentialHandler:
@@ -50,14 +51,17 @@ class CredentialHandler:
         email = json.get('email')
         localpassword = json.get('localpassword')
 
-        if email and localpassword:
-
-            ID = CredentialDAO().insert(email, localpassword)
-            mapped_result = self.buildCredentialDict(ID,email, localpassword)
-            return jsonify(Credential = mapped_result), 201
-
+        if UsersDAO().getUserbyEmail(email):
+            return jsonify(Error="Email already registered"),
         else:
-            return jsonify(Error="Unexpected attributes in post request"), 404
+            if email and localpassword:
+
+                ID = CredentialDAO().insert(email, localpassword)
+                mapped_result = self.buildCredentialDict(ID,email, localpassword)
+                return jsonify(Credential = mapped_result), 201
+
+            else:
+                return jsonify(Error="Unexpected attributes in post request"), 404
 
     def updateCredential(self, ID, form):
         credential = CredentialDAO.getCredentialById(ID)
