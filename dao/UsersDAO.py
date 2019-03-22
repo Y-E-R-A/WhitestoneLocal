@@ -10,17 +10,6 @@ class UsersDAO:
                                                             pg_config['passwd'])
         self.conn = psycopg2._connect(connection_url)
 
-    def getAllUserNames(self):
-        # Return a list of all registered users.
-
-        cursor = self.conn.cursor()
-        query = "SELECT ufirstname, ulastname" \
-                "FROM Users;"
-        cursor.execute(query)
-        result = []
-        for row in cursor:
-            result.append(row)
-        return result
 
 
     def getUserbyEmail(self, email):
@@ -34,13 +23,12 @@ class UsersDAO:
         return result
 
 
-    def getUserByFullName(self, ufirstname, ulastname):
+    def getAllUsersInfo(self):
         # Return a list of all registered users with an specific name and lastname.
         cursor = self.conn.cursor()
-        query= "SELECT ufirstname, ulastname, udescription, urole, uclassification, email, localpassword " \
-               "FROM Users natural inner join Credential" \
-               "WHERE ufirstname= %s and ulastname= %s;"
-        cursor.execute(query, (ufirstname, ulastname,))
+        query= "SELECT uid, id, ufirstname, ulastname, udescription, urole, uclassification, email, localpassword " \
+               "FROM Users natural inner join Credential"
+        cursor.execute(query)
         result = []
         for row in cursor:
             result.append(row)
@@ -63,8 +51,8 @@ class UsersDAO:
     def update(self, uID, ufirstname, ulastname, udescription, urole, uclassification):
         # Update user information using the uid
         cursor = self.conn.cursor()
-        query= "UPDATE Users"\
-               "SET ufirstname= %s, ulastname= %s, udescription= %s, urole= %s, uclassification= %s"\
+        query= "UPDATE Users "\
+               "SET ufirstname= %s, ulastname= %s, udescription= %s, urole= %s, uclassification= %s "\
                "WHERE uID= %s; "
         cursor.execute(query,(ufirstname, ulastname, udescription, urole, uclassification,uID,))
         self.conn.commit()

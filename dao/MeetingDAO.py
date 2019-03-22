@@ -1,4 +1,4 @@
-from configs.dbconfig import pq_config
+from configs.dbconfig import pg_config
 import psycopg2
 
 class MeetingDAO:
@@ -17,8 +17,20 @@ class MeetingDAO:
         # Return all the old or inactive meeting information
         cursor = self.conn.cursor()
         query = " SELECT * " \
-                "FROM Meeting" \
+                "FROM Meeting " \
                 "WHERE mstatus = 'Inactive';"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getActiveMeeting(self):
+        # Return all the old or inactive meeting information
+        cursor = self.conn.cursor()
+        query = " SELECT * " \
+                "FROM Meeting " \
+                "WHERE mstatus = 'Active';"
         cursor.execute(query)
         result = []
         for row in cursor:
@@ -29,7 +41,7 @@ class MeetingDAO:
     def insert(self, creatorID, mdate, mtime, mdescription, mstatus):
         # Insert a new meeting session in the table Meeting
         cursor = self.conn.cursor()
-        query = "INSERT INTO Meeting(creatorID, mdate, mtime. mdescription, mstatus)" \
+        query = "INSERT INTO Meeting(creatorID, mdate, mtime. mdescription, mstatus) " \
             "VALUES (%s, %s, %s, %s, %s, %s);"
         cursor.execute(query, (creatorID, mdate, mtime, mdescription, mstatus,))
         mid = cursor.fetchone()[0]

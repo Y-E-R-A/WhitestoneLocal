@@ -16,7 +16,7 @@ class ChooseDAO:
     def insert(self, uid, altid):
         #Insert the uid of the person who selected a voting alternative with altid
         cursor = self.conn.cursor()
-        query = "INSERT INTO Choose(uid, altid)" \
+        query = "INSERT INTO Choose(uid, altid) " \
                 "VALUES (%s, %s);"
         cursor.execute(query, (uid, altid,))
         self.conn.commit()

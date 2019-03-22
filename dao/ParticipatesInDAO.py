@@ -16,7 +16,16 @@ class ParticipatesInDAO:
     def insert(self, uid,  mid):
         #Insert the uid of the person who logged into a meeting with the specified mid
         cursor = self.conn.cursor()
-        query = "INSERT INTO VoteIn(uid, mid)" \
+        query = "INSERT INTO VoteIn(uid, mid) " \
                 "VALUES (%s, %s);"
         cursor.execute(query, (uid, mid,))
         self.conn.commit()
+
+    def getMeetingParticipants(self, mID):
+        cursor = self.conn.cursor()
+        query = "SELECT uID, ufirstname, ulastname, email " \
+                "FROM ParticipatesIn natural inner join Users natural inner join Credential " \
+                "WHERE ParticipatesIn.mID = %s;"
+        cursor.execute(query, (mID,))
+        self.conn.commit()
+

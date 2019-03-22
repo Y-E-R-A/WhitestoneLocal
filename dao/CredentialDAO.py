@@ -16,7 +16,7 @@ class CredentialDAO:
 
     def getAllCredentials(self):
         cursor = self.conn.cursor()
-        query = "SELECT * FROM Credential;"
+        query = "SELECT email, localpassword FROM Credential;"
         cursor.execute(query)
         result = []
         for row in cursor:
@@ -24,11 +24,11 @@ class CredentialDAO:
         return result
 
 
-    def getCredentialById(self, cid):
+    def getCredentialByEmail(self, email):
 
         cursor = self.conn.cursor()
-        query = "SELECT * FROM Credential WHERE cid = %s;"
-        cursor.execute(query, (cid,))
+        query = "SELECT * FROM Credential WHERE email = %s;"
+        cursor.execute(query, (email,))
         result = []
         for row in cursor:
             result.append(row)
@@ -38,7 +38,7 @@ class CredentialDAO:
     def insert(self, email, localpassword):
         # Insert new user's credentials
         cursor = self.conn.cursor()
-        query = " INSERT INTO Credential(email, localpassword)" \
+        query = " INSERT INTO Credential(email, localpassword) " \
                 "VALUES (%s, %s);"
         cursor.execute(query, (email, localpassword,))
         cID= cursor.fetchone()[0]
@@ -50,7 +50,7 @@ class CredentialDAO:
         # Update email and local password which belongs to cID
         cursor = self.conn.cursor()
         query = "UPDATE Credential" \
-                "SET email= %s, localpassword = %s" \
+                "SET email= %s, localpassword = %s " \
                 "WHERE cID = %s;"
         cursor.execute(query, (email, localpassword, cID,))
         self.conn.commit()

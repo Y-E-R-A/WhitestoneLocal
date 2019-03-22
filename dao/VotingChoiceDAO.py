@@ -1,4 +1,4 @@
-from configs.dbconfig import pq_config
+from configs.dbconfig import pg_config
 import psycopg2
 
 class VotingChoiceDAO:
@@ -16,10 +16,10 @@ class VotingChoiceDAO:
     def getVotingChoiceByVID(self, vID):
         # Return all the alternatives of a voting question with certain vID
         cursor = self.conn.cursor()
-        query = "SELECT choice" \
-                "FROM VotingQuestion inner join VotingChoice" \
-                "ON VotingQuestion.vID = VotingChoice.vID" \
-                "WHERE VotingQuetion.vID = %s;"
+        query = "SELECT altid, choice " \
+                "FROM VotingQuestion inner join VotingChoice " \
+                "ON VotingQuestion.vID = VotingChoice.vID " \
+                "WHERE VotingQuestion.vID = %s;"
         cursor.execute(query, (vID,))
         result= []
         for row in cursor:

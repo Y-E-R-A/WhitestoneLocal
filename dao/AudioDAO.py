@@ -1,4 +1,4 @@
-from configs.dbconfig import pq_config
+from configs.dbconfig import pg_config
 import psycopg2
 
 class AudioDAO:
@@ -18,8 +18,8 @@ class AudioDAO:
     def getAudioBymID(self, mID):
         #Get all the audio that belong to a meeting specified by mID
         cursor = self.conn.cursor()
-        query = "SELECT *" \
-                "FROM Audio" \
+        query = "SELECT * " \
+                "FROM Audio " \
                 "WHERE Audio.mID= %s;"
         cursor.execute(query, (mID,))
         result = []
@@ -32,7 +32,7 @@ class AudioDAO:
     def insert(self, uid, mid, aname, aaddress, atype):
         # Insert a new audio file to the Audio table to store its address and info
         cursor= self.conn.cursor()
-        query = "INSERT INTO Audio(uid, mid, aname, aaddress, atype)" \
+        query = "INSERT INTO Audio(uid, mid, aname, aaddress, atype) " \
                 "VALUES(%s, %s, %s, %s, %s)"
         cursor.execute(query, (uid, mid, aname, aaddress, atype,))
         aID= cursor.fetchone()[0]

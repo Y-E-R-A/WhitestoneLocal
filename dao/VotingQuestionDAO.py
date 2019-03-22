@@ -1,4 +1,4 @@
-from configs.dbconfig import pq_config
+from configs.dbconfig import pg_config
 import psycopg2
 
 class VotingQuestionDAO:
@@ -17,21 +17,34 @@ class VotingQuestionDAO:
     def getVotingQuestionByID(self, vID):
         # Return the voting question with the corresponding vID
         cursor = self.conn.cursor()
-        query = "SELECT vquestion" \
-                "FROM VotingQuestion" \
+        query = "SELECT * " \
+                "FROM VotingQuestion " \
                 "WHERE vID = %s;"
         cursor.execute(query, (vID,))
         result = cursor.fetchone()
         return result
 
+    def getVotingQuestionBymID(self, mID):
+        # Return the voting question corresponding to a specific meeting ID
+        cursor = self.conn.cursor()
+        query = "SELECT * " \
+                "FROM VotingQuestion " \
+                "WHERE mID = %s " \
+                "and vstatus= 'Inactive';"
+        cursor.execute(query, (mID,))
+        result = cursor.fetchone()
+        return result
+
+
 
     def getVotingResultsByvID(self, vID):
         # Return the alternatives and their votes obtained
         cursor = self.conn.cursor()
-        query = "SELECT choice, COUNT(*)" \
+        query = "SELECT choice, COUNT(*) " \
                 "FROM(SELECT * FROM VotingChoice NATURAL INNER JOIN Choose) AS Results " \
-                "NATURAL INNER JOIN VotingQuestion" \
-                "WHERE VotingQuestion.vID= %s" \
+                "NATURAL INNER JOIN VotingQuestion " \
+                "WHERE VotingQuestion.vID= %s " \
+                "and vstatus = 'Inactive' " \
                 "GROUP BY choice " \
                 "ORDER BY choice DESC;"
         cursor.execute(query, (vID,))
@@ -44,7 +57,7 @@ class VotingQuestionDAO:
     def insert(self, creatorID, mID, vdescription, vdate, vtime, vquestion, selectionlimit, vstatus):
         # Insert new voting question and return its vID
         cursor = self.conn.cursor()
-        query = "INSERT INTO VotingQuestion(creatorID, mid, vdate, vtime, vdescription, vquestion, selectionlimit, vstatus)" \
+        query = "INSERT INTO VotingQuestion(creatorID, mid, vdate, vtime, vdescription, vquestion, selectionlimit, vstatus) " \
                 "VALUES (%s, %s, %s, %s, %s, %s, %s, %s);"
         cursor.execute(query, (creatorID, mID, vdescription, vdate, vtime, vquestion, selectionlimit, vstatus,))
         vID= cursor.fetchone()[0]

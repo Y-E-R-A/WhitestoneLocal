@@ -1,4 +1,4 @@
-from configs.dbconfig import pq_config
+from configs.dbconfig import pg_config
 import psycopg2
 
 class ActivityLogDAO:
@@ -16,8 +16,8 @@ class ActivityLogDAO:
     def getActivityLogByDate(self, date):
         # Return all the activities that occurs in certain date
         cursor = self.conn.cursor()
-        query = "SELECT logcreation, ufirstname, ulastname, logmessage" \
-                "FROM ActivityLog NATURAL INNER JOIN User" \
+        query = "SELECT logcreation, ufirstname, ulastname, logmessage " \
+                "FROM ActivityLog NATURAL INNER JOIN User " \
                 "WHERE ActivityLog.logcreation = %s;"
         cursor.execute(query, (date,))
         result = []
@@ -29,7 +29,7 @@ class ActivityLogDAO:
     def insert(self, uID, date, logmessage):
         # Insert new activity log
         cursor = self.conn.cursor()
-        query = " INSERT INTO ActivityLog(uid, logcreation, logmessage)" \
+        query = " INSERT INTO ActivityLog(uid, logcreation, logmessage) " \
                 "VALUES (%s, %s, %s);"
         cursor.execute(query, (uID, date,logmessage,))
         logID = cursor.fetchone()[0]
