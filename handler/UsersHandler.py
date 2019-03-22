@@ -1,5 +1,5 @@
 from flask import jsonify, request
-from dao.usersDAO import UsersDAO
+from dao.UsersDAO import UsersDAO
 
 
 class UsersHandler:
@@ -38,9 +38,8 @@ class UsersHandler:
         return result
 
 
-    def getAllUsersNames(self):
-
-        result = UsersDAO.getAllUserNames()
+    def getAllUsersInfo(self):
+        result = UsersDAO().getAllUsersInfo()
         mapped_result = []
 
         if not result:
@@ -48,7 +47,7 @@ class UsersHandler:
 
         else:
             for r in result:
-                mapped_result.append(self.mapToUserNamesDict(r))
+                mapped_result.append(self.mapToUserInfoDict(r))
 
             return jsonify(User=mapped_result)
 
@@ -56,7 +55,7 @@ class UsersHandler:
 
     def getUserbyEmail(self, email):
 
-        result = UsersDAO.getUserbyEmail(email)
+        result = UsersDAO().getUserbyEmail(email)
         mapped_result = []
 
         if not result:
@@ -69,18 +68,18 @@ class UsersHandler:
             return jsonify(User=mapped_result)
 
 
-    def getUserByFullName(self, firstname, lastname):
-
-        result = UsersDAO.getUserByFullName(firstname, lastname)
-        mapped_result = []
-
-        if not result:
-            return jsonify(Error="NOT FOUND"), 404
-
-        else:
-            for r in result:
-                mapped_result.append(self.mapToUserInfoDict(r))
-            return jsonify(User=mapped_result)
+    # def getUserByFullName(self, firstname, lastname):
+    #
+    #     result = UsersDAO().getUserByFullName(firstname, lastname)
+    #     mapped_result = []
+    #
+    #     if not result:
+    #         return jsonify(Error="NOT FOUND"), 404
+    #
+    #     else:
+    #         for r in result:
+    #             mapped_result.append(self.mapToUserInfoDict(r))
+    #         return jsonify(User=mapped_result)
 
 
 

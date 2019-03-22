@@ -31,7 +31,7 @@ class MeetingHandler:
 
     def getOldMeetings(self):
 
-        result = MeetingDAO.getOldMeetings()
+        result = MeetingDAO().getOldMeetings()
         mapped_result = []
 
         if not result:
@@ -42,6 +42,22 @@ class MeetingHandler:
                 mapped_result.append(self.mapToMeetingInfoDict(r))
 
             return jsonify(Meeting=mapped_result)
+
+    def getActiveMeeting(self):
+
+        result = MeetingDAO().getActiveMeeting()
+        mapped_result = []
+
+        if not result:
+            return jsonify(Error="NOT FOUND"), 404
+
+        else:
+            for r in result:
+                mapped_result.append(self.mapToMeetingInfoDict(r))
+
+            return jsonify(Meeting=mapped_result)
+
+
 
 
 

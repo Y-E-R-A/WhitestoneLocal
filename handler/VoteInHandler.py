@@ -11,6 +11,28 @@ class VoteInHandler:
         result['vID'] = vID
 
         return result
+    def mapVotingParticipantsToDict(self, row):
+        result = {}
+        result['uID'] = row[0]
+        result['name'] = row[1]
+        result['lastname'] = row[2]
+        result['email'] = row[3]
+        return result
+
+
+    def getVotingParticipants(self, vID):
+        result = VoteInDAO().getVotingParticipants(vID)
+        mapped_result = []
+
+        if not result:
+            return jsonify(Error="NOT FOUND"), 404
+
+        else:
+            for r in result:
+                mapped_result.append(self.mapVotingParticipantsToDict(r))
+
+            return jsonify(Participant=mapped_result)
+
 
     def insertCredentialsJSON(self, json):
 

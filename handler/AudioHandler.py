@@ -28,7 +28,7 @@ class AudioHandler:
 
     def getAudioBymID(self, mID):
 
-        result = AudioDAO.getAudioBymID(mID)
+        result = AudioDAO().getAudioBymID(mID)
         mapped_result = []
 
         if not result:

@@ -6,9 +6,8 @@ class CredentialHandler:
 
     def mapToCredentialDict(self, row):
         result = {}
-        result['ID'] = row[0]
-        result['email'] = row[1]
-        result['localpassword'] = row[2]
+        result['email'] = row[0]
+        result['localpassword'] = row[1]
         return result
 
     def buildCredentialDict(self, ID, email, localpassword):
@@ -19,7 +18,7 @@ class CredentialHandler:
         return result
 
     def getAllCredentials(self):
-        result = CredentialDAO.getAllCredentials()
+        result = CredentialDAO().getAllCredentials()
         mapped_result = []
 
         if not result:
@@ -32,12 +31,12 @@ class CredentialHandler:
             return jsonify(AllCredentials =mapped_result)
 
 
-    def getCredentialById(self, ID):
+    def getCredentialByEmail(self, email):
 
-        result = CredentialDAO.getCredentialById(ID)
+        result = CredentialDAO().getCredentialById(email)
         if not result:
 
-            return jsonify(Error="NOT FOUND"), 404
+            return jsonify(Error="USER NOT FOUND"), 404
 
         else:
 

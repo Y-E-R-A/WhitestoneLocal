@@ -16,13 +16,14 @@ class VotingChoiceHandler:
     def mapVotingChoiceByVID(self, row):
 
         result = {}
-        result['choice'] = row[0]
+        result['altID'] = row[0]
+        result['choice'] = row[1]
         return result
 
 
     def getVotingChoiceByVID(self, vID):
 
-        result = VotingChoiceDAO.getVotingChoiceByVID(vID)
+        result = VotingChoiceDAO().getVotingChoiceByVID(vID)
         mapped_result = []
 
         if not result:
@@ -33,7 +34,6 @@ class VotingChoiceHandler:
                 mapped_result.append(self.mapVotingChoiceByVID(r))
 
             return jsonify(Choice=mapped_result)
-
 
 
     def insertCredentialsJSON(self, json):

@@ -25,7 +25,7 @@ class ActivityLogHandler:
 
     def getActivityLogByDate(self, date):
 
-        result = ActivityLogDAO.getActivityLogByDate(date)
+        result = ActivityLogDAO().getActivityLogByDate(date)
         mapped_result = []
 
         if not result:
