@@ -13,6 +13,16 @@ class AudioDAO:
         self.conn = psycopg2._connect(connection_url)
 
 
+    def getAudioByaID(self, aID):
+        # Get an audio with a specified by aID
+        cursor = self.conn.cursor()
+        query = "SELECT * " \
+                "FROM Audio " \
+                "WHERE Audio.aID= %s;"
+        cursor.execute(query, (aID,))
+        result = cursor.fetchone()
+        return result
+
 
 
     def getAudioBymID(self, mID):
@@ -28,12 +38,22 @@ class AudioDAO:
         return result
 
 
+    def getAudioByAddress(self, address):
+        # Get the audio with an specified address
+        cursor = self.conn.cursor()
+        query = "SELECT * " \
+                "FROM Audio " \
+                "WHERE Audio.aaddress= %s;"
+        cursor.execute(query, (address,))
+        result = cursor.fetchone()
+        return result
+
 
     def insert(self, uid, mid, aname, aaddress, atype):
         # Insert a new audio file to the Audio table to store its address and info
         cursor= self.conn.cursor()
         query = "INSERT INTO Audio(uid, mid, aname, aaddress, atype) " \
-                "VALUES(%s, %s, %s, %s, %s)"
+                "VALUES(%s, %s, %s, %s, %s) RETURNING aID"
         cursor.execute(query, (uid, mid, aname, aaddress, atype,))
         aID= cursor.fetchone()[0]
         self.conn.commit()

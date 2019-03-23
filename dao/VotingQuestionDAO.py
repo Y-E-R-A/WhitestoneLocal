@@ -68,8 +68,8 @@ class VotingQuestionDAO:
         # Insert new voting question and return its vID
         cursor = self.conn.cursor()
         query = "INSERT INTO VotingQuestion(creatorID, mid, vdate, vtime, vdescription, vquestion, selectionlimit, vstatus) " \
-                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s);"
-        cursor.execute(query, (creatorID, mID, vdescription, vdate, vtime, vquestion, selectionlimit, vstatus,))
+                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING vID;"
+        cursor.execute(query, (creatorID, mID, vdate, vtime,vdescription, vquestion, selectionlimit, vstatus,))
         vID= cursor.fetchone()[0]
         self.conn.commit()
         return vID

@@ -16,7 +16,7 @@ class ParticipatesInDAO:
     def insert(self, uid,  mid):
         #Insert the uid of the person who logged into a meeting with the specified mid
         cursor = self.conn.cursor()
-        query = "INSERT INTO VoteIn(uid, mid) " \
+        query = "INSERT INTO ParticipatesIn(uid, mid) " \
                 "VALUES (%s, %s);"
         cursor.execute(query, (uid, mid,))
         self.conn.commit()

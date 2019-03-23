@@ -123,7 +123,7 @@ class UsersDAO:
         # Insert a new User and return its uID
         cursor = self.conn.cursor()
         query= "INSERT into Users(id, ufirstname, ulastname, udescription, urole, uclassification) " \
-               "values(%s, %s, %s, %s, %s, %s);"
+               "values(%s, %s, %s, %s, %s, %s) RETURNING uID;"
         cursor.execute(query, (credentialID, ufirstname, ulastname, udescription, urole, uclassification,))
         uID = cursor.fetchone()[0]
         self.conn.commit()

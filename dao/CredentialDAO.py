@@ -39,9 +39,9 @@ class CredentialDAO:
         # Insert new user's credentials
         cursor = self.conn.cursor()
         query = " INSERT INTO Credential(email, localpassword) " \
-                "VALUES (%s, %s);"
+                "VALUES (%s, %s) returning ID;"
         cursor.execute(query, (email, localpassword,))
-        cID= cursor.fetchone()[0]
+        cID = cursor.fetchone()[0]
         self.conn.commit()
         return cID
 

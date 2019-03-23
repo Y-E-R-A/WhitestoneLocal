@@ -31,7 +31,7 @@ class VotingChoiceDAO:
         # Insert a new voting choice or alternative fro a voting with an specific vID and return its altID
         cursor = self.conn.cursor()
         query = "INSERT INTO VotingChoice(vid, choice) " \
-                "VALUES(%s, %s);"
+                "VALUES(%s, %s) RETURNING altID;"
         cursor.execute(query, (vid, choice,))
         altID = cursor.fetchone()[0]
         self.conn.commit()
