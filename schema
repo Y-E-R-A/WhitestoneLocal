@@ -6,7 +6,7 @@ Create Table Users(uID serial primary key, ID integer references Credential(ID),
 
 Create Table ActivityLog(logID serial primary key, uID integer references Users(uID), time timestamp, date varchar(10), logmessage varchar(100));
 
-Create Table Meeting(mid serial primary key, creatorID integer references Users(uID), mdate varchar(15), mtime varchar(10),  mdescription varchar(200), mstatus mvarchar(10));
+Create Table Meeting(mid serial primary key, creatorID integer references Users(uID), mdate varchar(15), mtime varchar(10),  mdescription varchar(200), mstatus varchar(10));
 
 Create Table VotingQuestion(vID serial primary key, creatorID integer references Users(uID),  mID integer references Meeting(mID), vdescription varchar(100),vdate varchar(20), vtime varchar(10), vquestion varchar(200), selectionlimit varchar(4), vstatus varchar(10));
 
