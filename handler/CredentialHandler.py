@@ -47,15 +47,15 @@ class CredentialHandler:
 
 
     def insertCredentialJSON(self,json):
-
+        print("entro a insert credent")
         email = json.get('email')
         localpassword = json.get('localpassword')
-
+        print("hizp los json.get")
         if UsersDAO().getUserbyEmail(email):
+
             return jsonify(Error="Email already registered"),
         else:
             if email and localpassword:
-
                 ID = CredentialDAO().insert(email, localpassword)
                 mapped_result = self.buildCredentialDict(ID,email, localpassword)
                 return jsonify(Credential = mapped_result), 201

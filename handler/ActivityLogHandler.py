@@ -7,18 +7,20 @@ class ActivityLogHandler:
     def mapToActivityLogDict(self, row):
 
         result = {}
-        result['logcreation']= row[0]
-        result['ufirstname']= row[1]
-        result['ulastname'] = row[2]
-        result['logmessage'] = row[2]
+        result['date']= row[0]
+        result['time']= row[1]
+        result['ufirstname']= row[2]
+        result['ulastname'] = row[3]
+        result['logmessage'] = row[4]
         return result
 
 
-    def builtActivityLogDict(self, logID, uID, logcreation, logmessage):
+    def builtActivityLogDict(self, logID, uID, time, date, logmessage):
         result = {}
         result['logID'] = logID
         result['uID'] = uID
-        result['logcreation']= logcreation
+        result['date']= date
+        result['time']= time
         result['logmessage'] = logmessage
         return result
 
@@ -41,12 +43,13 @@ class ActivityLogHandler:
     def insertCredentialsJSON(self, json):
 
         uID = json.get('uID')
-        logcreation = json.get('logcreation')
+        date= json.get('date')
+        time= json.get('time')
         logmessage= json.get('logmessage')
 
-        if uID and logcreation and logmessage:
-            logID = ActivityLogDAO().insert(uID, logcreation, logmessage)
-            mapped_result = self.builtActivityLogDict(logID, uID, logcreation, logmessage)
+        if uID and date and time and logmessage:
+            logID = ActivityLogDAO().insert(uID, date, time, logmessage)
+            mapped_result = self.builtActivityLogDict(logID, uID, time, date, logmessage)
             return jsonify(Log = mapped_result), 201
         else:
 

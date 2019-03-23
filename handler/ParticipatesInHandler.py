@@ -25,7 +25,7 @@ class ParticipatesInHandler:
         uID = json.get('uID')
         mID = json.get('mID')
 
-        if uID and mID :
+        if uID and mID:
 
             ParticipatesInDAO().insert(uID, mID)
             mapped_result = self.buildParticipatesInDict(uID, mID)

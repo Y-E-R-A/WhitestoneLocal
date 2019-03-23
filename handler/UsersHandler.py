@@ -195,7 +195,7 @@ class UsersHandler:
 
 
                 if ufirstname and ulastname and urole and uclassification:
-                    UsersDAO().update(ufirstname, ulastname, udescription, urole, uclassification)
+                    UsersDAO().update(uID, ufirstname, ulastname, udescription, urole, uclassification)
                     result = self.buildUserDict(uID, cID, ufirstname, ulastname, udescription, urole, uclassification)
                     return jsonify(User=result), 201
                 else:

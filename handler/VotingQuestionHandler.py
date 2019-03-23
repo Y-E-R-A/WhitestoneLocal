@@ -18,6 +18,12 @@ class VotingQuestionHandler:
         result['vtatus'] = vstatus
         return result
 
+    def builtVotingStatusDict(self, vID, vstatus):
+        result= {}
+        result['vID']= vID
+        result['vstatus']= vstatus
+        return result
+
     def mapToVotingQuestionDict(self, row):
         # Voting Question dictionary
         result = {}
@@ -83,23 +89,16 @@ class VotingQuestionHandler:
         if not VotingQuestionHandler().getVotingQuestionByID(vID):
             return jsonify(Error="Voting not found."), 404
         else:
-            if len(form) != 8:
+            if len(form) != 2:
                 return jsonify(Error="Malformed update request"), 400
             else:
 
                 vID= form['vID']
-                creatorID= form['creatorID']
-                mID = form['mID']
-                vdescription= form['vdescription']
-                vdate = form['vdate']
-                vtime= form['vtime']
-                vquestion = form['vquestion']
-                selectionlimit= form['selectionlimit']
-                vstatus= form['vtatus']
+                vstatus= form['vstatus']
 
-                if vstatus:
-                    VotingQuestionHandler.updateVotingStatus(vID, vstatus)
-                    result = self.builtVotingQuestionDict(vID, creatorID,mID, vdescription, vdate, vtime, vquestion, selectionlimit, vstatus)
+                if vID and vstatus:
+                    VotingQuestionDAO().updateVotingStatus(vID, vstatus)
+                    result = self.builtVotingStatusDict(vID, vstatus)
                     return jsonify(Voting=result), 201
                 else:
                     return jsonify(Error="Unexpected attributes in update request"), 400

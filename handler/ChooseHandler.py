@@ -17,7 +17,7 @@ class ChooseHandler:
         uID = json.get('uID')
         altID = json.get('altID')
 
-        if uID and altID :
+        if uID and altID:
 
             ChooseDAO().insert(uID, altID)
             mapped_result = self.buildChooseDict(uID, altID)

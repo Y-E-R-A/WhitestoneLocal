@@ -15,7 +15,7 @@ class AudioHandler:
         return result
 
 
-    def builtAudioDict(self, aID, uID, mID, aname, aaddress, atype):
+    def buildAudioToDict(self, aID, uID, mID, aname, aaddress, atype):
         result ={}
         result['aID'] = aID
         result['uID'] = uID
@@ -24,6 +24,19 @@ class AudioHandler:
         result['aadress'] = aaddress
         result['atype'] = atype
         return result
+
+
+    def getAudioByaID(self, aID):
+
+        result = AudioDAO().getAudioByaID(aID)
+
+        if not result:
+            return jsonify(Error="NOT FOUND"), 404
+
+        else:
+            mapped_result = self.mapToAudioDict(result)
+
+            return jsonify(Audio=mapped_result)
 
 
     def getAudioBymID(self, mID):
@@ -40,7 +53,24 @@ class AudioHandler:
 
             return jsonify(Audio=mapped_result)
 
-    def insertCredentialsJSON(self, json):
+
+    def getAudioByAddress(self, address):
+
+        result = AudioDAO().getAudioByAddress(address)
+        mapped_result = []
+
+        if not result:
+            return jsonify(Error="NOT FOUND"), 404
+
+        else:
+            for r in result:
+                mapped_result.append(self.mapToAudioDict(r))
+
+            return jsonify(Audio=mapped_result)
+
+
+    def insertJSON(self, json):
+
 
         uID = json.get('uID')
         mID = json.get('mID')
@@ -51,10 +81,9 @@ class AudioHandler:
         if uID and mID and aname and aaddress and atype:
 
             aID = AudioDAO().insert(uID, mID, aname, aaddress, atype)
-            mapped_result = self.buildUserDict(aID, uID, mID, aname, aaddress, atype)
+            mapped_result = self.buildAudioToDict(aID, uID, mID, aname, aaddress, atype)
             return jsonify(Audio=mapped_result), 201
 
         else:
             return jsonify(Error="Unexpected attributes in post request"), 404
 
-        
