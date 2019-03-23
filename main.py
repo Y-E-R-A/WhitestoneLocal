@@ -45,7 +45,7 @@ def getAllCredentials():
 
     if request.method == 'POST':
 
-        print ("REQUEST", request.json)
+        print("REQUEST", request.json)
         return CredentialHandler().insertCredentialJSON(request.json)
     else:
         handler = CredentialHandler()
@@ -54,7 +54,6 @@ def getAllCredentials():
 
 # Search all the info from users registered
 @app.route('/whitestone/users', methods = ['GET','POST'])
-
 def getAllUsers():
 
     if request.method == 'POST':
@@ -68,7 +67,7 @@ def getAllUsers():
 
 
 # Edit user information
-@app.route('/whitestone/edituser/<int:uid>')
+@app.route('/whitestone/edituser/<int:uid>', methods= ["PUT"])
 def updateUser(uid):
     print("REQUEST", request.json)
     return UsersHandler().updateUser(uid, request.json)
@@ -112,7 +111,7 @@ def getOldMeetings():
 
 
 # Show the active meeting and its info
-@app.route('/whitestone/meeting', methods = ['GET','POST'])
+@app.route('/whitestone/activemeeting', methods = ['GET','POST'])
 def getMeeting():
 
     if request.method == 'POST':
@@ -163,22 +162,29 @@ def getAlternatives(vid):
 
 
 # Update voting status
-@app.route('/whitestone/voting/<int:vid>')
+@app.route('/whitestone/votingstatus/<int:vid>', methods=['PUT'])
 def updateVotingStatus(vid):
     print("REQUEST", request.json)
     return VotingQuestionHandler().updateVotingStatus(vid, request.json)
 
-# Post audio
-@app.route('/whitestone/meeting/audio', methods = ['POST'])
-def postAudio():
-    print ("REQUEST", request.json)
-    return AudioHandler().insertCredentialsJSON(request.json)
+# Post or get audio by mID
+@app.route('/whitestone/meeting/<int:mid>/audio', methods = ['POST'])
+def meetingAudio(mid):
+    if request.method == 'POST':
+        print("REQUEST", request.json)
+        return AudioHandler().insertJSON(request.json)
+    else:
+     return AudioHandler().getAudioBymID(mid)
 
 
-# Search audio by meeting id
-@app.route('/whitestone/meeting/<int:mid>/audio')
-def getAudioBymID(mid):
-    return AudioHandler().getAudioBymID(mid)
+
+# Get audio by aid
+@app.route('/whitestone/audio/<int:aid>', methods = ['GET'])
+def getAudio(aid):
+
+     return AudioHandler().getAudioByaID(aid)
+
+
 
 # Post meeting participant
 @app.route('/whitestone/participatesIn/meeting/<int:mid>', methods = ['POST', 'GET'])
@@ -193,14 +199,14 @@ def ParticipatesIn(mid):
         return ParticipatesInHandler().getMeetingParticipants(mid)
 
 # Update meeting status
-@app.route('/whitestone/meetingstatus')
+@app.route('/whitestone/meetingstatus', methods= ["PUT"])
 def updateMeetingStatus():
     print("REQUEST", request.json)
     return MeetingHandler().updateMeetingStatus(request.json)
 
 
 # Post voting participant
-@app.route('/whitestone/votesin/<int:vid>', methods = ['POST', 'GET'])
+@app.route('/whitestone/votesin/<int:vid>', methods=['POST', 'GET'])
 def VotesIn(vid):
     if request.method == 'POST':
 
@@ -212,11 +218,10 @@ def VotesIn(vid):
 
 
 # Post user vote in table Choose
-@app.route('/whitestone/<int:uid>/choose/<int:altid>', methods = ['POST'])
-def PostChoose():
+@app.route('/whitestone/choose', methods=['POST'])
+def postChoose():
     print("REQUEST", request.json)
     return ChooseHandler().insertCredentialsJSON(request.json)
-
 
 
 # Activity Log
