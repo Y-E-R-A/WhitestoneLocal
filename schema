@@ -4,7 +4,7 @@ Create Table Credential(ID serial primary key, email varchar(50), localpassword 
 
 Create Table Users(uID serial primary key, ID integer references Credential(ID), ufirstname varchar(20), ulastname varchar(20), udescription varchar(150), urole varchar(50), uclassification varchar(50));
 
-Create Table ActivityLog(logID serial primary key, uID integer references Users(uID), time timestamp, date varchar(10), logmessage varchar(100));
+Create Table ActivityLog(logID serial primary key, uID integer references Users(uID), date varchar(15), time varchar(10), logmessage varchar(100));
 
 Create Table Meeting(mid serial primary key, creatorID integer references Users(uID), mdate varchar(15), mtime varchar(10),  mdescription varchar(200), mstatus varchar(10));
 
