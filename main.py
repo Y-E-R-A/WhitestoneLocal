@@ -5,8 +5,8 @@
 #   Ariel Torres Perez                      #
 #                                           #
 # Date: 3/17/2019                           #
-# Updated: 3/17/2019                        #
-# Distribution: Phyton 2.7                  #
+# Updated: 3/26/2019                        #
+# Distribution: Phyton 3.5                  #
 #                                           #
 # Whitestone project is a sound and voting  #
 # web application designed for the Academic #
@@ -16,7 +16,6 @@
 
 
 from flask import Flask, request
-
 from handler.ActivityLogHandler import ActivityLogHandler
 from handler.AudioHandler import AudioHandler
 from handler.ChooseHandler import ChooseHandler
@@ -31,10 +30,10 @@ from handler.VotingQuestionHandler import VotingQuestionHandler
 app = Flask(__name__)
 
 
-@app.route('/whitestone/login')
-def home():
-
-    return "Welcome to Whitestone"
+# @app.route('/whitestone/login')
+# def home():
+#
+#     return "Welcome to Whitestone"
 
 
 
@@ -52,6 +51,18 @@ def getAllCredentials():
         return handler.getAllCredentials()
 
 
+
+# Search all the user information using its email as identifier
+@app.route('/whitestone/credentials/user', methods = ['GET'])
+def getUser():
+
+    print(request.json)
+    print(request.json.get('email'))
+    handler = UsersHandler()
+    return handler.getUserByEmail(request.json.get('email'))
+
+
+
 # Search all the info from users registered
 @app.route('/whitestone/users', methods = ['GET','POST'])
 def getAllUsers():
@@ -67,14 +78,14 @@ def getAllUsers():
 
 
 # Edit user information
-@app.route('/whitestone/edituser/<int:uid>', methods= ["PUT"])
+@app.route('/whitestone/edituser/<int:uid>', methods=["PUT"])
 def updateUser(uid):
     print("REQUEST", request.json)
     return UsersHandler().updateUser(uid, request.json)
 
 
 # Search all senators including the chancellor
-@app.route('/whitestone/senators', methods = ['GET'])
+@app.route('/whitestone/senators', methods=['GET'])
 def getAllSenators():
     return UsersHandler().getAllSenator()
 
@@ -105,13 +116,13 @@ def getAllExOfficioStudentSenators():
 
 
 # Search old meetings (inactive)
-@app.route('/whitestone/meeting/oldmeetings', methods = ['GET'])
+@app.route('/whitestone/meeting/oldmeetings', methods=['GET'])
 def getOldMeetings():
     return MeetingHandler().getOldMeetings()
 
 
 # Show the active meeting and its info
-@app.route('/whitestone/activemeeting', methods = ['GET','POST'])
+@app.route('/whitestone/activemeeting', methods=['GET','POST'])
 def getMeeting():
 
     if request.method == 'POST':
@@ -125,15 +136,23 @@ def getMeeting():
         return handler.getActiveMeeting()
 
 
-# Search voting by mID
-@app.route('/whitestone/votings/<int:mID>',  methods = ['POST', 'GET'])
-def getVotingBymID(mID):
-    if request.method == 'POST':
+# Post voting question by mID
+@app.route('/whitestone/voting',  methods = ['POST'])
+def postVotingBymID():
+    print("REQUEST", request.json)
+    return VotingQuestionHandler().insertCredentialsJSON(request.json)
 
-        print("REQUEST", request.json)
-        return VotingQuestionHandler().insertCredentialsJSON(request.json)
-    else:
-        return VotingQuestionHandler().getVotingQuestionBymID(mID)
+
+# Get inactive or closed voting question by mID
+@app.route('/whitestone/inactivevotings/<int:mID>', methods=['GET'])
+def getInactiveVotingBymID(mID):
+    VotingQuestionHandler().getInactiveVotingQuestionBymID(mID)
+
+
+# Get inactive or closed voting question by mID
+@app.route('/whitestone/activevotings/<int:mID>', methods=['GET'])
+def getActiveVotingBymID(mID):
+    VotingQuestionHandler().getActiveVotingQuestionBymID(mID)
 
 
 # Search voting by vID
@@ -149,7 +168,7 @@ def getVotingResultByvID(vid):
 
 
 # Post voting alternatives
-@app.route('/whitestone/voting/choice', methods = ['POST'])
+@app.route('/whitestone/voting/choice', methods=['POST'])
 def postAlternatives():
     print ("REQUEST", request.json)
     return VotingChoiceHandler().insertCredentialsJSON(request.json)
@@ -205,8 +224,8 @@ def updateMeetingStatus():
     return MeetingHandler().updateMeetingStatus(request.json)
 
 
-# Post voting participant
-@app.route('/whitestone/votesin/<int:vid>', methods=['POST', 'GET'])
+# Post or get voting participant
+@app.route('/whitestone/votesIn/<int:vid>', methods=['POST', 'GET'])
 def VotesIn(vid):
     if request.method == 'POST':
 
@@ -218,22 +237,23 @@ def VotesIn(vid):
 
 
 # Post user vote in table Choose
-@app.route('/whitestone/choose', methods=['POST'])
+@app.route('/whitestone/votesubmission', methods=['POST'])
 def postChoose():
     print("REQUEST", request.json)
     return ChooseHandler().insertCredentialsJSON(request.json)
 
 
 # Activity Log
-@app.route('/whitestone/activitylog/<string:date>', methods = ['POST', 'GET'])
-def ActivityLog(date):
+
+@app.route('/whitestone/activitylog', methods = ['POST', 'GET'])
+def ActivityLog():
     if request.method == 'POST':
 
         print("REQUEST", request.json)
         return ActivityLogHandler().insertCredentialsJSON(request.json)
 
     else:
-        return ActivityLogHandler().getActivityLogByDate(date)
+        return ActivityLogHandler().getActivityLogByDate(request.json.get('date'))
 
 
 
