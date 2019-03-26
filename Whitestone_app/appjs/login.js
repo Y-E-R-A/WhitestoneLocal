@@ -17,6 +17,7 @@ angular.module('Whitestone').controller('LoginController', ['$http', '$log', '$s
         var credentialList = {};
 
         this.loginUserTest = function(){
+         
             if(this.role == "Administrator"){
                         $location.url('/createUser/'+"Administrator");
                     }else if(this.role == "Secretary"){
@@ -28,20 +29,22 @@ angular.module('Whitestone').controller('LoginController', ['$http', '$log', '$s
                     }
         }
         this.loginUser = function(){
- 
-
+            // Get the target part id from the parameter in the url
+            // using the $routerParams object
+            //var userId = $routeParams.uid;
+            
             var data = {};
         
-            data.user = this.user;
+            data.email = this.email;
             
             data.password = this.password;
             
             console.log("data: " + JSON.stringify(data));
-            console.log("user: "+this.user);
+            console.log("user: "+this.email);
             console.log("password: "+this.password);
             
             // Now create the url with the route to talk with the rest API
-            //var reqURL = "";
+            var reqURL = "http://localhost:5000/whitestone/credentials/user";
 
             console.log("reqURL: " + reqURL);
             var config = { headers : 
@@ -49,15 +52,19 @@ angular.module('Whitestone').controller('LoginController', ['$http', '$log', '$s
                          }
         
             // Now issue the http request to the rest API
-            $http.post(reqURL,data,config).then(
+            $http.get(reqURL,data,config).then(
                 // Success function
                 function (response) {
                     console.log("response: " + JSON.stringify(response.data))
                     // assing the part details to the variable in the controller
- 
+                    thisCtrl.credentialsList = response.data.User;
+                    //console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList))
+                    //console.log("uid without JSON: " + response.data.User)
+                    //this.group(response.data.User.uid);
+                    //console.log("uid: " + JSON.stringify(response.data.User[0].uid))
                     
                     //Get User Role
-                    var role = "";
+                    var role = thisCtrl.credentialsList.data.User[];
 
                     if(role == "Administrator"){
                         $location.url('/createUser/'+"Administrator");
@@ -76,6 +83,9 @@ angular.module('Whitestone').controller('LoginController', ['$http', '$log', '$s
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
+                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
+                    //console.log("Error: " + reqURL);
+                    //alert("Cristo");
                     if (status == 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -95,6 +105,5 @@ angular.module('Whitestone').controller('LoginController', ['$http', '$log', '$s
                 }
             );
         };
-
         
 }]);
