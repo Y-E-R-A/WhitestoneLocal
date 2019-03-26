@@ -5,6 +5,7 @@ from dao.UsersDAO import UsersDAO
 class UsersHandler:
 
     def mapToUserInfoDict(self, row):
+
         # User info dictionary
         result = {}
         result['uid'] = row[0]
@@ -24,6 +25,8 @@ class UsersHandler:
         result['firstname'] = row[0]
         result['lastname'] = row[1]
         return result
+
+
     def mapToUserIDDict(self, row):
         result = {}
         result['uID'] = row[0]
@@ -131,16 +134,15 @@ class UsersHandler:
     def getUserByEmail(self, email):
 
         result = UsersDAO().getUserbyEmail(email)
-        mapped_result = []
-
         if not result:
             return jsonify(Error="NOT FOUND"), 404
 
         else:
-            for r in result:
-                mapped_result.append(self.mapToUserInfoDict(r))
+            mapped_result = self.mapToUserInfoDict(result)
 
             return jsonify(User=mapped_result)
+
+
 
     def getUserByuID(self, uID):
 
