@@ -1,4 +1,4 @@
-angular.module('AppChat').controller('oldMeetingsController', ['$http', '$log', '$scope','$location', '$routeParams', 
+angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log', '$scope','$location', '$routeParams', 
     function($http, $log, $scope, $location, $routeParams) {
         var thisCtrl = this;
         $scope.nowdate = Date();

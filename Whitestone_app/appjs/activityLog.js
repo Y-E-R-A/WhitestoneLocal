@@ -1,4 +1,4 @@
-angular.module('AppChat').controller('activityLogController', ['$http', '$log', '$scope','$location', '$routeParams', 
+angular.module('Whitestone').controller('activityLogController', ['$http', '$log', '$scope','$location', '$routeParams', 
     function($http, $log, $scope, $location, $routeParams) {
         
         var thisCtrl = this;
