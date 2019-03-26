@@ -24,7 +24,7 @@ class VotingQuestionDAO:
         result = cursor.fetchone()
         return result
 
-    def getVotingQuestionBymID(self, mID):
+    def getInactiveVotingQuestionBymID(self, mID):
         # Return the voting question corresponding to a specific meeting ID
         cursor = self.conn.cursor()
         query = "SELECT * " \
@@ -35,6 +35,17 @@ class VotingQuestionDAO:
         result = cursor.fetchone()
         return result
 
+
+    def getActiveVotingQuestionBymID(self, mID):
+        # Return the voting question corresponding to a specific meeting ID
+        cursor = self.conn.cursor()
+        query = "SELECT * " \
+                "FROM VotingQuestion " \
+                "WHERE mID = %s " \
+                "and vstatus= 'Active';"
+        cursor.execute(query, (mID,))
+        result = cursor.fetchone()
+        return result
 
 
     def getVotingResultsByvID(self, vID):

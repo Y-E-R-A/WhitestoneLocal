@@ -15,7 +15,7 @@ class UsersDAO:
     def getUserbyEmail(self, email):
         # Return the user information corresponding to an email.
         cursor = self.conn.cursor()
-        query = "SELECT ufirstname, ulastname, udescription, urole, uclassification, email, localpassword " \
+        query = "SELECT uid, id, ufirstname, ulastname, udescription, urole, uclassification, email, localpassword " \
                 "FROM Users natural inner join Credential " \
                 "WHERE email= %s;"
         cursor.execute(query, (email,))
