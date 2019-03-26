@@ -26,15 +26,15 @@ angular.module('Whitestone').controller('submitVoteSenController', ['$http', '$l
         var selection = [];
         
         //Testing Purposes
-        //this.votingquestion = [{"voting_question":"Aprobacion del curso ICOM5016","Voting_date":"3/21/2019","Voting_Time":"5:10 PM"}];
-        //this.alternatives = [{"alt1":"Yes","alt2":"No","alt3":"Abstain"}];
+        this.votingquestion = [{"voting_question":"Aprobacion del curso ICOM5016","Voting_date":"3/21/2019","Voting_Time":"5:10 PM"}];
+        this.alternatives = [{"alt1":"Yes","alt2":"No","alt3":"Abstain"}];
 
         //Testing purposes
-        //this.construct = function(){
-        //    for (var i=0;i<thisCtrl.alternatives[0].length;i++){
-        //        thisCtrl.alternatives[i]["checked"] = false;
-        //    }
-        //}
+        this.construct = function(){
+            for (var i=0;i<thisCtrl.alternatives[0].length;i++){
+                thisCtrl.alternatives[i]["checked"] = false;
+            }
+        }
 
         this.checkChoice = function(choice) {
             if (thisCtrl.selectedChoice.includes(choice)) {
@@ -62,8 +62,13 @@ angular.module('Whitestone').controller('submitVoteSenController', ['$http', '$l
 
         
             
+            //data.udescription = this.description;
             
-            //var reqURL = "";
+            //console.log("data: " + JSON.stringify(data));
+            //console.log("first name: "+this.first_name);
+            //console.log("last name: "+this.last_name);
+            // Now create the url with the route to talk with the rest API
+            var reqURL = "http://localhost:5000/MessagingAppP1/credentials";
             //console.log("reqURL: " + reqURL);
             var config = { headers : 
                           {'Content-Type':'application/json;charset=utf-8;' }
@@ -75,18 +80,27 @@ angular.module('Whitestone').controller('submitVoteSenController', ['$http', '$l
                 function (response) {
                     console.log("response: " + JSON.stringify(response.data))
                     // assing the part details to the variable in the controller
-                    alert("");
+                    alert("New user added with id: " +response.data.User.cid);
                     
-            
+                    //thisCtrl.id = response.data.User.cid
+                    
+                    //console.log("ctrl cid "+this.id )
+                    
+                    //thisCtrl.newChoiceList = response.data.User;
 
                     for (var i=0;i<thisCtrl.newChoiceList.length;i++){
                         thisCtrl.newChoiceList[i]["checked"] = false;
                     }
+                    //thisCtrl.Limit = dblimit;
+                    
+                    //console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialList))
+                    
+                    //console.log("second sign in")
                     
                     
-                    //for(var i=0;i<$scope.votingAlternatives.length;i++){
-                    //  thisCtrl.createAlternatives($scope.votingAlternatives[i].valt);
-                    //}
+                    for(var i=0;i<$scope.votingAlternatives.length;i++){
+                      thisCtrl.createAlternatives($scope.votingAlternatives[i].valt);
+                    }
                     
                 }, //Error function
                 function (response) {
@@ -94,7 +108,9 @@ angular.module('Whitestone').controller('submitVoteSenController', ['$http', '$l
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-
+                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
+                    //console.log("Error: " + reqURL);
+                    //alert("Cristo");
                     if (status === 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -115,25 +131,45 @@ angular.module('Whitestone').controller('submitVoteSenController', ['$http', '$l
         };    
         this.submitVote = function(){
 
-            data = [];
-
-            data.alt = 
+        
+            var data = [];
+            data.uid = uid;
+            data.altid = altid;
+            //data.udescription = this.description;
             
- 
-            //var reqURL = "";
+            //console.log("data: " + JSON.stringify(data));
+            //console.log("first name: "+this.first_name);
+            //console.log("last name: "+this.last_name);
+            // Now create the url with the route to talk with the rest API
+            var reqURL = "http://localhost:5000/whitestone/votesubmission";
             //console.log("reqURL: " + reqURL);
             var config = { headers : 
-                         {'Content-Type':'application/json;charset=utf-8;' }
+                          {'Content-Type':'application/json;charset=utf-8;' }
                          }
         
             // Now issue the http request to the rest API
-            $http.post(reqURL,data,config).then(
+            $http.get(reqURL,data,config).then(
                 // Success function
                 function (response) {
                     console.log("response: " + JSON.stringify(response.data))
                     // assing the part details to the variable in the controller
-                    alert("");
+                    alert("New user added with id: " +response.data.User.cid);
+                    
+                    //thisCtrl.id = response.data.User.cid
+                    
+                    //console.log("ctrl cid "+this.id )
+                    
 
+                    //thisCtrl.Limit = dblimit;
+                    
+                    //console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialList))
+                    
+                    //console.log("second sign in")
+                    
+                    
+                    for(var i=0;i<$scope.votingAlternatives.length;i++){
+                      thisCtrl.createAlternatives($scope.votingAlternatives[i].valt);
+                    }
                     
                 }, //Error function
                 function (response) {
@@ -142,7 +178,8 @@ angular.module('Whitestone').controller('submitVoteSenController', ['$http', '$l
                     // Verify which was the cause and show an alert.
                     var status = response.status;
                     console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-
+                    //console.log("Error: " + reqURL);
+                    //alert("Cristo");
                     if (status === 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -160,5 +197,5 @@ angular.module('Whitestone').controller('submitVoteSenController', ['$http', '$l
                     }
                 }
             );
-        };
+        };  
 }]);
