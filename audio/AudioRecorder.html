@@ -8,6 +8,7 @@
     <h1>Audio Recorder</h1>
 
     <p>You must click the audio button, request a stream, and click start to begin recording.</p>
+    <p id="cdate"></p>
     <div id='gUMArea'>
       <div>
       Record:
@@ -97,8 +98,16 @@ function makeLink(){
   ;
   mt.controls = true;
   mt.src = url;
-  hf.href = url;	
-  hf.download = `${counter++}${media.ext}`;
+  hf.href = url;
+  var aDate = new Date();
+  var aDateYear = aDate.getFullYear().toString();	
+  var aDateMonth = (aDate.getMonth()+1).toString();
+  var aDateDay = aDate.getDate().toString();
+  var aDateHour = aDate.getHours().toString();
+  var aDateMinutes = aDate.getMinutes().toString();
+  var aDateSeconds = aDate.getSeconds().toString();
+  var aFullDateAndTime = aDateYear.concat("-", aDateMonth, "-",aDateDay, "-",aDateHour, "-",aDateMinutes, "-", aDateSeconds,);
+  hf.download = `${aFullDateAndTime}${media.ext}`;
   hf.innerHTML = `donwload ${hf.download}`;
   li.appendChild(mt);
   li.appendChild(hf);
