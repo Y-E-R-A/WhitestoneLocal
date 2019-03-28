@@ -9,8 +9,6 @@ angular.module('Whitestone').controller('LoginController', ['$http', '$log', '$s
         
         var password = "";
 
-        //For testing purposes
-        var role = "";
 
         // This variable hold the information on the part
         // as read from the REST API
@@ -40,7 +38,7 @@ angular.module('Whitestone').controller('LoginController', ['$http', '$log', '$s
             data.password = this.password;
             
             console.log("data: " + JSON.stringify(data));
-            console.log("user: "+this.email);
+            console.log("email: "+this.email);
             console.log("password: "+this.password);
             
             // Now create the url with the route to talk with the rest API
@@ -50,12 +48,12 @@ angular.module('Whitestone').controller('LoginController', ['$http', '$log', '$s
             var config = { headers : 
                           {'Content-Type':'application/json;charset=utf-8;' }
                          }
-        
+            console.log("bitch");
             // Now issue the http request to the rest API
             $http.get(reqURL,data,config).then(
                 // Success function
                 function (response) {
-                    console.log("response: " + JSON.stringify(response.data))
+                    
                     // assing the part details to the variable in the controller
                     thisCtrl.credentialsList = response.data.User;
                     //console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList))
@@ -64,7 +62,7 @@ angular.module('Whitestone').controller('LoginController', ['$http', '$log', '$s
                     //console.log("uid: " + JSON.stringify(response.data.User[0].uid))
                     
                     //Get User Role
-                    var role = thisCtrl.credentialsList.data.User[];
+                    var role = "Secretary";
 
                     if(role == "Administrator"){
                         $location.url('/createUser/'+"Administrator");
