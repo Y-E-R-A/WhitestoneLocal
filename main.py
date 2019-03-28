@@ -14,7 +14,7 @@
 #############################################
 
 
-
+from flask_cors import CORS, cross_origin
 from flask import Flask, request
 from handler.ActivityLogHandler import ActivityLogHandler
 from handler.AudioHandler import AudioHandler
@@ -29,7 +29,7 @@ from handler.VotingQuestionHandler import VotingQuestionHandler
 
 app = Flask(__name__)
 
-
+CORS(app)
 # @app.route('/whitestone/login')
 # def home():
 #
@@ -53,14 +53,12 @@ def getAllCredentials():
 
 
 # Search all the user information using its email as identifier
-@app.route('/whitestone/credentials/user', methods = ['GET'])
+@app.route('/whitestone/credentials/user', methods = ['POST'])
 def getUser():
 
-    print(request.json)
-    print(request.json.get('email'))
+    print("Request",request.json)
     handler = UsersHandler()
     return handler.getUserByEmail(request.json.get('email'))
-
 
 
 # Search all the info from users registered
