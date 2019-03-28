@@ -1,0 +1,81 @@
+<body>
+
+    <select ng-change="editUserCtrl.test(myuser)" ng-model="myuser" ng-options="user as (user.fist_name+'&nbsp'+user.last_name) for user in editUserCtrl.newUserSList">
+        <option value="">--Select User--</option>
+    </select>
+    <div ng-show="editUserCtrl.showForm">
+        <table>
+            <tbody style="text-align:center">
+                <br>
+                <tr>
+                    <th>
+                        <label>
+                            <b>First Name: </b>
+                        </label>
+                        <input ng-model="editUserCtrl.first_name" placeholder="First Name" value="{{myuser.fist_name}}">
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        <label>
+                            <b>Last Name: </b>
+                        </label>
+                        <input ng-model="editUserCtrl.last_name" placeholder="Last Name" value="{{myuser.last_name}}">
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        <label>
+                            <b>About: </b>
+                        </label>
+                        <input ng-model="editUserCtrl.about" placeholder="about" value="{{myuser.abour}}">
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        <label>
+                            <b>UPR email: </b>
+                        </label>
+                        <input ng-model="editUserCtrl.email" placeholder="email" value="{{myuser.email}}">
+                    </th>
+                </tr>
+                <tr>
+
+                    <th>
+                        <label>
+                            <b>Select The User Role: </b>
+                        </label>
+                        <br>
+                        <div ng-repeat="r in editUserCtrl.roles">
+                            <input type="radio" ng-model="editUserCtrl.roleSelect.selected" ng-value="r.role"> {{r.role}}
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        <label>
+                            <b>Select The User Classification: </b>
+                        </label>
+                        <br>
+                        <div ng-repeat="t in editUserCtrl.titles">
+                            <input type="radio" ng-model="editUserCtrl.titleSelect.selected" ng-value="t.title"> {{t.title}}
+
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        <button type="submit" name="action" ng-click="editUserCtrl.editUser()">Save</button>
+                        <button type="submit" name="action" ng-click="editUserCtrl.deleteUser()">Delete</button>
+                        <button type="reset" name="action">Cancel</button>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div ng-show="editUserCtrl.showMessage">
+        <p>The user data has been edited</p>
+        </div>>
+    <br>
+</body>
