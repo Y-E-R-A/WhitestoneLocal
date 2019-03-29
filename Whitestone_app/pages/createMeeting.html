@@ -1,25 +1,43 @@
-                    <table>
-                        <tbody>
-                            <tr>
-                                <th><label> <b>Meeting Name:  </b></label><input ng-model="createMeetingCtrl.meeting_name" placeholder="Enter Meeting Name"></th>
-                            </tr>
-                            <tr>
-                                <th><label> <b>Meeting description:  </b></label><input ng-model="createMeetingCtrl.meeting_desc" placeholder="Enter Meeting_description" ></th>
-                            </tr>
-                            <tr>
-                                <th><label> <b>MM:  </b></label><input ng-model="createMeetingCtrl.meeting_month" placeholder= "MM" ></th>
-                            </tr>
-                            <tr>
-                                <th><label> <b>DD:  </b></label><input ng-model="createMeetingCtrl.meeting_date" placeholder="DD"></th>
-                            </tr>
-                            <tr>
-                                
-                                <th><label> <b>YYYY:  </b></label><input ng-model="createMeetingCtrl.meeting_year" placeholder="YYYY"></th>
-                            </tr>
-                            <tr>
-                                <th>
-                                <button type="submit" name="action" ng-click="createMeetingCtrl.createMeeting()">Create</button> 
-                            </th>
-                            </tr>
-                        </tbody>
-                    </table>
+<head>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>                    
+
+
+
+<body>
+    <center>
+        <div class="container" >
+            <tbody>
+                <div class="card-header">
+                    <h3>Create new meeting</h3>
+                </div>
+
+                <tr>
+                    <th><input ng-model="createMeetingCtrl.meeting_name" class="form-control" placeholder="Meeting Name"></th>
+                </tr>
+                <tr>
+                    <th><input ng-model="createMeetingCtrl.meeting_desc" class="form-control" placeholder="Meeting description" ></th>
+                </tr>
+                <tr>
+                    <th><input ng-model="createMeetingCtrl.meeting_month" class="form-control" placeholder= "MM" ></th>
+                </tr>
+                <tr>
+                    <th><input ng-model="createMeetingCtrl.meeting_date" class="form-control"  placeholder="DD"></th>
+                </tr>
+                <tr>
+
+                    <th><input ng-model="createMeetingCtrl.meeting_year" class="form-control" placeholder="YYYY"></th>
+                </tr>
+                <tr>
+                    <th>
+                    <button type="submit" name="action" ng-click="createMeetingCtrl.createMeeting()">Create</button> 
+                </th>
+                </tr>
+              </tbody>
+            </div>
+        <button type="submit" name="action" ng-click="createMeetingCtrl.voteRedirect()">Voting</button>
+        <button type="submit" name="action" ng-click="createMeetingCtrl.activityLogRedirect()">Activity Log</button>
+       </center>
+    
+</body>

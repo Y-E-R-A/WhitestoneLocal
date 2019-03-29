@@ -7,7 +7,8 @@
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 </head>
 <body>
-
+<button type="submit" name="action" ng-click="votingCtrl.meetingRedirect()">Meeting</button>
+        <button type="submit" name="action" ng-click="votingCtrl.activityLogRedirect()">Activity Log</button>
 <div class="container">
   
   <div class="row">
@@ -47,9 +48,9 @@
                 <label> <b>Select all the participants </b></label>
                 <div ng-repeat="t in votingCtrl.titles">
                   <div class="action-checkbox">
-                  <input id="{{t.title}}" type="checkbox" value="{{t.title}}" ng-checked="titles.selected"  ng-click="votingCtrl.addToSelection(t.title)" />
+                  <input id="{{t.title}}" type="checkbox" value="{{t.title}}" ng-checked="t.selected"  ng-click="votingCtrl.addToSelection(t.title)" />
                   <label for="{{t.title}}"></label>
-                   {{title.title}}
+                   {{t.title}}
                   </div>
                 </div>
               </tr>
@@ -71,7 +72,7 @@
               <tr>
               <th>
                 <br>
-                <button class="btn btn-success" style="float:left;padding:5px 30px;border-radius: 12px;" type="submit" name="action" ng-click="votingCtrl.loginUser()">Create</button>
+                <button class="btn btn-success" style="float:left;padding:5px 30px;border-radius: 12px;" type="submit" name="action" ng-click="votingCtrl.createVote()">Create</button>
                 
                 <button class="btn btn-danger" style="float:right;padding:5px 30px;border-radius: 12px;" type="reset" name="action" ng-click="votingCtrl.loginUser()">Cancel</button>
               </th>
