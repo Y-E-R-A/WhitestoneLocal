@@ -30,18 +30,14 @@ angular.module('Whitestone').controller('createMeetingController', ['$http', '$l
             
             var data = {};
         
-                     
-            data.meeting_name = this.meeting_name;
+            data.creatorID = $routeParams.uid;       
             
-            data.meeting_desc = this.meeting_desc;
             
-            data.meeting_month = this.meeting_month;
-
-            data.meeting_day = this.meeting_day;
-
-            data.meeting_year = this.meeting_year;
-        
-            data.meeting_status = "Active";
+            data.mdescription = this.meeting_desc;
+            data.mdate = this.meeting_month+'/'+this.meeting_date+'/'+this.meeting_year;
+          
+            data.mtime = "11:07pm"
+            data.mstatus = "Active";
             //data.udescription = this.description;
             
             //console.log("data: " + JSON.stringify(data));
@@ -160,4 +156,10 @@ angular.module('Whitestone').controller('createMeetingController', ['$http', '$l
             );
         };
         this.loadActiveMeeting();
+        this.voteRedirect = function(){
+            $location.url('/Vote/'+$routeParams.role+'/'+$routeParams.uid);
+        }
+        this.activityLogRedirect = function(){
+            $location.url('/ActivityLog/'+$routeParams.role+'/'+$routeParams.uid);
+        }
 }]);

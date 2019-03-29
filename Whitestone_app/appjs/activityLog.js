@@ -56,4 +56,10 @@ angular.module('Whitestone').controller('activityLogController', ['$http', '$log
                 }
             );
         };
+        this.meetingRedirect = function(){
+                                    $location.url("/meeting/"+role+'/'+uid);
+        }this.voteRedirect = function(){
+            $location.url('/Vote/'+$routeParams.role+'/'+$routeParams.uid);
+        }
+        
 }]);

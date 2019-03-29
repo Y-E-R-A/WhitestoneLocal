@@ -27,36 +27,38 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
 
         //The limit of answers
         var vLimit = "";
-            
+        this.meetingId =0;
         //
         var vid = 0;
         //Check box selection
-        var titles = [{title:'Elect Student Senator', selected:false},
+        this.titles = [{title:'Elect Student Senator', selected:false},
         {title:'Ex-Officio Student',selected:false},
         {title:'Elect',selected:false},
         {title:'Ex-Officio',selected:false}];
 
-        var selection = [];
+        this.selection = [];
         
         //Alternative Handler////////////////////////////////
-        var votingAlternatives = [{altId:"alt1", valt:''}]
+        this.votingAlternatives = [{altId:"alt1", valt:''}]
         
         this.addToSelection = function(title){
-          if(selection.includes(title)){
+            console.log("title"+title)
+          if(this.selection.includes(title)){
             this.selection.splice( this.selection.indexOf(title), 1 );
           }else{
             this.selection.push(title);
           }
+            console.log("selection: "+this.selection)
         }
         
         this.addAlternative = function(){
-          var newAlt = $scope.votingAlternatives.length+1;
-          $scope.votingAlternatives.push({altId:"alt"+newAlt});
-          
+          var newAlt = this.votingAlternatives.length+1;
+          this.votingAlternatives.push({altId:"alt"+newAlt});
+          console.log("voting alternatives: "+this.votingAlternatives)
         }
         this.removeAlternative = function(index){
           //remove($index) en html
-          $scope.votingAlternatives.splice(index,1);
+          this.votingAlternatives.splice(index,1);
         }
         //////////////////////////////////////////////////////
         
@@ -67,18 +69,20 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
             
             var data = {};
         
-                     
-            data.voting_question = this.voting_question;
+            data.creatorID = $routeParams.uid;
+            //console.log("thisCtrl in create: "+thisCtrl.meetingId)
+            data.mID = thisCtrl.meetingId;
+            data.vquestion = this.voting_question;
             
-            data.voting_objective = this.voting_objective;
+            data.vdescription = this.voting_objective;
             
             data.vdate = this.vMM+"/"+vDD+"/"+vYYYY;
             
-            data.vTime = this.vHour+"/"+this.vMin;
+            data.vtime = this.vHour+":"+this.vMin+"pm";
         
-            data.vlimit = this.vLimit;
+            data.selectionlimit = this.vLimit;
             
-            data.voting_status = "Active";
+            data.vstatus = "Active";
             
             //data.udescription = this.description;
             
@@ -99,7 +103,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                 function (response) {
                     console.log("response: " + JSON.stringify(response.data))
                     // assing the part details to the variable in the controller
-                    alert("New user added with id: " +response.data.User.cid);
+                    //alert("New user added with id: " +response.data.User.cid);
                     
                     //thisCtrl.id = response.data.User.cid
                     
@@ -111,10 +115,10 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                     
                     //console.log("second sign in")
                     
-                    this.selectParticipant();
-                    for(var i=0;i<$scope.votingAlternatives.length;i++){
-                      thisCtrl.createAlternatives($scope.votingAlternatives[i].valt);
-                    }
+                    //this.selectParticipant();
+                    //for(var i=0;i<thisCtrl.votingAlternatives.length;i++){
+                    //  thisCtrl.createAlternatives(thisCtrl.votingAlternatives[i].valt);
+                    //}
                     
                 }, //Error function
                 function (response) {
@@ -669,7 +673,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                          }
         
             // Now issue the http request to the rest API
-            $http.get(reqURL,data,config).then(
+            $http.get(reqURL).then(
                 // Success function
                 function (response) {
                     console.log("response: " + JSON.stringify(response.data))
@@ -706,6 +710,68 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                     //console.log("Error: " + reqURL);
                     //alert("Cristo");
                     if (status === 0) {
+                        alert("No hay conexion a Internet");
+                    }
+                    else if (status == 401) {
+                        alert("Su sesion expiro. Conectese de nuevo.");
+                    }
+                    else if (status == 403) {
+                        alert("No esta autorizado a usar el sistema.");
+                    }
+                    else if (status == 404) {
+                        alert("No se encontro la informacion solicitada.");
+                    }
+                    else {
+                        alert("Error interno del sistema.");
+                    }
+                }
+            );
+        };
+        
+        this.loadActiveMeeting = function(){
+            
+
+            // Now create the url with the route to talk with the rest API
+            var reqURL = "http://localhost:5000/whitestone/activemeeting";
+            //console.log("reqURL: " + reqURL);
+            var config = { headers : 
+                          {'Content-Type':'application/json;charset=utf-8;' }
+                         }
+        
+            // Now issue the http request to the rest API
+            $http.get(reqURL).then(
+                // Success function
+                function (response) {
+                    console.log("response: " + JSON.stringify(response.data))
+                    // assing the part details to the variable in the controller
+                    //alert("New user added with id: " +response.data.User.cid);
+                    
+                    //thisCtrl.id = response.data.User.cid
+                    
+                    console.log("response "+response.data);
+                    
+                    //thisCtrl.credentialList = response.data.User;
+                    
+                    //console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialList))
+                    
+                    //console.log("second sign in")
+                    
+                    //thisCtrl.signUpUser();
+                     console.log("thisCtrl: "+thisCtrl.meetingId);
+                    thisCtrl.meetingId = JSON.stringify(response.data.Meeting[0].mID);
+                    console.log("response.data.Meet: "+response.data.Meeting[0].mID)
+                    console.log("mid: "+thisCtrl.meetingId)
+                    
+                }, //Error function
+                function (response) {
+                    // This is the error function
+                    // If we get here, some error occurred.
+                    // Verify which was the cause and show an alert.
+                    var status = response.status;
+                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
+                    //console.log("Error: " + reqURL);
+                    //alert("Cristo");
+                    if (status == 0) {
                         alert("No hay conexion a Internet");
                     }
                     else if (status == 401) {
@@ -777,5 +843,14 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                 }
             );
         };
-            
+        this.meetingRedirect = function(){
+                                   console.log("role"+$routeParams.role)
+            console.log("uid"+$routeParams.uid)
+            $location.url("/meeting/"+$routeParams.role+'/'+$routeParams.uid);
+        }
+        this.activityLogRedirect = function(){
+            $location.url('/ActivityLog/'+$routeParams.role+'/'+$routeParams.uid);
+        }
+        //this.loadInActiveVotingQuestions();
+        this.loadActiveMeeting();
 }]);

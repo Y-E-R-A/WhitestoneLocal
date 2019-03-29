@@ -7,11 +7,11 @@
             templateUrl: 'pages/login.html',
             controller: 'LoginController',
             controllerAs : 'loginCtrl'
-        }).when('/activityLog', {
+        }).when('/activityLog/:role/:uid', {
             templateUrl: 'pages/activityLog.html',
             controller: 'activityLogController',
             controllerAs : 'activityLogCtrl'
-        }).when('/meeting', {
+        }).when('/meeting/:role/:uid', {
             templateUrl: 'pages/createMeeting.html',
             controller: 'createMeetingController',
             controllerAs : 'createMeetingCtrl'
@@ -19,7 +19,7 @@
             templateUrl: 'pages/createUser.html',
             controller: 'createUserController',
             controllerAs : 'createUserCtrl'
-        }).when('/Vote', {
+        }).when('/Vote/:role/:uid', {
             templateUrl: 'pages/createVote.html',
             controller: 'votingController',
             controllerAs : 'votingCtrl'

@@ -50,24 +50,29 @@ angular.module('Whitestone').controller('LoginController', ['$http', '$log', '$s
                          }
             console.log("bitch");
             // Now issue the http request to the rest API
-            $http.get(reqURL,data,config).then(
+            $http.post(reqURL,data,config).then(
                 // Success function
                 function (response) {
                     
                     // assing the part details to the variable in the controller
                     thisCtrl.credentialsList = response.data.User;
                     //console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList))
-                    //console.log("uid without JSON: " + response.data.User)
+                    console.log("uid without JSON: " + response.data)
+                    console.log("uid with JSON: " +JSON.stringify(response))
+                    
                     //this.group(response.data.User.uid);
                     //console.log("uid: " + JSON.stringify(response.data.User[0].uid))
                     
                     //Get User Role
-                    var role = "Secretary";
-
+                    var role = response.data.User.role;
+                    console.log("role"+role)
+                    var uid = response.data.User.uid;
+                    console.log("uid"+uid)
                     if(role == "Administrator"){
                         $location.url('/createUser/'+"Administrator");
                     }else if(role == "Secretary"){
-                        $location.url("createMeeting"+'/Secretary/');
+                       console.log("Secretary")
+                        $location.url("/meeting/"+role+'/'+uid);
                     }else if(role == "Senator"){
                         $location.url('/speak/'+"Senator");
                     }else if(role == "Chancellor"){
