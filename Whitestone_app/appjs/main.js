@@ -15,7 +15,7 @@
             templateUrl: 'pages/createMeeting.html',
             controller: 'createMeetingController',
             controllerAs : 'createMeetingCtrl'
-        }).when('/createUser', {
+        }).when('/createUser/:role/:uid', {
             templateUrl: 'pages/createUser.html',
             controller: 'createUserController',
             controllerAs : 'createUserCtrl'
@@ -23,18 +23,22 @@
             templateUrl: 'pages/createVote.html',
             controller: 'votingController',
             controllerAs : 'votingCtrl'
-        }).when('/submitVoteSenator', {
+        }).when('/submitVoteSenator/:role/uid', {
             templateUrl: 'pages/submitVote.html',
             controller: 'submitVoteSenController',
             controllerAs : 'submitVoteSenCtrl'
-        }).when('/submitVoteChancellor', {
+        }).when('/submitVoteChancellor/:role/uid', {
             templateUrl: 'pages/submitVoteChan.html',
             controller: 'submitVoteChanController',
             controllerAs : 'submitVoteChanCtrl'
-        }).when('/oldMeeting', {
+        }).when('/oldMeeting/:role/:uid', {
             templateUrl: 'pages/viewOldMeetins.html',
             controller: 'oldMeetingsController',
             controllerAs : 'oldMeetingsSenCtrl'
+        }).when('/editUser/:role/:uid', {
+            templateUrl: 'pages/editUser.html',
+            controller: 'editUserController',
+            controllerAs : 'editUserCtrl'
         }).otherwise({
             redirectTo: '/login'
         });
