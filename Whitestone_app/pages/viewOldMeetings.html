@@ -1,0 +1,57 @@
+<head>
+ 
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="row">
+      <div class="col-sm-4">
+
+      </div>
+      <div class="col-sm-4" style="background-color:rgba(246, 245, 250, 1);color:black;padding:20px 20px 20px 20px">
+        <table>
+          <tbody>
+            <tr>
+              <th>
+                <div ng-repeat="meetings in oldMeetingCtrl.newOldMeetingList">
+                  <label>
+                    {{meetings.mname}} {{meetings.mdate}}{{meetings.mtime}}
+                    {{meetings.mdescription}} 
+                  </label>
+                  <input type="checkbox" name="mycheckbox" ng-model="meetings.checked" ng-click="checkMeeting(meetings)" ng-checked='meetings.checked'
+                  />
+                </div>
+              </th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-sm-4">
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4" style="background-color:rgba(246, 245, 250, 1);color:black;padding:20px 20px 20px 20px">
+        <div ng-show="oldMeetingCtrl.selected">
+          <h1>Welcome</h1>
+          <div ng-repeat="votingQuestion in oldMeetingCtrl.votingQuestionList">
+            {{votingQuestion}}
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+      </div>
+
+      <div class="col-sm-4" style="background-color:rgba(246, 245, 250, 1);color:black;padding:20px 20px 20px 20px">
+      </div>
+    </div>
+  </div>
+</body>
