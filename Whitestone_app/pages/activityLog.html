@@ -1,0 +1,37 @@
+<head>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="row">
+      <div class="col-sm-4">
+        <input ng-model="activityLogCtrl.date" placeholder="MM/DD/YYYY">
+        <button type="submit" name="action" ng-click="activityLogCtrl.searchActivity()">Search</button>
+      </div>
+      <div class="col-sm-4" style="background-color:rgba(246, 245, 250, 1);color:black;padding:20px 20px 20px 20px">
+        <table>
+          <tbody>
+            <tr>
+              <th>
+                <div ng-repeat="activity in activityLogCtrl.newActivityLogList">
+                  <label>
+                    {{activity.user}}{{activity.logmessage}}{{activity.date}}
+                  </label>
+                </div>
+              </th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-sm-4">
+      </div>
+    </div>
+  </div>
+</body>
