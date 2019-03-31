@@ -14,19 +14,44 @@
       </div>
 
       <div class="col-sm-4">
-            <div ng-repeat="choices in submitVoteChanCtrl.newChoiceList">
-                    <input 
-                                  type="checkbox" 
-                                  name="mycheckbox" 
-                                  ng-model= "choices.checked"
-                                  ng-click="checkChoice(choice.alt)"
-                                  ng-disabled="submitVoteChanCtrl.count >= submitVoteChanCtrl.Limit && choice.checked"
-                                  ng-value='choice.alt'
-                                         ng-checked='choice.checked'/>  
-                                      {{choice.alt}}
-                </div>
-                <button class="btn btn-primary" style="padding:1px 10px;border-radius: 5px;" ng-click="submitVoteChanCtrl.checkSubmit()">Submit</button>
+          <table>
+              <tbody>
+                  <tr>
+                      <th>
+                          {{submitVoteChanCtrl.votingQuestion[0].vquestion}}
 
+                      </th>
+                  </tr>
+                  <tr>
+                      <th>
+                          {{submitVoteChanCtrl.votingQuestion[0].vdescription}}
+
+                      </th>
+                  </tr>
+                  <tr>
+                      <th>
+                          <div ng-repeat="choices in submitVoteChanCtrl.newChoiceList">
+                              <input 
+                                            type="checkbox" 
+                                            name="mycheckbox" 
+                                            ng-model= "choices.checked"
+                                            ng-click="submitVoteChanCtrl.checkChoice(choice.alt)"
+                                            ng-disabled="submitVoteChanCtrl.count >= submitVoteChanCtrl.Limit && choice.checked"
+                                            ng-value='choice.alt'
+                                                  ng-checked='choice.checked'/>  
+                                                {{choice.alt}}
+                          </div>
+                          <button class="btn btn-primary" style="padding:1px 10px;border-radius: 5px;" ng-click="submitVoteChanCtrl.checkSubmit()">Submit</button>
+                      </th>
+                  </tr>
+                  <tr>
+                      <th>
+                          <button class="btn btn-primary" style="padding:1px 10px;border-radius: 5px;" ng-click="submitVoteChanCtrl.checkSubmit()">Submit</button>
+                      </th>
+                  </tr>
+
+              </tbody>
+          </table>
       </div>
       
       <div class="col-sm-4" style="background-color:rgba(246, 245, 250, 1);color:black;padding:20px 20px 20px 20px">
