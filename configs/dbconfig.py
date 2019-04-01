@@ -1,8 +1,10 @@
 pg_config = {
 
 
-    'user' : 'postgres',
-    'passwd' : 'capstone',
+    'user' : 'whitestoneadmin',
+    'passwd' : 'colegio',
     'dbname' : 'whitestone'
+
+
 
 }
