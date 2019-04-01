@@ -3,51 +3,58 @@
 <table bgcolor="#FFFFFF">
     <tbody>
         <tr>
-            <th><label> <b>Name:  </b></label><input ng-model="createUserCtrl.meeting_name" placeholder="Enter Meeting Name"></th>
+            <th><label> <b>Name:  </b></label><input ng-model="createUserCtrl.first_name" placeholder="Enter Meeting Name"></th>
         </tr>
         <tr>
-            <th><label> <b>Last:  </b></label><input ng-model="createUserCtrl.meeting_desc" placeholder="Enter Meeting_description" ></th>
+            <th><label> <b>Last:  </b></label><input ng-model="createUserCtrl.last_name" placeholder="Enter Last Name" ></th>
         </tr>
         <tr>
-            <th><label> <b>About:  </b></label><input ng-model="createUserCtrl.meeting_month" placeholder= "MM" ></th>
+            <th><label> <b>About:  </b></label><input ng-model="createUserCtrl.about" placeholder= "about" ></th>
         </tr>
         <tr>
-            <th><label> <b>UPR email:  </b></label><input ng-model="createUserCtrl.meeting_date" placeholder="DD"></th>
+            <th><label> <b>Password:  </b></label><input ng-model="createUserCtrl.password" placeholder= "password" ></th>
+        </tr>
+        <tr>
+            <th><label> <b>UPR email:  </b></label><input ng-model="createUserCtrl.email" placeholder="email"></th>
         </tr>
         <tr>
             
             <th><label> <b>Select The User Role:  </b></label><br>
 
-                <input type="radio" ng-model="role" value="Senator">Senator
+                <input type="radio" ng-model="createUserCtrl.role" value="Senator">Senator
                 <br>
-                <input type="radio" ng-model="role" value="Chancellor">Chancellor
+                <input type="radio" ng-model="createUserCtrl.role" value="Chancellor">Chancellor
                 <br>
-                <input type="radio" ng-model="role" value="Secretary">Secretary
+                <input type="radio" ng-model="createUserCtrl.role" value="Secretary">Secretary
                 <br>
-                <input type="radio" ng-model="role" value="Administrator">Administrator
+                <input type="radio" ng-model="createUserCtrl.role" value="Administrator">Administrator
 
             </th>
         </tr>
         <tr>
             <th><label> <b>Select The User Classification:  </b></label><br>
 
-                <input type="radio" ng-model="title" value="Ex-Officio Student">Ex-Officio Student
+                <input type="radio" ng-model="createUserCtrl.title" value="Ex-Officio Student">Ex-Officio Student
                 <br>
-                <input type="radio" ng-model="title" value="Elect Student">Elect Student
+                <input type="radio" ng-model="createUserCtrl.title" value="Elect Student">Elect Student
                 <br>
-                <input type="radio" ng-model="title" value="Elect">Elect
+                <input type="radio" ng-model="createUserCtrl.title" value="Elect">Elect
                 <br>
-                <input type="radio" ng-model="title" value="Ex-Officio">Ex-Officio
+                <input type="radio" ng-model="createUserCtrl.title" value="Ex-Officio">Ex-Officio
                 <br>
-                <input type="radio" ng-model="title" value="Staff">Staff
+                <input type="radio" ng-model="createUserCtrl.title" value="Staff">Staff
 
             </th>
         </tr>
         <tr>
             <th>
-            <button type="submit" name="action" ng-click="createUserCtrl.createNewUser()">Create</button> 
+            <button type="submit" name="action" ng-click="createUserCtrl.createNewCredentials()">Create</button> 
         </th>
         </tr>
+        
     </tbody>
 </table>
+    <button type="submit" name="action" ng-click="createUserCtrl.editUserRedirect()">Edit User</button> 
+    <button type="submit" name="action" ng-click="createUserCtrl.activityLogRedirect()">Activity Log</button> 
+    <button type="submit" name="action" ng-click="createUserCtrl.logOut()">Logout</button> 
 </body>

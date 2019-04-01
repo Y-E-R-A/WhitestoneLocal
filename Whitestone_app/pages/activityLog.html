@@ -2,7 +2,7 @@
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -28,6 +28,9 @@
             </tr>
           </tbody>
         </table>
+    <button type="submit" name="action" ng-click="activityLogCtrl.editUserRedirect()">Edit User</button> 
+    <button type="submit" name="action" ng-click="activityLogCtrl.createUserRedirect()">create user</button> 
+    <button type="submit" name="action" ng-click="activityLogCtrl.logOut()">Logout</button>
       </div>
 
       <div class="col-sm-4">
