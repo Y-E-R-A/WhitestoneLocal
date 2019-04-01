@@ -40,11 +40,13 @@ class VotingQuestionDAO:
         # Return the voting question corresponding to a specific meeting ID
         cursor = self.conn.cursor()
         query = "SELECT * " \
-                "FROM VotingQuestion " \
+                "FROM VotingQuestion NATURAL INNER JOIN VotingChoice " \
                 "WHERE mID = %s " \
                 "and vstatus= 'Active';"
         cursor.execute(query, (mID,))
-        result = cursor.fetchone()
+        result = []
+        for row in cursor:
+            result.append(row)
         return result
 
 
