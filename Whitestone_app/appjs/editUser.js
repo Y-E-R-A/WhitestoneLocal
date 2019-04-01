@@ -1,6 +1,6 @@
 angular.module('Whitestone').controller('editUserController', ['$http', '$log', '$scope', '$location', '$routeParams',
     function ($http, $log, $scope, $location, $routeParams) {
-
+        var thisCtrl = this;
         this.newUserList = [];
 
         var first_name = "";
@@ -10,7 +10,8 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
         var password = "";
         var role = "";
         var title = "";
-        this.myUser = {};
+        this.myUser = [];
+        this.uID = 0;
         // $scope.users = [{
         //     "id": 1,
         //     "fist_name": "Javi",
@@ -57,55 +58,43 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
         //$scope.selected = [];
         //$parent.rol
 
-        this.loadForm = function (data) {
-            thisCtrl.roleSelect.selected = data.role;
-            thisCtrl.titleSelect.selected = data.classification;
+        this.loadForm = function () {
+            console.log("My User: "+JSON.stringify(thisCtrl.myuser));
+            if(thisCtrl.myUser){
+                console.log("Null");
+                
+            }else{
+                console.log("Not Null");
+            }
+            
+            if(thisCtrl.myUser == null){
+                thisCtrl.roleSelect.selected = '';
+                thisCtrl.titleSelect.selected = '';
+                thisCtrl.uID = 0;
+                thisCtrl.showForm = false;
+                
+            }else{
+                thisCtrl.roleSelect.selected = thisCtrl.myuser.role;
+                thisCtrl.titleSelect.selected = thisCtrl.myuser.classification;
+                thisCtrl.uID = thisCtrl.myuser.uid;
+                thisCtrl.showForm = true;
+                
+            }
             thisCtrl.showMessage = false;
-            thisCtrl.showForm = true;
+            
         }
 
-        this.loadUsers = function () {
+        this.editTest = function(){
+            var data = [];
 
-            // Now create the url with the route to talk with the rest API
-            var reqURL = "http://localhost:5000/Whitestone/credentials/user";
-
-            // Now issue the http request to the rest API
-            $http.get(reqURL).then(
-                // Success function
-                function (response) {
-                    console.log("response: " + JSON.stringify(response.data))
-                    // assing the part details to the variable in the controller
-                    //alert("New user added with id: " +response.data.User.cid);
-
-                    //thisCtrl.newUserSList = response.data;
-                    //thisCtrl.showMessage = true;
-                }, //Error function
-                function (response) {
-                    // This is the error function
-                    // If we get here, some error occurred.
-                    // Verify which was the cause and show an alert.
-                    var status = response.status;
-                    console.log("thiscredentialList: " + JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
-                    if (status == 0) {
-                        alert("No hay conexion a Internet");
-                    }
-                    else if (status == 401) {
-                        alert("Su sesion expiro. Conectese de nuevo.");
-                    }
-                    else if (status == 403) {
-                        alert("No esta autorizado a usar el sistema.");
-                    }
-                    else if (status == 404) {
-                        alert("No se encontro la informacion solicitada.");
-                    }
-                    else {
-                        alert("Error interno del sistema.");
-                    }
-                }
-            );
-        };
+            data.uname = this.first_name;
+            data.ulastname = this.last_name;
+            data.uabout = this.about;
+            data.uemail = this.email;
+            data.urole = this.roleSelect.selected;
+            data.uclassification = this.titleSelect.selected;   
+            console.log("data test: "+JSON.stringify(data));
+        }
         this.editUser = function () {
 
             var data = [];
@@ -183,7 +172,52 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
                     console.log("response: " + JSON.stringify(response.data))
                     // assing the part details to the variable in the controller
                     //alert("New user added with id: " +response.data.User.cid);
+                    
+                }, //Error function
+                function (response) {
+                    // This is the error function
+                    // If we get here, some error occurred.
+                    // Verify which was the cause and show an alert.
+                    var status = response.status;
+                    console.log("thiscredentialList: " + JSON.stringify(thisCtrl.credentialsList));
+                    //console.log("Error: " + reqURL);
+                    //alert("Cristo");
+                    if (status == 0) {
+                        alert("No hay conexion a Internet");
+                    }
+                    else if (status == 401) {
+                        alert("Su sesion expiro. Conectese de nuevo.");
+                    }
+                    else if (status == 403) {
+                        alert("No esta autorizado a usar el sistema.");
+                    }
+                    else if (status == 404) {
+                        alert("No se encontro la informacion solicitada.");
+                    }
+                    else {
+                        alert("Error interno del sistema.");
+                    }
+                }
+            );
+        };
+        this.loadUsers = function () {
 
+            // Now create the url with the route to talk with the rest API
+            console.log("load users");
+            var reqURL = "http://localhost:5000/whitestone/users";
+
+            // Now issue the http request to the rest API
+            $http.get(reqURL).then(
+                // Success function
+                function (response) {
+                    console.log("response: " + JSON.stringify(response.data))
+                    // assing the part details to the variable in the controller
+                    //alert("New user added with id: " +response.data.User.cid);
+                    thisCtrl.newUserList = response.data.User;
+                    console.log("new User List: "+JSON.stringify(thisCtrl.newUserList));
+                    
+                    //thisCtrl.newUserSList = response.data;
+                    //thisCtrl.showMessage = true;
                 }, //Error function
                 function (response) {
                     // This is the error function

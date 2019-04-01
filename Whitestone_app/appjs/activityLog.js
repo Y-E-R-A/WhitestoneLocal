@@ -8,14 +8,15 @@ angular.module('Whitestone').controller('activityLogController', ['$http', '$log
 
         this.newActivityLogList = [];
 
-
         this.searchActivity = function () {
 
             // First set up the url for te route
-            var data = [];
-            data.date = thisCtrl.date;
+            var data = {};
+            console.log("date: "+this.date);
+            data.date = this.date;
 
-
+            console.log("Search Activity");
+            console.log("data: "+JSON.stringify(data));
             var reqURL = "http://localhost:5000/whitestone/activitylog";
             // Now set up the $http object
             // It has two function call backs, one for success and one for error
@@ -24,11 +25,11 @@ angular.module('Whitestone').controller('activityLogController', ['$http', '$log
                     { 'Content-Type': 'application/json;charset=utf-8;' }
             }
 
-            $http.get(reqURL).then(// success call back
+            $http.post(reqURL,data,config).then(// success call back
                 function (response) {
                     // The is the sucess function!
                     // Copy the list of parts in the data variable
-                    console.log("response: " + JSON.stringify(response))
+                    console.log("response Activity Log: " + JSON.stringify(response))
 
                     //thisCtrl.newActivityLogList = response.data;
                     //thisCtrl.newActivityLogList = response.data;

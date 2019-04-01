@@ -69,7 +69,7 @@ angular.module('Whitestone').controller('LoginController', ['$http', '$log', '$s
                     var uid = response.data.User.uid;
                     console.log("uid"+uid)
                     if(role == "Administrator"){
-                        $location.url('/createUser/'+"Administrator");
+                        $location.url('/createUser/'+role+'/'+uid);
                     }else if(role == "Secretary"){
                        console.log("Secretary")
                         $location.url("/meeting/"+role+'/'+uid);
