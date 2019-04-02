@@ -3,14 +3,14 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
         var thisCtrl = this;
         this.newUserList = [];
 
-        var first_name = "";
+       var first_name = "";
         var last_name = "";
         var about = "";
         var email = "";
         var password = "";
         var role = "";
         var title = "";
-        this.myUser = [];
+        this.selectedUser;
         this.uID = 0;
         // $scope.users = [{
         //     "id": 1,
@@ -58,35 +58,39 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
         //$scope.selected = [];
         //$parent.rol
 
-        this.loadForm = function () {
-            console.log("My User: "+JSON.stringify(thisCtrl.myuser));
-            if(thisCtrl.myUser){
-                console.log("Null");
-                
-            }else{
-                console.log("Not Null");
-            }
-            
-            if(thisCtrl.myUser == null){
-                thisCtrl.roleSelect.selected = '';
-                thisCtrl.titleSelect.selected = '';
+         this.loadForm = function () {
+            console.log("My User: "+JSON.stringify(thisCtrl.selectedUser));
+            console.log("selected User: "+thisCtrl.selectedUser);
+            if(thisCtrl.selectedUser === null){
+                this.roleSelect.selected = '';
+                this.titleSelect.selected = '';
+                this.first_name = "";
+                this.last_name = "";
+                this.email = "";
+                this.about = "";
                 thisCtrl.uID = 0;
-                thisCtrl.showForm = false;
+                this.showForm = false;
                 
             }else{
-                thisCtrl.roleSelect.selected = thisCtrl.myuser.role;
-                thisCtrl.titleSelect.selected = thisCtrl.myuser.classification;
-                thisCtrl.uID = thisCtrl.myuser.uid;
+                this.roleSelect.selected = thisCtrl.selectedUser.role;
+                this.titleSelect.selected = thisCtrl.selectedUser.classification;
+                this.uID = thisCtrl.selectedUser.uid;
+                this.first_name = thisCtrl.selectedUser.firstname;
+                this.last_name = thisCtrl.selectedUser.lastname;
+                this.email = thisCtrl.selectedUser.email;
+                this.password = thisCtrl.selectedUser.localpassword;
                 thisCtrl.showForm = true;
-                
             }
             thisCtrl.showMessage = false;
-            
+            console.log("role"+this.role);
+            console.log("title"+this.roleSelect.selected);
+             console.log("title"+this.titleSelect.selected);
         }
 
         this.editTest = function(){
-            var data = [];
-
+            var data = {};
+            console.log("edit Test");
+            console.log(this.first_name);
             data.uname = this.first_name;
             data.ulastname = this.last_name;
             data.uabout = this.about;
@@ -97,12 +101,12 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
         }
         this.editUser = function () {
 
-            var data = [];
+            var data = {};
 
-            data.uname = this.first_name;
+            data.ufirstname = this.first_name;
             data.ulastname = this.last_name;
-            data.uabout = this.about;
-            data.uemail = this.email;
+            data.udescription = this.about;
+            //data.uemail = this.email;
             data.urole = this.roleSelect.selected;
             data.uclassification = this.titleSelect.selected;
 
@@ -111,9 +115,10 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
             thisCtrl.roleSelect.selected = '';
             thisCtrl.showForm = false;
             thisCtrl.myUser = {};
-
+            
             // Now create the url with the route to talk with the rest API
-            var reqURL = "http://localhost:5000/whitestone/users";
+            console.log("data: "+JSON.stringify(data));
+            var reqURL = "http://localhost:5000/whitestone/edituser/"+thisCtrl.uID;
 
             var config = {
                 headers:
@@ -134,7 +139,7 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " + JSON.stringify(thisCtrl.credentialsList));
+                    
                     //console.log("Error: " + reqURL);
                     //alert("Cristo");
                     if (status == 0) {
