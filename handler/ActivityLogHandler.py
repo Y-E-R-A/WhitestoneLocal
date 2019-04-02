@@ -12,6 +12,7 @@ class ActivityLogHandler:
         result['ufirstname']= row[2]
         result['ulastname'] = row[3]
         result['logmessage'] = row[4]
+        result['email'] = row[5]
         return result
 
 
