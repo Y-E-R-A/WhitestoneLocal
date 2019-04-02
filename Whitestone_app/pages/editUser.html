@@ -1,6 +1,6 @@
 <body>
 
-    <select ng-change="editUserCtrl.test(myuser)" ng-model="myuser" ng-options="user as (user.fist_name+'&nbsp'+user.last_name) for user in editUserCtrl.newUserSList">
+    <select ng-change="editUserCtrl.loadForm()" ng-model="editUserCtrl.selectedUser" ng-options="user as (user.firstname+'&nbsp'+user.lastname) for user in editUserCtrl.newUserList">
         <option value="">--Select User--</option>
     </select>
     <div ng-show="editUserCtrl.showForm">
@@ -12,7 +12,7 @@
                         <label>
                             <b>First Name: </b>
                         </label>
-                        <input ng-model="editUserCtrl.first_name" placeholder="First Name" value="{{myuser.fist_name}}">
+                        <input ng-model="editUserCtrl.first_name" placeholder="First Name">
                     </th>
                 </tr>
                 <tr>
@@ -20,7 +20,7 @@
                         <label>
                             <b>Last Name: </b>
                         </label>
-                        <input ng-model="editUserCtrl.last_name" placeholder="Last Name" value="{{myuser.last_name}}">
+                        <input ng-model="editUserCtrl.last_name" placeholder="Last Name">
                     </th>
                 </tr>
                 <tr>
@@ -28,7 +28,15 @@
                         <label>
                             <b>About: </b>
                         </label>
-                        <input ng-model="editUserCtrl.about" placeholder="about" value="{{myuser.abour}}">
+                        <input ng-model="editUserCtrl.about" placeholder="about">
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        <label>
+                            <b>Password: </b>
+                        </label>
+                        <input ng-model="editUserCtrl.password" placeholder="email">
                     </th>
                 </tr>
                 <tr>
@@ -36,7 +44,7 @@
                         <label>
                             <b>UPR email: </b>
                         </label>
-                        <input ng-model="editUserCtrl.email" placeholder="email" value="{{myuser.email}}">
+                        <input ng-model="editUserCtrl.email" placeholder="email">
                     </th>
                 </tr>
                 <tr>
