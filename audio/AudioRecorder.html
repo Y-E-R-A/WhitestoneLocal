@@ -112,7 +112,23 @@ function makeLink(){
   li.appendChild(mt);
   li.appendChild(hf);
   ul.appendChild(li);
+
+  var httpRequest = new XMLHttpRequest();
+  var aFileForm = new FormData();
+  aFileForm.append(aFullDateAndTime, blob, aFullDateAndTime.concat(".mp3"));
+  httpRequest.open("POST", "http://whitestone.uprm.edu/uploads.php");
+  //httpRequest.setRequestHeader(multipart/FormData,audio/mpeg);
+  httpRequest.send(aFileForm);
+
 }
+
+function upload(){
+var fileName = makeLink().hf.download;
+
+
+}
+
 </script>
-  </body>
+
+</body>
 </html>
