@@ -26,7 +26,7 @@ class VotingQuestionHandler:
 
     def mapToVotingQuestionDict(self, row):
 
-        # Voting Question dictionary
+        # Inactive Voting Question dictionary
         result = {}
         result['vID'] = row[0]
         result['creatorID'] = row[1]
@@ -39,8 +39,8 @@ class VotingQuestionHandler:
         result['vstatus'] = row[8]
         return result
 
-    def mapToVotingQuestionDict(self, row):
-        # Voting Question dictionary
+    def mapToActiveVotingQuestionDict(self, row):
+        # Voting Active Question dictionary (Question with choices)
         result = {}
         result['vID'] = row[0]
         result['creatorID'] = row[1]
@@ -55,16 +55,16 @@ class VotingQuestionHandler:
         result['choice'] = row[10]
         return result
 
-    def mapToVotingQuestionDict(self, row):
-        # Voting Question dictionary
-        result = {}
-        result['vID'] = row[0]
-        result['vquestion'] = row[1]
-        result['altID'] = row[2]
-        result['choice'] = row[3]
-        result['votes'] = row[4]
-        result['vtime'] = row[5]
-        result['vdate'] = row[6]
+    # def mapToInactiveVotingQuestionDict(self, row):
+    #     # Voting Question dictionary
+    #     result = {}
+    #     result['vID'] = row[0]
+    #     result['vquestion'] = row[1]
+    #     result['altID'] = row[2]
+    #     result['choice'] = row[3]
+    #     result['votes'] = row[4]
+    #     result['vtime'] = row[5]
+    #     result['vdate'] = row[6]
 
         return result
 
@@ -112,7 +112,7 @@ class VotingQuestionHandler:
 
         else:
             for r in result:
-                mapped_result.append(self.mapToVotingQuestionDict(r))
+                mapped_result.append(self.mapToActiveVotingQuestionDict(r))
 
             return jsonify(Voting=mapped_result)
 
