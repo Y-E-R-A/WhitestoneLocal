@@ -25,6 +25,7 @@ class VotingQuestionHandler:
         return result
 
     def mapToVotingQuestionDict(self, row):
+
         # Voting Question dictionary
         result = {}
         result['vID'] = row[0]
@@ -35,9 +36,37 @@ class VotingQuestionHandler:
         result['vtime'] = row[5]
         result['vquestion'] = row[6]
         result['selectionlimit'] = row[7]
-        result['vtatus'] = row[8]
+        result['vstatus'] = row[8]
         return result
 
+    def mapToVotingQuestionDict(self, row):
+        # Voting Question dictionary
+        result = {}
+        result['vID'] = row[0]
+        result['creatorID'] = row[1]
+        result['mID'] = row[2]
+        result['vdescription'] = row[3]
+        result['vdate'] = row[4]
+        result['vtime'] = row[5]
+        result['vquestion'] = row[6]
+        result['selectionlimit'] = row[7]
+        result['vstatus'] = row[8]
+        result['altID'] = row[9]
+        result['choice'] = row[10]
+        return result
+
+    def mapToVotingQuestionDict(self, row):
+        # Voting Question dictionary
+        result = {}
+        result['vID'] = row[0]
+        result['vquestion'] = row[1]
+        result['altID'] = row[2]
+        result['choice'] = row[3]
+        result['votes'] = row[4]
+        result['vtime'] = row[5]
+        result['vdate'] = row[6]
+
+        return result
 
     def mapToVotingResultsDict(self, row):
         # Voting Result dictionary
@@ -61,24 +90,30 @@ class VotingQuestionHandler:
 
     def getInactiveVotingQuestionBymID(self, mID):
         result = VotingQuestionDAO().getInactiveVotingQuestionBymID(mID)
+        mapped_result = []
 
         if not result:
             return jsonify(Error="NOT FOUND"), 404
 
         else:
-            mapped_result = self.mapToVotingQuestionDict(result)
-            return jsonify(Voting=mapped_result)
+            for r in result:
+                mapped_result.append(self.mapToVotingQuestionDict(r))
+            print("Result:", mapped_result)
 
+            return jsonify(Voting=mapped_result)
 
 
     def getActiveVotingQuestionBymID(self, mID):
         result = VotingQuestionDAO().getActiveVotingQuestionBymID(mID)
+        mapped_result = []
 
         if not result:
             return jsonify(Error="NOT FOUND"), 404
 
         else:
-            mapped_result = self.mapToVotingQuestionDict(result)
+            for r in result:
+                mapped_result.append(self.mapToVotingQuestionDict(r))
+
             return jsonify(Voting=mapped_result)
 
 
