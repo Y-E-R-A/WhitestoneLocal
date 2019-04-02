@@ -27,14 +27,17 @@ class VotingQuestionDAO:
     def getInactiveVotingQuestionBymID(self, mID):
         # Return the voting question corresponding to a specific meeting ID
         cursor = self.conn.cursor()
-        query = "SELECT * " \
-                "FROM VotingQuestion " \
-                "WHERE mID = %s " \
-                "and vstatus= 'Inactive';"
-        cursor.execute(query, (mID,))
-        result = cursor.fetchone()
-        return result
+        query = "SELECT vID, vquestion, altID, choice, count(*), vtime, vdate " \
+                "FROM (VotingChoice NATURAL INNER JOIN Choose AS Result) NATURAL INNER JOIN VotingQuestion " \
+                "WHERE mID = 2 AND vstatus = 'Inactive' " \
+                "GROUP BY altID, vID, vquestion, choice, vtime, vdate " \
+                "ORDER BY vID, vtime, choice DESC"
 
+        cursor.execute(query, (mID,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
 
     def getActiveVotingQuestionBymID(self, mID):
         # Return the voting question corresponding to a specific meeting ID
@@ -60,6 +63,7 @@ class VotingQuestionDAO:
                 "and vstatus = 'Inactive' " \
                 "GROUP BY choice " \
                 "ORDER BY choice DESC;"
+
         cursor.execute(query, (vID,))
         result = []
         for row in cursor:
