@@ -24,6 +24,7 @@ class UsersDAO:
 
 
     def getUserByuID(self, uID):
+        print("getUserbyID")
         # Return the user information corresponding to a uID.
         cursor = self.conn.cursor()
         query = "SELECT ufirstname, ulastname, udescription, urole, uclassification, email, localpassword " \
@@ -31,6 +32,7 @@ class UsersDAO:
                 "WHERE uID= %s;"
         cursor.execute(query, (uID,))
         result = cursor.fetchone()
+        print(result)
         return result
 
 

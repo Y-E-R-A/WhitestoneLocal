@@ -44,6 +44,16 @@ class UsersHandler:
         result['uclassification'] = uclassification
         return result
 
+    def editUserDict(self, uID, ufirstname, ulastname, udescription, urole, uclassification):
+
+        result = {}
+        result['uID'] = uID
+        result['ufirstname'] = ufirstname
+        result['ulastname'] = ulastname
+        result['udescription'] = udescription
+        result['urole'] = urole
+        result['uclassification'] = uclassification
+        return result
 
     def getAllUsersInfo(self):
         result = UsersDAO().getAllUsersInfo()
@@ -158,7 +168,7 @@ class UsersHandler:
 
             return jsonify(User=mapped_result)
 
-    def insertCredentialsJSON(self,json):
+    def insertUserJSON(self, json):
 
         cid = json.get('cID')
         ufirstname = json.get('ufirstname')
@@ -183,12 +193,11 @@ class UsersHandler:
         if not UsersDAO().getUserByuID(uID):
             return jsonify(Error="User not found."), 404
         else:
-            if len(form) != 7:
+
+            if len(form) != 5:
                 return jsonify(Error="Malformed update request"), 400
             else:
 
-                uID = form['uID']
-                cID = form['cID']
                 ufirstname = form['ufirstname']
                 ulastname = form['ulastname']
                 udescription = form['udescription']
@@ -198,7 +207,7 @@ class UsersHandler:
 
                 if ufirstname and ulastname and urole and uclassification:
                     UsersDAO().update(uID, ufirstname, ulastname, udescription, urole, uclassification)
-                    result = self.buildUserDict(uID, cID, ufirstname, ulastname, udescription, urole, uclassification)
+                    result = self.editUserDict(uID, ufirstname, ulastname, udescription, urole, uclassification)
                     return jsonify(User=result), 201
                 else:
                     return jsonify(Error="Unexpected attributes in update request"), 400
