@@ -8,6 +8,13 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
         //List of voting voting questions from database
         this.votingQuestions = [];
         
+        this.inActiveVotingQuestion = [];
+        this.inActiveVotingChoices = [];
+        this.inActiveVotingChoicesTest = {};
+        
+        this.inActiveVotingChoiceTest = [];
+        this.inActiveVotingResult = [];
+        this.inActiveVotingChoicesTest2 = {};
         //The voting question
         var voting_question = "";
         
@@ -514,6 +521,69 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
             );
         };
 
+        this.loadActiveMeeting = function(){
+            
+
+            // Now create the url with the route to talk with the rest API
+            var reqURL = "http://localhost:5000/whitestone/activemeeting";
+            //console.log("reqURL: " + reqURL);
+            var config = { headers : 
+                          {'Content-Type':'application/json;charset=utf-8;' }
+                         }
+        
+            // Now issue the http request to the rest API
+            $http.get(reqURL).then(
+                // Success function
+                function (response) {
+                    console.log("response: " + JSON.stringify(response.data))
+                    // assing the part details to the variable in the controller
+                    //alert("New user added with id: " +response.data.User.cid);
+                    
+                    //thisCtrl.id = response.data.User.cid
+                    
+                    console.log("response "+response.data);
+                    
+                    //thisCtrl.credentialList = response.data.User;
+                    
+                    //console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialList))
+                    
+                    //console.log("second sign in")
+                    
+                    //thisCtrl.signUpUser();
+                     console.log("thisCtrl: "+thisCtrl.meetingId);
+                    thisCtrl.meetingId = JSON.stringify(response.data.Meeting[0].mID);
+                    console.log("response.data.Meet: "+response.data.Meeting[0].mID)
+                    console.log("mid: "+thisCtrl.meetingId)
+                    thisCtrl.loadInActiveVotingQuestions();
+                    
+                }, //Error function
+                function (response) {
+                    // This is the error function
+                    // If we get here, some error occurred.
+                    // Verify which was the cause and show an alert.
+                    var status = response.status;
+                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
+                    //console.log("Error: " + reqURL);
+                    //alert("Cristo");
+                    if (status == 0) {
+                        alert("No hay conexion a Internet");
+                    }
+                    else if (status == 401) {
+                        alert("Su sesion expiro. Conectese de nuevo.");
+                    }
+                    else if (status == 403) {
+                        alert("No esta autorizado a usar el sistema.");
+                    }
+                    else if (status == 404) {
+                        alert("No se encontro la informacion solicitada.");
+                    }
+                    else {
+                        alert("Error interno del sistema.");
+                    }
+                }
+            );
+        };
+        
         this.loadActiveVotingQuestions = function(){
 
         
@@ -595,144 +665,9 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
             //console.log("first name: "+this.first_name);
             //console.log("last name: "+this.last_name);
             // Now create the url with the route to talk with the rest API
-            var reqURL = "http://localhost:5000/whitestone/inactivevotings/+meetingID";
-            //console.log("reqURL: " + reqURL);
-            var config = { headers : 
-                          {'Content-Type':'application/json;charset=utf-8;' }
-                         }
-        
-            // Now issue the http request to the rest API
-            $http.get(reqURL,data,config).then(
-                // Success function
-                function (response) {
-                    console.log("response: " + JSON.stringify(response.data))
-                    // assing the part details to the variable in the controller
-                    alert("New user added with id: " +response.data.User.cid);
-                    
-                    //thisCtrl.id = response.data.User.cid
-                    
-                    //console.log("ctrl cid "+this.id )
-                    
-                    //thisCtrl.newChoiceList = response.data.User;
-
-                    for (var i=0;i<thisCtrl.newChoiceList.length;i++){
-                        thisCtrl.newChoiceList[i]["checked"] = false;
-                    }
-                    //thisCtrl.Limit = dblimit;
-                    
-                    //console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialList))
-                    
-                    //console.log("second sign in")
-                    
-                    
-                    for(var i=0;i<$scope.votingAlternatives.length;i++){
-                      thisCtrl.createAlternatives($scope.votingAlternatives[i].valt);
-                    }
-                    
-                }, //Error function
-                function (response) {
-                    // This is the error function
-                    // If we get here, some error occurred.
-                    // Verify which was the cause and show an alert.
-                    var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
-                    if (status === 0) {
-                        alert("No hay conexion a Internet");
-                    }
-                    else if (status == 401) {
-                        alert("Su sesion expiro. Conectese de nuevo.");
-                    }
-                    else if (status == 403) {
-                        alert("No esta autorizado a usar el sistema.");
-                    }
-                    else if (status == 404) {
-                        alert("No se encontro la informacion solicitada.");
-                    }
-                    else {
-                        alert("Error interno del sistema.");
-                    }
-                }
-            );
-        };
-        this.loadChoices = function(){
-
-        
-            
-            //data.udescription = this.description;
-            
-            //console.log("data: " + JSON.stringify(data));
-            //console.log("first name: "+this.first_name);
-            //console.log("last name: "+this.last_name);
-            // Now create the url with the route to talk with the rest API
-            var reqURL = "http://localhost:5000/whitestone/voting/+vid+/choices";
-            //console.log("reqURL: " + reqURL);
-            var config = { headers : 
-                          {'Content-Type':'application/json;charset=utf-8;' }
-                         }
-        
-            // Now issue the http request to the rest API
-            $http.get(reqURL).then(
-                // Success function
-                function (response) {
-                    console.log("response: " + JSON.stringify(response.data))
-                    // assing the part details to the variable in the controller
-                    alert("New user added with id: " +response.data.User.cid);
-                    
-                    //thisCtrl.id = response.data.User.cid
-                    
-                    //console.log("ctrl cid "+this.id )
-                    
-                    //thisCtrl.newChoiceList = response.data.User;
-
-                    for (var i=0;i<thisCtrl.newChoiceList.length;i++){
-                        thisCtrl.newChoiceList[i]["checked"] = false;
-                    }
-                    //thisCtrl.Limit = dblimit;
-                    
-                    //console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialList))
-                    
-                    //console.log("second sign in")
-                    
-                    
-                    for(var i=0;i<$scope.votingAlternatives.length;i++){
-                      thisCtrl.createAlternatives($scope.votingAlternatives[i].valt);
-                    }
-                    
-                }, //Error function
-                function (response) {
-                    // This is the error function
-                    // If we get here, some error occurred.
-                    // Verify which was the cause and show an alert.
-                    var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
-                    if (status === 0) {
-                        alert("No hay conexion a Internet");
-                    }
-                    else if (status == 401) {
-                        alert("Su sesion expiro. Conectese de nuevo.");
-                    }
-                    else if (status == 403) {
-                        alert("No esta autorizado a usar el sistema.");
-                    }
-                    else if (status == 404) {
-                        alert("No se encontro la informacion solicitada.");
-                    }
-                    else {
-                        alert("Error interno del sistema.");
-                    }
-                }
-            );
-        };
-        
-        this.loadActiveMeeting = function(){
-            
-
-            // Now create the url with the route to talk with the rest API
-            var reqURL = "http://localhost:5000/whitestone/activemeeting";
+            console.log("Inactive mid"+thisCtrl.meetingId);
+            console.log("meetingID: "+thisCtrl.meetingId);
+            var reqURL = "http://localhost:5000/whitestone/inactivevotings/"+thisCtrl.meetingId;
             //console.log("reqURL: " + reqURL);
             var config = { headers : 
                           {'Content-Type':'application/json;charset=utf-8;' }
@@ -748,19 +683,23 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                     
                     //thisCtrl.id = response.data.User.cid
                     
-                    console.log("response "+response.data);
+                    //console.log("ctrl cid "+this.id )
                     
-                    //thisCtrl.credentialList = response.data.User;
+                    //thisCtrl.newChoiceList = response.data.User;
+                    //thisCtrl.Limit = dblimit;
                     
                     //console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialList))
+                    thisCtrl.inActiveVotingQuestion = response.data.Voting;
                     
+                    console.log("InActive VQ List: "+JSON.stringify(thisCtrl.inActiveVotingQuestion));
+                    
+                    //for(var i=0;i<thisCtrl.inActiveVotingQuestion.length;i++){
+                        //thisCtrl.loadChoices(thisCtrl.inActiveVotingQuestion[i].vID);
+                    //}
+                    
+                    thisCtrl.loadChoices(thisCtrl.inActiveVotingQuestion[0].vID);
+                    //thisCtrl.loadResult(thisCtrl.inActiveVotingQuestion[0].vID);
                     //console.log("second sign in")
-                    
-                    //thisCtrl.signUpUser();
-                     console.log("thisCtrl: "+thisCtrl.meetingId);
-                    thisCtrl.meetingId = JSON.stringify(response.data.Meeting[0].mID);
-                    console.log("response.data.Meet: "+response.data.Meeting[0].mID)
-                    console.log("mid: "+thisCtrl.meetingId)
                     
                 }, //Error function
                 function (response) {
@@ -771,7 +710,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                     console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
                     //console.log("Error: " + reqURL);
                     //alert("Cristo");
-                    if (status == 0) {
+                    if (status === 0) {
                         alert("No hay conexion a Internet");
                     }
                     else if (status == 401) {
@@ -789,6 +728,228 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                 }
             );
         };
+        this.loadChoices = function(vid){
+
+        
+            console.log("load Choices");    
+            //data.udescription = this.description;
+            
+            //console.log("data: " + JSON.stringify(data));
+            //console.log("first name: "+this.first_name);
+            //console.log("last name: "+this.last_name);
+            // Now create the url with the route to talk with the rest API
+            console.log("loadChoiced: ");
+            //var reqURL = "http://localhost:5000/whitestone/voting/"+vid+"/results";
+            var reqURL = "http://localhost:5000/whitestone/voting/"+vid+"/choices";
+            //console.log("reqURL: " + reqURL);
+            var config = { headers : 
+                          {'Content-Type':'application/json;charset=utf-8;' }
+                         }
+        
+            // Now issue the http request to the rest API
+            $http.get(reqURL).then(
+                // Success function
+                function (response) {
+                    console.log("response Load Choices: " + JSON.stringify(response.data))
+                    // assing the part details to the variable in the controller
+                    //alert("New user added with id: " +response.data.User.cid);
+                    
+                    //thisCtrl.id = response.data.User.cid
+                    
+                    //console.log("ctrl cid "+this.id )
+                    
+                    //thisCtrl.newChoiceList = response.data.User;
+
+                    //thisCtrl.Limit = dblimit;
+                    
+                    //console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialList))
+                    thisCtrl.loadResult(vid);
+                    var num = vid;
+                    var dic = {};
+                    dic[num] =response.data.VotingResult;
+                    var dict =[];
+                    //dict.push({num:response.data.VotingResult});
+                    //dict.push(dic);
+                    
+                    //console.log("dict test: "+JSON.stringify(dict));
+                    //console.log("second sign in")
+                    //thisCtrl.inActiveVotingChoices = dict;
+                    //console.log("In Active VotingChoices: "+JSON.stringify(thisCtrl.inActiveVotingChoices));
+                    
+                    //thisCtrl.inActiveVotingChoicesTest[vid] = dic;
+                    //console.log("IAVC Test: "+JSON.stringify(thisCtrl.inActiveVotingChoicesTest));
+                    
+                }, //Error function
+                function (response) {
+                    // This is the error function
+                    // If we get here, some error occurred.
+                    // Verify which was the cause and show an alert.
+                    var status = response.status;
+                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
+                    //console.log("Error: " + reqURL);
+                    //alert("Cristo");
+                    if (status === 0) {
+                        alert("No hay conexion a Internet");
+                    }
+                    else if (status == 401) {
+                        alert("Su sesion expiro. Conectese de nuevo.");
+                    }
+                    else if (status == 403) {
+                        alert("No esta autorizado a usar el sistema.");
+                    }
+                    else if (status == 404) {
+                        alert("No se encontro la informacion solicitada.");
+                    }
+                    else {
+                        alert("Error interno del sistema.");
+                    }
+                }
+            );
+        };
+        this.loadResult = function(vid){
+
+        
+            console.log("load Choices");    
+            //data.udescription = this.description;
+            
+            //console.log("data: " + JSON.stringify(data));
+            //console.log("first name: "+this.first_name);
+            //console.log("last name: "+this.last_name);
+            // Now create the url with the route to talk with the rest API
+            console.log("loadChoiced: ");
+            var reqURL = "http://localhost:5000/whitestone/voting/"+vid+"/results";
+            //console.log("reqURL: " + reqURL);
+            var config = { headers : 
+                          {'Content-Type':'application/json;charset=utf-8;' }
+                         }
+        
+            // Now issue the http request to the rest API
+            $http.get(reqURL).then(
+                // Success function
+                function (response) {
+                    console.log("response Load Result: " + JSON.stringify(response.data))
+                    // assing the part details to the variable in the controller
+                    //alert("New user added with id: " +response.data.User.cid);
+                    
+                    //thisCtrl.id = response.data.User.cid
+                    
+                    //console.log("ctrl cid "+this.id )
+                    
+                    //thisCtrl.newChoiceList = response.data.User;
+
+                    //thisCtrl.Limit = dblimit;
+                    
+                    //console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialList))
+                    var num = vid;
+                    var dic = {};
+                    dic[num] =response.data.VotingResult;
+                    var dict =[];
+                    
+                }, //Error function
+                function (response) {
+                    // This is the error function
+                    // If we get here, some error occurred.
+                    // Verify which was the cause and show an alert.
+                    var status = response.status;
+                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
+                    //console.log("Error: " + reqURL);
+                    //alert("Cristo");
+                    if (status === 0) {
+                        alert("No hay conexion a Internet");
+                    }
+                    else if (status == 401) {
+                        alert("Su sesion expiro. Conectese de nuevo.");
+                    }
+                    else if (status == 403) {
+                        alert("No esta autorizado a usar el sistema.");
+                    }
+                    else if (status == 404) {
+                        alert("No se encontro la informacion solicitada.");
+                    }
+                    else {
+                        alert("Error interno del sistema.");
+                    }
+                }
+            );
+        };
+        
+        this.loadResults = function(vid){
+
+        
+            console.log("load Choices");    
+            //data.udescription = this.description;
+            
+            //console.log("data: " + JSON.stringify(data));
+            //console.log("first name: "+this.first_name);
+            //console.log("last name: "+this.last_name);
+            // Now create the url with the route to talk with the rest API
+            console.log("loadChoiced: ");
+            var reqURL = "http://localhost:5000/whitestone/voting/"+vid+"/results";
+            //console.log("reqURL: " + reqURL);
+            var config = { headers : 
+                          {'Content-Type':'application/json;charset=utf-8;' }
+                         }
+        
+            // Now issue the http request to the rest API
+            $http.get(reqURL).then(
+                // Success function
+                function (response) {
+                    console.log("response Load Choices: " + JSON.stringify(response.data))
+                    // assing the part details to the variable in the controller
+                    //alert("New user added with id: " +response.data.User.cid);
+                    
+                    //thisCtrl.id = response.data.User.cid
+                    
+                    //console.log("ctrl cid "+this.id )
+                    
+                    //thisCtrl.newChoiceList = response.data.User;
+
+                    //thisCtrl.Limit = dblimit;
+                    
+                    //console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialList))
+                    var num = vid;
+                    var dic = {};
+                    dic[num] =response.data.VotingResult;
+                    var dict =[];
+                    //dict.push({num:response.data.VotingResult});
+                    dict.push(dic);
+                    
+                    console.log("dict test: "+JSON.stringify(dict));
+                    //console.log("second sign in")
+                    thisCtrl.inActiveVotingChoices = dict;
+                    console.log("In Active VotingChoices: "+JSON.stringify(thisCtrl.inActiveVotingChoices));
+                    
+                    thisCtrl.inActiveVotingChoicesTest[vid] = dic;
+                    console.log("IAVC Test: "+JSON.stringify(thisCtrl.inActiveVotingChoicesTest));
+                }, //Error function
+                function (response) {
+                    // This is the error function
+                    // If we get here, some error occurred.
+                    // Verify which was the cause and show an alert.
+                    var status = response.status;
+                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
+                    //console.log("Error: " + reqURL);
+                    //alert("Cristo");
+                    if (status === 0) {
+                        alert("No hay conexion a Internet");
+                    }
+                    else if (status == 401) {
+                        alert("Su sesion expiro. Conectese de nuevo.");
+                    }
+                    else if (status == 403) {
+                        alert("No esta autorizado a usar el sistema.");
+                    }
+                    else if (status == 404) {
+                        alert("No se encontro la informacion solicitada.");
+                    }
+                    else {
+                        alert("Error interno del sistema.");
+                    }
+                }
+            );
+        };
+        
+        
 
         this.createAlternatives = function(alternative){
             // Get the target part id from the parameter in the url
@@ -848,9 +1009,10 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
             console.log("uid"+$routeParams.uid)
             $location.url("/meeting/"+$routeParams.role+'/'+$routeParams.uid);
         }
-        this.activityLogRedirect = function(){
-            $location.url('/ActivityLog/'+$routeParams.role+'/'+$routeParams.uid);
+        this.oldMeetingRedirect = function(){
+            $location.url('/oldMeeting/'+$routeParams.role+'/'+$routeParams.uid);
         }
         //this.loadInActiveVotingQuestions();
         this.loadActiveMeeting();
+        
 }]);
