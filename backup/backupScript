@@ -1,0 +1,8 @@
+#!/bin/bash
+# This script holds commands for the backup.
+# This script should not be executed unless it is necessary.
+
+echo "This script holds commands for the system backup."
+
+sudo yum install -y https://centos7.iuscommunity.org/ius-release.rpm
+&& sudo yum update && sudo yum install -y python 35u python35u-libs python35u-devel python35u-pip
