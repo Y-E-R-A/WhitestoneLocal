@@ -84,17 +84,22 @@
     </div>
     
     <div class="col-sm-4" style="background-color:rgba(246, 245, 250, 1);color:black;padding:20px 20px 20px 20px">
-      <div ng-repeat="v in votingCtrl.votingQuestions">
+      <div ng-repeat="v in votingCtrl.inActiveVotingQuestion">
             <!-- This card prodives space for the message and Like/dislike buttons -->
             <!-- Card Title is the person who write the message -->
             <!-- Here comes the message text -->
               <p>
-                {{v.votingquestion}}
-                {{v.votinDate}}{{v.votingTime}}
+                {{v.vquestion}}
+                {{v.vdescription}}
+                {{v.vdate}}{{v.vtime}}
               </p>
+            <!--<div ng-repeat="c in votingCtrl.inActiveVotingChoicesTest[v.vID][v.vID]">
               <p>
-                {{v.alternative}}{v.result}
+                {{c.vchoice}}
+                  {{c.votes}}
               </p>
+            
+        </div>-->
         </div>
     </div>
   </div>
