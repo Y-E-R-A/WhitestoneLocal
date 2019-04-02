@@ -30,22 +30,24 @@ from handler.VotingQuestionHandler import VotingQuestionHandler
 app = Flask(__name__)
 
 CORS(app)
-# @app.route('/whitestone/login')
-# def home():
-#
-#     return "Welcome to Whitestone"
+
 
 
 
 # From the admin dashboard search for the user credentials (email, pin)
 # List for emergency local access
-@app.route('/whitestone/credentials', methods = ['GET','POST'])
+@app.route('/whitestone/credentials', methods = ['GET','POST','PUT'])
 def getAllCredentials():
 
     if request.method == 'POST':
 
         print("REQUEST", request.json)
         return CredentialHandler().insertCredentialJSON(request.json)
+
+    if request.method =='PUT':
+        print("REQUEST", request.json)
+        return CredentialHandler().updateUserPin()
+
     else:
         handler = CredentialHandler()
         return handler.getAllCredentials()
@@ -147,7 +149,7 @@ def getInactiveVotingBymID(mID):
     return VotingQuestionHandler().getInactiveVotingQuestionBymID(mID)
 
 
-# Get inactive or closed voting question by mID
+# Get active or open voting question by mID
 @app.route('/whitestone/activevotings/<int:mID>', methods=['GET'])
 def getActiveVotingBymID(mID):
     return VotingQuestionHandler().getActiveVotingQuestionBymID(mID)
@@ -243,16 +245,16 @@ def postChoose():
 
 # Activity Log
 
-@app.route('/whitestone/activitylog', methods = ['POST', 'GET'])
+@app.route('/whitestone/activitylog', methods=['POST'])
 def ActivityLog():
-    if request.method == 'POST':
+    print("REQUEST", request.json)
+    return ActivityLogHandler().insertCredentialsJSON(request.json)
 
-        print("REQUEST", request.json)
-        return ActivityLogHandler().insertCredentialsJSON(request.json)
 
-    else:
-        return ActivityLogHandler().getActivityLogByDate(request.json.get('date'))
-
+@app.route('/whitestone/getactivitylog', methods=['POST'])
+def getActivityLog():
+    print("REQUEST", request.json)
+    return ActivityLogHandler().getActivityLogByDate(request.json.get('date'))
 
 
 if __name__ == '__main__':
