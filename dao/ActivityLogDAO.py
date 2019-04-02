@@ -16,8 +16,8 @@ class ActivityLogDAO:
     def getActivityLogByDate(self, date):
         # Return all the activities that occurs in certain date
         cursor = self.conn.cursor()
-        query = "SELECT date, time, ufirstname, ulastname, logmessage " \
-                "FROM ActivityLog NATURAL INNER JOIN Users " \
+        query = "SELECT date, time, ufirstname, ulastname, logmessage, email " \
+                "FROM ActivityLog NATURAL INNER JOIN Users NATURAL INNER JOIN Credential " \
                 "WHERE ActivityLog.date = %s;"
         cursor.execute(query, (date,))
         result = []
