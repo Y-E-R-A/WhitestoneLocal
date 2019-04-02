@@ -46,13 +46,21 @@ class CredentialDAO:
         return cID
 
 
-    def update(self, email, localpassword, cID):
+    def update(self, email, localpassword, ID):
         # Update email and local password which belongs to cID
         cursor = self.conn.cursor()
-        query = "UPDATE Credential" \
+        query = "UPDATE Credential " \
                 "SET email= %s, localpassword = %s " \
-                "WHERE cID = %s;"
-        cursor.execute(query, (email, localpassword, cID,))
+                "WHERE ID = %s;"
+        cursor.execute(query, (email, localpassword, ID,))
         self.conn.commit()
-        return cID
+        return ID
 
+    # def updateAllPins(self):
+    #     # Update all users pins with a random 4 digits number.
+    #     cursor = self.conn.cursor()
+    #     query = "UPDATE Credential " \
+    #             "SET localpassword = floor(random()*9999); "
+    #     cursor.execute(query)
+    #     self.conn.commit()
+    #     return

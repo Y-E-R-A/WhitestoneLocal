@@ -46,7 +46,7 @@ def getAllCredentials():
 
     if request.method =='PUT':
         print("REQUEST", request.json)
-        return CredentialHandler().updateUserPin()
+        return CredentialHandler().updateCredential(request.json)
 
     else:
         handler = CredentialHandler()
@@ -70,7 +70,7 @@ def getAllUsers():
     if request.method == 'POST':
 
         print ("REQUEST", request.json)
-        return UsersHandler().insertCredentialsJSON(request.json)
+        return UsersHandler().insertUserJSON(request.json)
     else:
 
         handler = UsersHandler()
@@ -81,6 +81,7 @@ def getAllUsers():
 @app.route('/whitestone/edituser/<int:uid>', methods=["PUT"])
 def updateUser(uid):
     print("REQUEST", request.json)
+    print("Uid",uid)
     return UsersHandler().updateUser(uid, request.json)
 
 

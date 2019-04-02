@@ -47,10 +47,8 @@ class CredentialHandler:
 
 
     def insertCredentialJSON(self,json):
-        print("entro a insert credent")
         email = json.get('email')
         localpassword = json.get('localpassword')
-        print("hizp los json.get")
         if UsersDAO().getUserbyEmail(email):
 
             return jsonify(Error="Email already registered"),
@@ -63,8 +61,8 @@ class CredentialHandler:
             else:
                 return jsonify(Error="Unexpected attributes in post request"), 404
 
-    def updateCredential(self, ID, form):
-        credential = CredentialDAO.getCredentialById(ID)
+    def updateCredential(self, form):
+        credential = CredentialDAO().getCredentialByEmail(form['email'])
         if not credential:
             return jsonify(Error="User not found."), 404
         else:
@@ -76,14 +74,24 @@ class CredentialHandler:
 
                 ID = form['ID']
                 email = form['email']
-                localpassword = form['localpassword']
+                pin = form['localpassword']
 
-                if ID and email and localpassword:
-                    CredentialDAO.update(ID, email, localpassword)
-                    result = self.buildCredentialDict(ID, email, localpassword)
+                if ID and email and pin:
+                    CredentialDAO().update(email, pin, ID)
+                    result = self.buildCredentialDict(ID, email, pin)
                     return jsonify(Credential=result), 201
 
                 else:
                     return jsonify(Error="Unexpected attributes in update request"), 400
+
+    # def updateAllPins(self):
+    #     credential = CredentialDAO().getAllCredentials()
+    #     if not credential:
+    #         return jsonify(Error="No users credentials found."), 404
+    #     else:
+    #         CredentialDAO().updateAllPins()
+    #
+    #         return self.getAllCredentials()
+
 
 
