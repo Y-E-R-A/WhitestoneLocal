@@ -1,25 +1,36 @@
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
 
-<body ng-app="">
+<body>
+     
+    <center>
+        <div class="container" >
+            
+            <div class="card-header">
+				<h3>Create New User</h3>
+            </div>
 <table bgcolor="#FFFFFF">
     <tbody>
         <tr>
-            <th><label> <b>Name:  </b></label><input ng-model="createUserCtrl.first_name" placeholder="Enter Meeting Name"></th>
+            <th><input ng-model="createUserCtrl.first_name" class="form-control" placeholder="Enter First Name"></th>
         </tr>
         <tr>
-            <th><label> <b>Last:  </b></label><input ng-model="createUserCtrl.last_name" placeholder="Enter Last Name" ></th>
+            <th><input ng-model="createUserCtrl.last_name" class="form-control" placeholder="Enter Last Name" ></th>
         </tr>
         <tr>
-            <th><label> <b>About:  </b></label><input ng-model="createUserCtrl.about" placeholder= "about" ></th>
+            <th><input ng-model="createUserCtrl.about" class="form-control" placeholder= "About User" ></th>
         </tr>
         <tr>
-            <th><label> <b>Password:  </b></label><input ng-model="createUserCtrl.password" placeholder= "password" ></th>
+            <th><input ng-model="createUserCtrl.password" class="form-control"  placeholder= "Password" ></th>
         </tr>
         <tr>
-            <th><label> <b>UPR email:  </b></label><input ng-model="createUserCtrl.email" placeholder="email"></th>
+            <th><input ng-model="createUserCtrl.email" class="form-control"  placeholder="UPRM Email "></th>
         </tr>
         <tr>
             
-            <th><label> <b>Select The User Role:  </b></label><br>
+            <th><label> <b><br>Select The User Role:  </b></label><br>
 
                 <input type="radio" ng-model="createUserCtrl.role" value="Senator">Senator
                 <br>
@@ -32,7 +43,7 @@
             </th>
         </tr>
         <tr>
-            <th><label> <b>Select The User Classification:  </b></label><br>
+            <th><label> <b><br>Select The User Classification:  </b></label><br>
 
                 <input type="radio" ng-model="createUserCtrl.title" value="Ex-Officio Student">Ex-Officio Student
                 <br>
@@ -47,14 +58,20 @@
             </th>
         </tr>
         <tr>
-            <th>
-            <button type="submit" name="action" ng-click="createUserCtrl.createNewCredentials()">Create</button> 
+            <th><br>
+            <button class="btn btn-primary btn-block"  type="submit" name="action" ng-click="createUserCtrl.createNewCredentials()">Create</button> 
         </th>
         </tr>
         
     </tbody>
 </table>
+     
+    <br>
     <button type="submit" name="action" ng-click="createUserCtrl.editUserRedirect()">Edit User</button> 
     <button type="submit" name="action" ng-click="createUserCtrl.activityLogRedirect()">Activity Log</button> 
-    <button type="submit" name="action" ng-click="createUserCtrl.logOut()">Logout</button> 
+    <button type="submit" name="action" ng-click="createUserCtrl.logOut()">Logout</button>
+        
+        
+        </div>
+    </center>
 </body>
