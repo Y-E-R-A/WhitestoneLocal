@@ -1,5 +1,40 @@
-<body>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
 
+<body>
+    
+    
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Whitestone</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a type="submit" name="action" ng-click="editUserCtrl.createUserRedirect()">Create User</a></li>
+      <li class="active"><a type="submit" name="action" ng-click="editUserCtrl.editUserRedirect()"> Edit User</a></li>
+        
+      <li><a type="submit" name="action" ng-click="editUserCtrl.activityLogRedirect()">Activity Log</a></li>
+    
+      </ul>
+      <ul></ul>
+      
+      <li style = "float:right"><a class="active" type="submit" name="action" ng-click="editUserCtrl.logOut()">Logout</a></li>
+      
+  </div>
+</nav>
+    
+    
+    
+ <center>
+     <div class="container" >
+
+    <div class="card-header">
+        <h3>Edit User</h3>
+    </div>
+    <br>
     <select ng-change="editUserCtrl.loadForm()" ng-model="editUserCtrl.selectedUser" ng-options="user as (user.firstname+'&nbsp'+user.lastname) for user in editUserCtrl.newUserList">
         <option value="">--Select User--</option>
     </select>
@@ -9,47 +44,37 @@
                 <br>
                 <tr>
                     <th>
-                        <label>
-                            <b>First Name: </b>
-                        </label>
-                        <input ng-model="editUserCtrl.first_name" placeholder="First Name">
+                       
+                        <input ng-model="editUserCtrl.first_name" class="form-control" placeholder="First Name">
                     </th>
                 </tr>
                 <tr>
                     <th>
-                        <label>
-                            <b>Last Name: </b>
-                        </label>
-                        <input ng-model="editUserCtrl.last_name" placeholder="Last Name">
+                       
+                        <input ng-model="editUserCtrl.last_name" class="form-control" placeholder="Last Name">
                     </th>
                 </tr>
                 <tr>
                     <th>
-                        <label>
-                            <b>About: </b>
-                        </label>
-                        <input ng-model="editUserCtrl.about" placeholder="about">
+                        
+                        <input ng-model="editUserCtrl.about" class="form-control" placeholder="About User">
+                    </th>
+                </tr>
+                 <tr>
+                    <th>
+                       <input ng-model="editUserCtrl.email" class="form-control"
+                       placeholder="UPRM Email">
                     </th>
                 </tr>
                 <tr>
                     <th>
-                        <label>
-                            <b>Password: </b>
-                        </label>
-                        <input ng-model="editUserCtrl.password" placeholder="email">
+                       <input ng-model="editUserCtrl.password" class="form-control" placeholder="Pin">
                     </th>
                 </tr>
-                <tr>
-                    <th>
-                        <label>
-                            <b>UPR email: </b>
-                        </label>
-                        <input ng-model="editUserCtrl.email" placeholder="email">
-                    </th>
-                </tr>
+               
                 <tr>
 
-                    <th>
+                    <th><br>
                         <label>
                             <b>Select The User Role: </b>
                         </label>
@@ -60,7 +85,7 @@
                     </th>
                 </tr>
                 <tr>
-                    <th>
+                    <th><br>
                         <label>
                             <b>Select The User Classification: </b>
                         </label>
@@ -72,7 +97,7 @@
                     </th>
                 </tr>
                 <tr>
-                    <th>
+                    <th><br>
                         <button type="submit" name="action" ng-click="editUserCtrl.editUser()">Save</button>
                         <button type="submit" name="action" ng-click="editUserCtrl.deleteUser()">Delete</button>
                         <button type="reset" name="action">Cancel</button>
@@ -84,6 +109,8 @@
     </div>
     <div ng-show="editUserCtrl.showMessage">
         <p>The user data has been edited</p>
-        </div>>
+        </div>
     <br>
+     </div>
+    </center>
 </body>
