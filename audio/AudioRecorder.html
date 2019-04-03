@@ -117,16 +117,11 @@ function makeLink(){
   var aFileForm = new FormData();
   aFileForm.append(aFullDateAndTime, blob, aFullDateAndTime.concat(".mp3"));
   httpRequest.open("POST", "http://whitestone.uprm.edu/uploads.php");
-  //httpRequest.setRequestHeader(multipart/FormData,audio/mpeg);
+  httpRequest.setRequestHeader("Content-Type","audio/mpeg3");
   httpRequest.send(aFileForm);
 
 }
 
-function upload(){
-var fileName = makeLink().hf.download;
-
-
-}
 
 </script>
 
