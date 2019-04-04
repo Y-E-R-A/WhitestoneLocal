@@ -1,5 +1,6 @@
 <?php
 
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_FILES['files'])) {
         $errors = [];
@@ -16,11 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $file_ext = strtolower(end(explode('.', $_FILES['files']['name'][$i])));
 
             $file = $path . $file_name;
-            print_r("File name: " . $file_name);
-            print_r("File temporary name: " . $file_tmp);
-            print_r("File type: " . $file_type);
-            print_r("File size: " . $file_size);
-            print_r("Complete file identifier: " . $file);
+            echo(print_r("File name: " . $file_name));
+            echo(print_r("File temporary name: " . $file_tmp));
+            echo(print_r("File type: " . $file_type));
+            echo(print_r("File size: " . $file_size));
+            echo(print_r("Complete file identifier: " . $file));
             if (!in_array($file_ext, $extensions)) {
                 $errors[] = 'Extension not allowed: ' . $file_name . ' ' . $file_type;
             }
@@ -34,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        if ($errors) print_r($errors);
+        if ($errors) echo(print_r($errors));
 
 
 

@@ -119,6 +119,7 @@ function makeLink(){
   httpRequest.open("POST", "http://whitestone.uprm.edu/uploads.php");
   httpRequest.setRequestHeader("Content-Type","audio/mpeg3");
   httpRequest.send(aFileForm);
+  console.log("Request sent.");
 
 }
 
