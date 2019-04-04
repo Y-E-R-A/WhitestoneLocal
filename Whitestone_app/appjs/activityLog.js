@@ -17,7 +17,7 @@ angular.module('Whitestone').controller('activityLogController', ['$http', '$log
 
             console.log("Search Activity");
             console.log("data: "+JSON.stringify(data));
-            var reqURL = "http://localhost:5000/whitestone/activitylog";
+            var reqURL = "http://localhost:5000/whitestone/getactivitylog";
             // Now set up the $http object
             // It has two function call backs, one for success and one for error
             var config = {
@@ -30,7 +30,7 @@ angular.module('Whitestone').controller('activityLogController', ['$http', '$log
                     // The is the sucess function!
                     // Copy the list of parts in the data variable
                     console.log("response Activity Log: " + JSON.stringify(response))
-
+                    thisCtrl.newActivityLogList = response.data.Log;
                     //thisCtrl.newActivityLogList = response.data;
                     //thisCtrl.newActivityLogList = response.data;
                 }, // error callback

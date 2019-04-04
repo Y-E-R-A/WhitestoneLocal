@@ -19,7 +19,7 @@
             templateUrl: 'pages/createUser.html',
             controller: 'createUserController',
             controllerAs : 'createUserCtrl'
-        }).when('/Vote/:role/:uid', {
+        }).when('/Vote/:Secretary/:uid', {
             templateUrl: 'pages/createVote.html',
             controller: 'votingController',
             controllerAs : 'votingCtrl'
