@@ -1,14 +1,16 @@
 <?php
 
-
+echo("Here.");
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    echo("REQUEST_METHOD === POST");
     if (isset($_FILES['files'])) {
+        echo("FILES is set.");
         $errors = [];
         $path = '/var/www/html/uploads/';
         $extensions = ['mp3'];
 
         $all_files = count($_FILES['files']['tmp_name']);
-        print("Number of files" . $all_files);
+        echo("Number of files" . $all_files);
         for ($i = 0; $i < $all_files; $i++) {
             $file_name = $_FILES['files']['name'][$i];
             $file_tmp = $_FILES['files']['tmp_name'][$i];

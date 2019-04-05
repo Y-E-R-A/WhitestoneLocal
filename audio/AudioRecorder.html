@@ -125,7 +125,7 @@ function makeLink(){
   //const files = document.querySelector('[type=file]').files;
   aFileForm.append(aFullDateAndTime.concat(".mp3"), afile, aFullDateAndTime.concat(".mp3"));
   httpRequest.open("POST", "http://whitestone.uprm.edu/uploads.php");
-  httpRequest.setRequestHeader("enctype", "multipart/form-data");
+  httpRequest.setRequestHeader("Enctype", "multipart/form-data");
   httpRequest.setRequestHeader("Content-Type","audio/mpeg3");
   httpRequest.send(aFileForm);
   console.log("Request sent.");
