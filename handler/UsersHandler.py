@@ -211,3 +211,20 @@ class UsersHandler:
                     return jsonify(User=result), 201
                 else:
                     return jsonify(Error="Unexpected attributes in update request"), 400
+
+
+
+    def deleteUser(self, uID):
+
+        if not UsersDAO().getUserByuID(uID):
+            return jsonify(Error="User not found"), 404
+
+        else:
+
+            UsersDAO().deleteUser(uID)
+            return jsonify(Action="User deleted"), 200
+
+
+
+
+
