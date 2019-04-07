@@ -20,21 +20,21 @@
                     <tbody>
                         <tr>
                             <th>
-                                {{submitVoteCtrl.votingQuestion[0].vquestion}}
+                                {{submitVoteCtrl.VotingQuestion.vquestion}}
 
                             </th>
                         </tr>
                         <tr>
                             <th>
-                                {{submitVoteCtrl.votingQuestion[0].vdescription}}
-
+                                {{submitVoteCtrl.VotingQuestion.vdescription}}
+                                {{submitVoteCtrl.VotingQuestion.vtime}}
+                                {{submitVoteCtrl.VotingQuestion.vdate}}
                             </th>
                         </tr>
                         <tr>
                             <th>
-                                <div ng-repeat="choices in submitVoteCtrl.newChoiceList">
-                                    <input type="checkbox" name="mycheckbox" ng-model="choices.checked" ng-click="submitVoteCtrl.checkChoice(choice.alt)" ng-disabled="submitVoteCtrl.count >= submitVoteCtrl.Limit && choice.checked"
-                                        ng-value='choice.alt' ng-checked='choice.checked' /> {{choice.alt}}
+                                <div ng-repeat="choices in submitVoteCtrl.votingChoices">
+                                    <input type="checkbox" name="mycheckbox" ng-model="choices.checked" ng-click="submitVoteCtrl.checkChoice(choices)" ng-disabled="submitVoteCtrl.count >= submitVoteCtrl.limit && !choices.checked" ng-checked='choices.checked' /> {{choices.choice}}
                                 </div>
                             </th>
                         </tr>
@@ -42,7 +42,7 @@
                             <th>
                             <br>
                                 <center>
-                                <button class="btn btn-primary" style="padding:1px 20px;border-radius: 5px;" ng-click="submitVoteSenCtrl.checkSubmit()">Submit</button>
+                                <button class="btn btn-primary" style="padding:1px 20px;border-radius: 5px;" ng-click="submitVoteCtrl.checkSubmit()">Submit</button>
                                 </center>
                             </th>
                         </tr>

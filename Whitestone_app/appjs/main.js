@@ -19,7 +19,7 @@
             templateUrl: 'pages/createUser.html',
             controller: 'createUserController',
             controllerAs : 'createUserCtrl'
-        }).when('/Vote/:Secretary/:uid', {
+        }).when('/Vote/:role/:uid', {
             templateUrl: 'pages/createVote.html',
             controller: 'votingController',
             controllerAs : 'votingCtrl'
@@ -39,6 +39,10 @@
             templateUrl: 'pages/editUser.html',
             controller: 'editUserController',
             controllerAs : 'editUserCtrl'
+        }).when('/voting/:role/:uid', {
+            templateUrl: 'pages/submitVote.html',
+            controller: 'submitVoteController',
+            controllerAs : 'submitVoteCtrl'
         }).otherwise({
             redirectTo: '/login'
         });

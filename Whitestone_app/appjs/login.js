@@ -8,11 +8,17 @@ angular.module('Whitestone').controller('LoginController', ['$http', '$log', '$s
         var email = "";
         
         var password = "";
+        
+        this.loginForm;
+        this.emailInput;
+        this.checkForm = function(){
+            if(this.loginForm.$valid){
+                thisCtrl.loginUser();
+            }else{
+                alert("Please fill the fields correctly");
+            }
+        }
 
-
-        // This variable hold the information on the part
-        // as read from the REST API
-        var credentialList = {};
 
         this.loginUserTest = function(){
          
@@ -74,7 +80,7 @@ angular.module('Whitestone').controller('LoginController', ['$http', '$log', '$s
                        console.log("Secretary")
                         $location.url("/meeting/"+role+'/'+uid);
                     }else if(role == "Senator"){
-                        $location.url('/speak/'+"Senator");
+                        $location.url('/voting/'+role+"/"+uid);
                     }else if(role == "Chancellor"){
                         $location.url('/cDashboard/'+"Chancellor");
                     }

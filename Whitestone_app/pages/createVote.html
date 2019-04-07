@@ -110,7 +110,20 @@
     </div>
     
     <div class="col-sm-4" style="background-color:rgba(246, 245, 250, 1);color:black;padding:20px 20px 20px 20px">
-    <h3>Meeting's Votings</h3>
+        <div ng-show="votingCtrl.activeMeeting">
+        <h3>Meeting's Active Votings</h3>
+        
+            {{votingCtrl.votingQuestion.vquestion}}
+            {{votingCtrl.votingQuestion.vdescription}}
+            {{votingCtrl.votingQuestion.vdate}}{{votingCtrl.votingQuestion.vtime}}
+            <div ng-repeat="choices in votingCtrl.votingChoices">
+                {{choices.choice}}
+                  {{choices.votes}}
+            </div>
+            <button style="float:right;padding:5px 30px;border-radius: 12px;" type="submit" name="action" ng-click="votingCtrl.closeVotingQuestion()">Close</button>
+        </div>
+        <h3>Meeting's Votings</h3>
+        
             <div ng-repeat="v in votingCtrl.inActiveVotingQuestion">
             <!-- This card prodives space for the message and Like/dislike buttons -->
             <!-- Card Title is the person who write the message -->
