@@ -4,12 +4,13 @@ from dao.VotingChoiceDAO import VotingChoiceDAO
 
 class VotingChoiceHandler:
 
-    def builtVotingChoiceDict(self, altID, vID, choice):
+    def builtVotingChoiceDict(self, altID, vID, choice, votes):
         # Voting Choice Info dictionary
         result = {}
         result['altID'] = altID
         result['vID'] = vID
         result['choice'] = choice
+        result['votes']= votes
         return result
 
 
@@ -18,6 +19,7 @@ class VotingChoiceHandler:
         result = {}
         result['altID'] = row[0]
         result['choice'] = row[1]
+        result['votes']= row[2]
         return result
 
 
@@ -40,11 +42,11 @@ class VotingChoiceHandler:
 
         vID = json.get('vID')
         choice = json.get('choice');
+        votes = json.get('votes')
+        if vID and choice and votes:
 
-        if vID and choice:
-
-            altID = VotingChoiceDAO().insert(vID, choice)
-            mapped_result = self.builtVotingChoiceDict(altID, vID, choice)
+            altID = VotingChoiceDAO().insert(vID, choice, votes)
+            mapped_result = self.builtVotingChoiceDict(altID, vID, choice, votes)
             return jsonify(Choice=mapped_result), 201
 
         else:
