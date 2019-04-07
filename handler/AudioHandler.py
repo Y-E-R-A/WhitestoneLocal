@@ -7,18 +7,16 @@ class AudioHandler:
     def mapToAudioDict(self, row):
         result = {}
         result['aID'] = row[0]
-        result['uID'] = row[1]
-        result['mID'] = row[2]
-        result['aname']= row[3]
-        result['aadress'] = row[4]
-        result['atype'] = row[5]
+        result['mID'] = row[1]
+        result['aname']= row[2]
+        result['aadress'] = row[3]
+        result['atype'] = row[4]
         return result
 
 
-    def buildAudioToDict(self, aID, uID, mID, aname, aaddress, atype):
+    def buildAudioToDict(self, aID, mID, aname, aaddress, atype):
         result ={}
         result['aID'] = aID
-        result['uID'] = uID
         result['mID'] = mID
         result['aname'] = aname
         result['aadress'] = aaddress
@@ -72,16 +70,15 @@ class AudioHandler:
     def insertJSON(self, json):
 
 
-        uID = json.get('uID')
         mID = json.get('mID')
         aname = json.get('aname');
         aaddress = json.get('aaddress');
         atype = json.get('atype');
 
-        if uID and mID and aname and aaddress and atype:
+        if mID and aname and aaddress and atype:
 
-            aID = AudioDAO().insert(uID, mID, aname, aaddress, atype)
-            mapped_result = self.buildAudioToDict(aID, uID, mID, aname, aaddress, atype)
+            aID = AudioDAO().insert(mID, aname, aaddress, atype)
+            mapped_result = self.buildAudioToDict(aID, mID, aname, aaddress, atype)
             return jsonify(Audio=mapped_result), 201
 
         else:
