@@ -141,3 +141,19 @@ class UsersDAO:
         cursor.execute(query,(ufirstname, ulastname, udescription, urole, uclassification,uID,))
         self.conn.commit()
         return uID
+
+
+    def deleteUser(self, uID):
+
+        cursor = self.conn.cursor()
+        query = "DELETE FROM Users " \
+                "WHERE uID= %s RETURNING ID; "
+        cursor.execute(query, (uID,))
+        ID = cursor.fetchone()[0]
+
+        query = "DELETE FROM Credential " \
+                "WHERE ID= %s; "
+        cursor.execute(query, (ID,))
+
+        self.conn.commit()
+        return
