@@ -32,7 +32,6 @@
     </form> -->
     <script>
 'use strict'
-
 let log = console.log.bind(console),
   id = val => document.getElementById(val),
   ul = id('ul'),
@@ -44,8 +43,6 @@ let log = console.log.bind(console),
   counter=1,
   chunks,
   media;
-
-
 gUMbtn.onclick = e => {
   let mv = id('mediaVideo'),
       mediaOptions = {
@@ -76,23 +73,17 @@ gUMbtn.onclick = e => {
     log('got media successfully');
   }).catch(log);
 }
-
 start.onclick = e => {
   start.disabled = true;
   stop.removeAttribute('disabled');
   chunks=[];
   recorder.start();
 }
-
-
 stop.onclick = e => {
   stop.disabled = true;
   recorder.stop();
   start.removeAttribute('disabled');
 }
-
-
-
 function makeLink(){
   let blob = new Blob(chunks, {type: media.type })
     , url = URL.createObjectURL(blob)
@@ -116,21 +107,21 @@ function makeLink(){
   li.appendChild(mt);
   li.appendChild(hf);
   ul.appendChild(li);
-
   var afile = new File([blob], aFullDateAndTime, {type: "audio/mpeg"},);
   var httpRequest = new XMLHttpRequest();
   var aFileForm = new FormData();
   console.log(afile.name);
   //const form = document.querySelector('form');
   //const files = document.querySelector('[type=file]').files;
-  aFileForm.append(aFullDateAndTime.concat(".mp3"), afile, aFullDateAndTime.concat(".mp3"));
+  aFileForm.append("files", afile, aFullDateAndTime.concat(".mp3"));
+  aFileForm.set("name", aFullDateAndTime.concat(".mp3") );
+  aFileForm.set("enctype", "multipart/form-data");
   httpRequest.open("POST", "http://whitestone.uprm.edu/uploads.php");
-  httpRequest.setRequestHeader("Enctype", "multipart/form-data");
-  httpRequest.setRequestHeader("Content-Type","audio/mpeg3");
+  httpRequest.setRequestHeader("enctype", "multipart/form-data");
+//  httpRequest.setRequestHeader("Content-Type","audio/mpeg3");
   httpRequest.send(aFileForm);
   console.log("Request sent.");
   console.log(httpRequest.statusText);
-
   // fetch("http://whitestone.uprm.edu/uploads.php", {
   //   method: 'POST',
   //   body: aFileForm,
@@ -140,19 +131,14 @@ function makeLink(){
 }
 // const url = 'process.php'
 // const form = document.querySelector('form')
-
 // form.addEventListener('submit', e => {
 //   e.preventDefault()
-
 //   const files = document.querySelector('[type=file]').files
 //   const formData = new FormData()
-
 //   for (let i = 0; i < files.length; i++) {
 //     let file = files[i]
-
 //     formData.append('files[]', file)
 //   }
-
 //   fetch(url, {
 //     method: 'POST',
 //     body: formData,
@@ -160,7 +146,6 @@ function makeLink(){
 //     console.log(response)
 //   })
 // })
-
 </script>
 
 </body>
