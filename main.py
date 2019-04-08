@@ -218,16 +218,20 @@ def updateMeetingStatus():
 
 
 # Post or get voting participant
-@app.route('/whitestone/<int:uid>/votesIn/<int:vid>', methods=['POST', 'GET'])
+@app.route('/whitestone/<int:uid>/votesIn/<int:vid>', methods=['POST', 'GET', 'PUT'])
 def VotesIn(vid, uid):
     if request.method == 'POST':
-
         print("REQUEST", request.json)
         return VoteInHandler().insertVoteInJSON(request.json)
 
+    if request.method == 'PUT':
+        print("REQUEST", request.json)
+        return VoteInHandler().updateVoteInFlag(request.json)
+
     else:
         #return VoteInHandler().getVotingParticipants(vid)
-        return VoteInHandler().isParticipant(vid, uid)
+        return VoteInHandler().getParticipant(vid, uid)
+
 
 
 # Activity Log

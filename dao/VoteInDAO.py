@@ -12,9 +12,12 @@ class VoteInDAO:
                                                             pg_config['passwd'])
         self.conn = psycopg2._connect(connection_url)
 
+
+
     def getVotingParticipants(self, vID):
+        # Get the information of the users which are permitted to participate in a voting
         cursor = self.conn.cursor()
-        query = "SELECT uID, ufirstname, ulastname, email " \
+        query = "SELECT uID, ufirstname, ulastname, email, exercised_vote " \
                 "FROM VoteIn natural inner join Users natural inner join Credential " \
                 "WHERE VoteIn.vID = %s ;"
         cursor.execute(query, (vID,))
@@ -24,10 +27,10 @@ class VoteInDAO:
 
         return result
 
-    def isParticipant(self, vID, uID):
+    def getParticipant(self, vID, uID):
         # Check if the user with uID participates in a particular voting
         cursor = self.conn.cursor()
-        query = "SELECT 1 AS COUNT " \
+        query = "SELECT vID, uID, exercised_vote  " \
                 "FROM VoteIn " \
                 "WHERE vid= %s " \
                 "AND uid= %s"
@@ -35,10 +38,23 @@ class VoteInDAO:
         result = cursor.fetchone()
         return result
 
-    def insert(self, uid, vid):
-        #Insert the uid of the person who is permitted to vote in a voting with  a specific vID
+
+    def insertVoteIn(self, uid, vid):
+        # Insert the uid of the person who is permitted to vote in a voting with  a specific vID
         cursor = self.conn.cursor()
-        query = "INSERT INTO VoteIn(uid, vid) " \
-                "VALUES (%s, %s);"
-        cursor.execute(query, (uid, vid,))
+        query = "INSERT INTO VoteIn(uid, vid, exercised_vote) " \
+                "VALUES (%s, %s, %s);"
+        cursor.execute(query, (uid, vid, False))
         self.conn.commit()
+
+
+    def updateVoteInFlag(self, uid, vid):
+        # Change the exercise_vote flag to TRUE
+        cursor = self.conn.cursor()
+        query = "UPDATE VoteIN " \
+                "SET exercise_vote = %s " \
+                "WHERE uID= %s " \
+                "AND vID= %s; "
+        cursor.execute(query, (True, uid, vid,))
+        self.conn.commit()
+        return uid
