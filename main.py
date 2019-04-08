@@ -63,6 +63,13 @@ def getUser():
     return handler.getUserByEmail(request.json.get('email'))
 
 
+# Search all the user information using its email as identifier
+@app.route('/whitestone/delete/user/<int:uID>', methods = ['POST'])
+def deleteUser(uID):
+    handler = UsersHandler()
+    return handler.deleteUser(uID)
+
+
 # Search all the info from users registered
 @app.route('/whitestone/users', methods = ['GET','POST'])
 def getAllUsers():

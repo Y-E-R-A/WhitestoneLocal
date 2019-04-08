@@ -51,8 +51,8 @@ class VotingQuestionHandler:
         result['vquestion'] = row[6]
         result['selectionlimit'] = row[7]
         result['vstatus'] = row[8]
-        result['altID'] = row[9]
-        result['choice'] = row[10]
+        #result['altID'] = row[9]
+        #result['choice'] = row[10]
         return result
 
     # def mapToInactiveVotingQuestionDict(self, row):

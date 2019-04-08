@@ -1,4 +1,4 @@
-angular.module('Whitestone').controller('submitVoteSenController', ['$http', '$log', '$scope', '$location', '$routeParams',
+angular.module('Whitestone').controller('submitVoteController', ['$http', '$log', '$scope', '$location', '$routeParams',
     function($http, $log, $scope, $location, $routeParams) {
         // This variable lets you access this controller
         // from within the callbacks of the $http object
@@ -6,9 +6,9 @@ angular.module('Whitestone').controller('submitVoteSenController', ['$http', '$l
         var thisCtrl = this;
         
         //List of voting voting questions from database
-        this.votingQuestion = [];
-        this.newChoiceList = [];
-        this.Limit =0;
+        this.VotingQuestion = [];
+        this.votingChoices = [];
+        this.limit =0;
         this.count =0;
 
         //The voting question
@@ -38,18 +38,24 @@ angular.module('Whitestone').controller('submitVoteSenController', ['$http', '$l
         }
 
         this.checkChoice = function(choice) {
-            if (thisCtrl.selectedChoice.includes(choice)) {
+            console.log("Limit: "+thisCtrl.limit);
+            
+            console.log("voting Choice: "+JSON.stringify(thisCtrl.votingChoices));
+            if (thisCtrl.selectedChoice.includes(choice.choice)) {
+                console.log("its included")
                     thisCtrl.count--;
                     //console.log('--');
                     //item.checked = false;
-                    var findId = $scope.checkedItems.indexOf(item.id);
+                    var findId = thisCtrl.selectedChoice.indexOf(choice.choice);
                     thisCtrl.selectedChoice.splice(findId, 1);
             } else {
+                    console.log("not included")
                     //console.log('++' + item.name);
                     thisCtrl.count++;
                     //item.checked = true;
-                    thisCtrl.selectedChoice.push(item.id)
+                    thisCtrl.selectedChoice.push(choice.choice);
             };
+            console.log("selectedChoice: "+JSON.stringify(thisCtrl.selectedChoice));
         };
 
         this.checkSubmit = function(){
@@ -81,9 +87,9 @@ angular.module('Whitestone').controller('submitVoteSenController', ['$http', '$l
                     //thisCtrl.meetingId = JSON.stringify(response.data.Meeting[0].mID);
                     //console.log("response.data.Meet: "+response.data.Meeting[0].mID)
                     //console.log("mid: "+thisCtrl.meetingId)
-                    if(thisCtrl.activeMeetingId!==0){
-                        this.loadVotingQuestion(thisCtrl.activeMeetingId);
-                    }
+                    console.log("mID: "+thisCtrl.activeMeetingId);
+                    thisCtrl.loadVotingQuestion(response.data.Meeting[0].mID);
+                    
                 }, //Error function
                 function (response) {
                     // This is the error function
@@ -112,26 +118,28 @@ angular.module('Whitestone').controller('submitVoteSenController', ['$http', '$l
             );
         };
 
-        this.loadVotingQuestion = function(meetindID){
+        this.loadVotingQuestion = function(meetingID){
 
         
             // Now create the url with the route to talk with the rest API
-            var reqURL = "http://localhost:5000/whitestone/activevotings/"+meetingId;
+            var reqURL = "http://localhost:5000/whitestone/activevotings/"+meetingID;
             //console.log("reqURL: " + reqURL);
             var config = { headers : 
                           {'Content-Type':'application/json;charset=utf-8;' }
                          }
         
             // Now issue the http request to the rest API
-            $http.get(reqURL,data,config).then(
+            $http.get(reqURL).then(
                 // Success function
                 function (response) {
                     console.log("response Active VQ: " + JSON.stringify(response.data))
                     // assing the part details to the variable in the controller
                     //alert("New user added with id: " +response.data.User.cid);
                     
-                    this.VotingQuestion = response.data;
-                    this.loadChoices(response.data);
+                    thisCtrl.VotingQuestion = response.data.Voting[0];
+                    thisCtrl.limit = response.data.Voting[0].selectionlimit;
+                    console.log("VQ: "+JSON.stringify(thisCtrl.VotingQuestion));
+                    thisCtrl.loadChoices(response.data.Voting[0].vID);
              
  
                 }, //Error function
@@ -140,7 +148,6 @@ angular.module('Whitestone').controller('submitVoteSenController', ['$http', '$l
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
                     //console.log("Error: " + reqURL);
                     //alert("Cristo");
                     if (status === 0) {
@@ -165,6 +172,7 @@ angular.module('Whitestone').controller('submitVoteSenController', ['$http', '$l
         this.loadChoices = function(vid){
 
             // Now create the url with the route to talk with the rest API
+            console.log("vid: "+vid);
             var reqURL = "http://localhost:5000/whitestone/voting/"+vid+"/choices";
             //console.log("reqURL: " + reqURL);
             var config = { headers : 
@@ -180,6 +188,12 @@ angular.module('Whitestone').controller('submitVoteSenController', ['$http', '$l
                     //alert("New user added with id: " +response.data.User.cid);
                     //this.newChoiceList = response.data;
                     
+                    thisCtrl.votingChoices = response.data.Choice;
+                    console.log("votingChoices: "+JSON.stringify(thisCtrl.votingChoices));
+                    for(var i=0;i<thisCtrl.votingChoices.length;i++){
+                        thisCtrl.votingChoices[i]["checked"] = false;
+                    }
+                    console.log("votingChoices: "+JSON.stringify(thisCtrl.votingChoices));
                 }, //Error function
                 function (response) {
                     // This is the error function

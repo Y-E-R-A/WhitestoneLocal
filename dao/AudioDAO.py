@@ -52,9 +52,9 @@ class AudioDAO:
     def insert(self, uid, mid, aname, aaddress, atype):
         # Insert a new audio file to the Audio table to store its address and info
         cursor= self.conn.cursor()
-        query = "INSERT INTO Audio(uid, mid, aname, aaddress, atype) " \
-                "VALUES(%s, %s, %s, %s, %s) RETURNING aID"
-        cursor.execute(query, (uid, mid, aname, aaddress, atype,))
+        query = "INSERT INTO Audio(mid, aname, aaddress, atype) " \
+                "VALUES(%s, %s, %s, %s) RETURNING aID"
+        cursor.execute(query, (mid, aname, aaddress, atype,))
         aID= cursor.fetchone()[0]
         self.conn.commit()
         return aID
