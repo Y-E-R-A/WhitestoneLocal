@@ -41,7 +41,7 @@ class ActivityLogHandler:
             return jsonify(Log = mapped_result)
 
 
-    def insertCredentialsJSON(self, json):
+    def insertActivityLogJSON(self, json):
 
         uID = json.get('uID')
         date= json.get('date')

@@ -25,7 +25,7 @@ class AudioHandler:
 
 
     def getAudioByaID(self, aID):
-
+        # Handle information of an audio specified by aID
         result = AudioDAO().getAudioByaID(aID)
 
         if not result:
@@ -38,6 +38,8 @@ class AudioHandler:
 
 
     def getAudioBymID(self, mID):
+        # Handle information of all the audios
+        # that belong to a meeting specified by mID
 
         result = AudioDAO().getAudioBymID(mID)
         mapped_result = []
@@ -53,7 +55,7 @@ class AudioHandler:
 
 
     def getAudioByAddress(self, address):
-
+        # Handle information of the audio specified by an address
         result = AudioDAO().getAudioByAddress(address)
         mapped_result = []
 
@@ -67,9 +69,8 @@ class AudioHandler:
             return jsonify(Audio=mapped_result)
 
 
-    def insertJSON(self, json):
-
-
+    def insertAudioJSON(self, json):
+        # Handle information insertion of a new audio file
         mID = json.get('mID')
         aname = json.get('aname');
         aaddress = json.get('aaddress');

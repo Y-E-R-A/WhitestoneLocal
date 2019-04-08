@@ -19,6 +19,7 @@ class CredentialHandler:
         return result
 
     def getAllCredentials(self):
+        # Handle the email, and pin information of all users registered
         result = CredentialDAO().getAllCredentials()
         mapped_result = []
 
@@ -33,20 +34,17 @@ class CredentialHandler:
 
 
     def getCredentialByEmail(self, email):
-
+        # Handle credential information (ID, email, pin) of a user with certain email
         result = CredentialDAO().getCredentialById(email)
         if not result:
-
             return jsonify(Error="USER NOT FOUND"), 404
-
         else:
-
             mapped_result = self.mapToCredentialDict(result)
-
-            return jsonify(Credential = mapped_result)
+            return jsonify(Credential=mapped_result)
 
 
     def insertCredentialJSON(self,json):
+        # Handle new user's credentials insertions
         email = json.get('email')
         localpassword = json.get('localpassword')
         if UsersDAO().getUserbyEmail(email):
@@ -62,9 +60,10 @@ class CredentialHandler:
                 return jsonify(Error="Unexpected attributes in post request"), 404
 
     def updateCredential(self, form):
+        # Handle the email and pin updates for user with certain ID
         credential = CredentialDAO().getCredentialByEmail(form['email'])
         if not credential:
-            return jsonify(Error="User not found."), 404
+            return jsonify(Error="User not registered."), 404
         else:
             if len(form) != 3:
 

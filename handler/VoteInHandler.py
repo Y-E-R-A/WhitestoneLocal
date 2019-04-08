@@ -43,7 +43,7 @@ class VoteInHandler:
 
 
 
-    def insertCredentialsJSON(self, json):
+    def insertVoteInJSON(self, json):
 
         uID = json.get('uID')
         vID = json.get('vID')

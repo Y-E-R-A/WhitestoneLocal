@@ -38,7 +38,7 @@ class VotingChoiceHandler:
             return jsonify(Choice=mapped_result)
 
 
-    def insertCredentialsJSON(self, json):
+    def insertChoiceJSON(self, json):
 
         vID = json.get('vID')
         choice = json.get('choice');
