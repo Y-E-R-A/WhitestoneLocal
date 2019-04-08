@@ -24,6 +24,17 @@ class VoteInDAO:
 
         return result
 
+    def isParticipant(self, vID, uID):
+        # Check if the user with uID participates in a particular voting
+        cursor = self.conn.cursor()
+        query = "SELECT 1 AS COUNT " \
+                "FROM VoteIn " \
+                "WHERE vid= %s " \
+                "AND uid= %s"
+        cursor.execute(query, (vID, uID,))
+        result = cursor.fetchone()
+        return result
+
     def insert(self, uid, vid):
         #Insert the uid of the person who is permitted to vote in a voting with  a specific vID
         cursor = self.conn.cursor()

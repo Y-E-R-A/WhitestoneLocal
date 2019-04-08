@@ -33,6 +33,15 @@ class VoteInHandler:
 
             return jsonify(Participant=mapped_result)
 
+    def isParticipant(self, vID, uID):
+
+        result = VoteInDAO().isParticipant(vID,uID)
+        if not result:
+            return jsonify(Error="USER IS NOT PARTICIPANT"), 404
+        else:
+            return jsonify(Participant="USER IS PARTICIPANT")
+
+
 
     def insertCredentialsJSON(self, json):
 
