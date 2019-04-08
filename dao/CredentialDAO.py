@@ -15,6 +15,7 @@ class CredentialDAO:
 
 
     def getAllCredentials(self):
+        # Search the email, and pin of all users registered
         cursor = self.conn.cursor()
         query = "SELECT email, localpassword FROM Credential;"
         cursor.execute(query)
@@ -25,7 +26,7 @@ class CredentialDAO:
 
 
     def getCredentialByEmail(self, email):
-
+        # Search all credential information (ID, email, pin) of a user with certain email
         cursor = self.conn.cursor()
         query = "SELECT * FROM Credential WHERE email = %s;"
         cursor.execute(query, (email,))
@@ -47,7 +48,7 @@ class CredentialDAO:
 
 
     def update(self, email, localpassword, ID):
-        # Update email and local password which belongs to cID
+        # Update email and pin which belongs to a user with certain ID
         cursor = self.conn.cursor()
         query = "UPDATE Credential " \
                 "SET email= %s, localpassword = %s " \

@@ -42,9 +42,14 @@ class VotingQuestionDAO:
         # Return the voting question corresponding to a specific meeting ID
         cursor = self.conn.cursor()
         query = "SELECT * " \
-                "FROM VotingQuestion NATURAL INNER JOIN VotingChoice " \
+                "FROM VotingQuestion " \
                 "WHERE mID = %s " \
                 "and vstatus= 'Active';"
+
+        # query = "SELECT * " \
+        #         "FROM VotingQuestion NATURAL INNER JOIN VotingChoice " \
+        #         "WHERE mID = %s " \
+        #         "and vstatus= 'Active';"
         cursor.execute(query, (mID,))
         result = []
         for row in cursor:
@@ -80,12 +85,12 @@ class VotingQuestionDAO:
         self.conn.commit()
 
 
-    def insert(self, creatorID, mID, vdescription, vdate, vtime, vquestion, selectionlimit, vstatus):
+    def insert(self, creator, mID, vdescription, vdate, vtime, vquestion, selectionlimit, vstatus):
         # Insert new voting question and return its vID
         cursor = self.conn.cursor()
-        query = "INSERT INTO VotingQuestion(creatorID, mid, vdate, vtime, vdescription, vquestion, selectionlimit, vstatus) " \
+        query = "INSERT INTO VotingQuestion(creator, mid, vdate, vtime, vdescription, vquestion, selectionlimit, vstatus) " \
                 "VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING vID;"
-        cursor.execute(query, (creatorID, mID, vdate, vtime,vdescription, vquestion, selectionlimit, vstatus,))
+        cursor.execute(query, (creator, mID, vdate, vtime,vdescription, vquestion, selectionlimit, vstatus,))
         vID= cursor.fetchone()[0]
         self.conn.commit()
         return vID

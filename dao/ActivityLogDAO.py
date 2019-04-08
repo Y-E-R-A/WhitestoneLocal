@@ -16,8 +16,8 @@ class ActivityLogDAO:
     def getActivityLogByDate(self, date):
         # Return all the activities that occurs in certain date
         cursor = self.conn.cursor()
-        query = "SELECT date, time, ufirstname, ulastname, logmessage, email " \
-                "FROM ActivityLog NATURAL INNER JOIN Users NATURAL INNER JOIN Credential " \
+        query = "SELECT date, time, urole, email, logmessage " \
+                "FROM ActivityLog " \
                 "WHERE ActivityLog.date = %s;"
         cursor.execute(query, (date,))
         result = []
@@ -26,12 +26,12 @@ class ActivityLogDAO:
         return result
 
 
-    def insert(self, uID, date, time, logmessage):
+    def insert(self, urole, email, date, time, logmessage):
         # Insert new activity log
         cursor = self.conn.cursor()
-        query = " INSERT INTO ActivityLog(uid, date, time, logmessage) " \
-                "VALUES (%s, %s, %s, %s) RETURNING logID;"
-        cursor.execute(query, (uID, date, time, logmessage,))
+        query = " INSERT INTO ActivityLog(urole, email, date, time, logmessage) " \
+                "VALUES (%s, %s, %s, %s, %s) RETURNING logID;"
+        cursor.execute(query, (urole,email, date, time, logmessage,))
         logID = cursor.fetchone()[0]
         self.conn.commit()
         return logID

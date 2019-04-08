@@ -14,7 +14,7 @@ class AudioDAO:
 
 
     def getAudioByaID(self, aID):
-        # Get an audio with a specified by aID
+        # Get an audio specified by aID
         cursor = self.conn.cursor()
         query = "SELECT * " \
                 "FROM Audio " \
@@ -26,7 +26,7 @@ class AudioDAO:
 
 
     def getAudioBymID(self, mID):
-        #Get all the audio that belong to a meeting specified by mID
+        # Get all the audio that belong to a meeting specified by mID
         cursor = self.conn.cursor()
         query = "SELECT * " \
                 "FROM Audio " \
@@ -39,7 +39,7 @@ class AudioDAO:
 
 
     def getAudioByAddress(self, address):
-        # Get the audio with an specified address
+        # Get the audio specified by an address
         cursor = self.conn.cursor()
         query = "SELECT * " \
                 "FROM Audio " \
@@ -49,8 +49,8 @@ class AudioDAO:
         return result
 
 
-    def insert(self, uid, mid, aname, aaddress, atype):
-        # Insert a new audio file to the Audio table to store its address and info
+    def insert(self, mid, aname, aaddress, atype):
+        # Insert a new audio file information
         cursor= self.conn.cursor()
         query = "INSERT INTO Audio(mid, aname, aaddress, atype) " \
                 "VALUES(%s, %s, %s, %s) RETURNING aID"
