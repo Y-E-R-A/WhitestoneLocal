@@ -18,10 +18,8 @@ from flask_cors import CORS, cross_origin
 from flask import Flask, request
 from handler.ActivityLogHandler import ActivityLogHandler
 from handler.AudioHandler import AudioHandler
-from handler.ChooseHandler import ChooseHandler
 from handler.CredentialHandler import CredentialHandler
 from handler.MeetingHandler import MeetingHandler
-from handler.ParticipatesInHandler import ParticipatesInHandler
 from handler.UsersHandler import UsersHandler
 from handler.VoteInHandler import VoteInHandler
 from handler.VotingChoiceHandler import VotingChoiceHandler
@@ -30,7 +28,6 @@ from handler.VotingQuestionHandler import VotingQuestionHandler
 app = Flask(__name__)
 
 CORS(app)
-
 
 
 
@@ -136,7 +133,7 @@ def getMeeting():
     if request.method == 'POST':
 
         print ("REQUEST", request.json)
-        return MeetingHandler().insertCredentialsJSON(request.json)
+        return MeetingHandler().insertMeetingJSON(request.json)
 
     else:
 
@@ -148,7 +145,7 @@ def getMeeting():
 @app.route('/whitestone/voting',  methods = ['POST'])
 def postVotingBymID():
     print("REQUEST", request.json)
-    return VotingQuestionHandler().insertCredentialsJSON(request.json)
+    return VotingQuestionHandler().insertVotingJSON(request.json)
 
 
 # Get inactive or closed voting question by mID
@@ -179,7 +176,7 @@ def getVotingResultByvID(vid):
 @app.route('/whitestone/voting/choice', methods=['POST'])
 def postAlternatives():
     print ("REQUEST", request.json)
-    return VotingChoiceHandler().insertCredentialsJSON(request.json)
+    return VotingChoiceHandler().insertChoiceJSON(request.json)
 
 
 # Search voting choices and its altIDs by voting id
@@ -199,7 +196,7 @@ def updateVotingStatus(vid):
 def meetingAudio(mid):
     if request.method == 'POST':
         print("REQUEST", request.json)
-        return AudioHandler().insertJSON(request.json)
+        return AudioHandler().insertAudioJSON(request.json)
     else:
      return AudioHandler().getAudioBymID(mid)
 
@@ -212,18 +209,6 @@ def getAudio(aid):
      return AudioHandler().getAudioByaID(aid)
 
 
-
-# Post meeting participant
-@app.route('/whitestone/participatesIn/meeting/<int:mid>', methods = ['POST', 'GET'])
-def ParticipatesIn(mid):
-    if request.method == 'POST':
-
-        print("REQUEST", request.json)
-        return ParticipatesInHandler().insertCredentialsJSON(request.json)
-
-    else:
-
-        return ParticipatesInHandler().getMeetingParticipants(mid)
 
 # Update meeting status
 @app.route('/whitestone/meetingstatus', methods= ["PUT"])
@@ -238,27 +223,21 @@ def VotesIn(vid, uid):
     if request.method == 'POST':
 
         print("REQUEST", request.json)
-        return VoteInHandler().insertCredentialsJSON(request.json)
+        return VoteInHandler().insertVoteInJSON(request.json)
 
     else:
         #return VoteInHandler().getVotingParticipants(vid)
         return VoteInHandler().isParticipant(vid, uid)
 
-# Post user vote in table Choose
-@app.route('/whitestone/votesubmission', methods=['POST'])
-def postChoose():
-    print("REQUEST", request.json)
-    return ChooseHandler().insertCredentialsJSON(request.json)
-
 
 # Activity Log
-
+# Post new activity log
 @app.route('/whitestone/activitylog', methods=['POST'])
 def ActivityLog():
     print("REQUEST", request.json)
-    return ActivityLogHandler().insertCredentialsJSON(request.json)
+    return ActivityLogHandler().insertActivityLogJSON(request.json)
 
-
+# Get activity log by date
 @app.route('/whitestone/getactivitylog', methods=['POST'])
 def getActivityLog():
     print("REQUEST", request.json)
