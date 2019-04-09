@@ -34,3 +34,5 @@ def upload_file():
             return redirect(url_for('uploaded_file',
                                     filename=filename))
     return ""
+
+app.run('0.0.0.0')
