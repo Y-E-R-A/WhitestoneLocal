@@ -24,22 +24,28 @@
       <li style = "float:right"><a class="active" type="submit" name="action" ng-click="createUserCtrl.logOut()">Logout</a>
   </div>
 </nav>
-    
-    
-    
     <center>
+    <div ng-if="createMeetingCtrl.active">
+        <h4 style="text-align: center">The meeting: "{{createMeetingCtrl.meeting.mdescription}}" is a currently active.
+        Do you want to close the meeting?</h4>
+        <button class="btn btn-primary" type="submit" name="action" ng-click="createMeetingCtrl.closeMeeting()">Close</button> 
+    </div>
+    </center>
+    <center>
+        <div ng-if="!createMeetingCtrl.active">
         <table>
         <div class="container" >
+            <div form="meetingForm">
             <tbody>
                 <div class="card-header">
                     <h3>Create new meeting</h3>
                 </div>
 
                 <tr>
-                    <th><input ng-model="createMeetingCtrl.meeting_name" class="form-control" placeholder="Meeting Name"></th>
+                    <th><input ng-model="createMeetingCtrl.meeting_name" class="form-control" placeholder="Meeting Name" required></th>
                 </tr>
                 <tr>
-                    <th><input ng-model="createMeetingCtrl.meeting_desc" class="form-control" placeholder="Meeting description" ></th>
+                    <th><input ng-model="createMeetingCtrl.meeting_desc" class="form-control" placeholder="Meeting description" required></th>
                 </tr>
                 <tr>
                     <th><input ng-model="createMeetingCtrl.meeting_month" class="form-control" placeholder= "MM" ></th>
@@ -53,16 +59,16 @@
                 </tr>
                 <tr>
                     <th><br>
-                    <button class="btn btn-primary btn-block" type="submit" name="action" ng-click="createMeetingCtrl.createMeeting()">Create</button> 
+                    <button class="btn btn-primary btn-block" type="submit" name="action" ng-click="createMeetingCtrl.createMeeting()" ng-disabled="createMeetingCtrl.active">Create</button> 
                     <br>
                 </th>
                 </tr>
                 
               </tbody>
-            
+            </div>
             </div>
             </table>
-              
+        </div>
        </center>
     
 </body>

@@ -32,9 +32,9 @@
             controller: 'submitVoteChanController',
             controllerAs : 'submitVoteChanCtrl'
         }).when('/oldMeeting/:role/:uid', {
-            templateUrl: 'pages/viewOldMeetins.html',
+            templateUrl: 'pages/viewOldMeetings.html',
             controller: 'oldMeetingsController',
-            controllerAs : 'oldMeetingsSenCtrl'
+            controllerAs : 'oldMeetingsCtrl'
         }).when('/editUser/:role/:uid', {
             templateUrl: 'pages/editUser.html',
             controller: 'editUserController',

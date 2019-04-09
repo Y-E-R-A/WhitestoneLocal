@@ -116,7 +116,7 @@ function makeLink(){
   aFileForm.append("files", afile, aFullDateAndTime.concat(".mp3"));
   aFileForm.set("name", aFullDateAndTime.concat(".mp3") );
   aFileForm.set("enctype", "multipart/form-data");
-  httpRequest.open("POST", "http://whitestone.uprm.edu/uploads.php");
+  httpRequest.open("POST", "http://whitestone.uprm.edu/uploads.py");
   httpRequest.setRequestHeader("enctype", "multipart/form-data");
 //  httpRequest.setRequestHeader("Content-Type","audio/mpeg3");
   httpRequest.send(aFileForm);
