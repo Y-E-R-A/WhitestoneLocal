@@ -17,32 +17,31 @@ angular.module('Whitestone').controller('createMeetingController', ['$http', '$l
 
         var meeting_status = "";
         
+        this.active = false;
+        this.meetingId = 0;
         var id = 0;
+        
+        this.meeting = [];
         // This variable hold the information on the part
         // as read from the REST API
-        var credentialList = {};
         
     
         this.createMeeting = function(){
             // Get the target part id from the parameter in the url
             // using the $routerParams object
             //var userId = $routeParams.uid;
-            
+            var d = new Date();
             var data = {};
         
             data.creatorID = $routeParams.uid;       
             
             
             data.mdescription = this.meeting_desc;
-            data.mdate = this.meeting_month+'/'+this.meeting_date+'/'+this.meeting_year;
-          
-            data.mtime = "11:07pm"
+            //data.mdate = this.meeting_month+'/'+this.meeting_date+'/'+this.meeting_year;
+            data.mdate = d.getMonth()+"/"+d.getDate()+"/"+d.getFullYear();
+            //data.mtime = "11:07pm"
+            data.mtime = d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
             data.mstatus = "Active";
-            //data.udescription = this.description;
-            
-            //console.log("data: " + JSON.stringify(data));
-            //console.log("first name: "+this.first_name);
-            //console.log("last name: "+this.last_name);
             // Now create the url with the route to talk with the rest API
             var reqURL = "http://localhost:5000/whitestone/activemeeting";
             //console.log("reqURL: " + reqURL);
@@ -56,19 +55,9 @@ angular.module('Whitestone').controller('createMeetingController', ['$http', '$l
                 function (response) {
                     console.log("response: " + JSON.stringify(response.data))
                     // assing the part details to the variable in the controller
-                    //alert("New user added with id: " +response.data.User.cid);
-                    
-                    //thisCtrl.id = response.data.User.cid
-                    
-                    //console.log("ctrl cid "+this.id )
-                    
-                    //thisCtrl.credentialList = response.data.User;
-                    
-                    //console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialList))
-                    
-                    //console.log("second sign in")
-                    
-                    //thisCtrl.signUpUser();
+                    thisCtrl.active = true;
+                    thisCtrl.meetingId = response.data.Meeting.mID;
+                    //thisCtrl.active = true;
                     
                 }, //Error function
                 function (response) {
@@ -98,6 +87,55 @@ angular.module('Whitestone').controller('createMeetingController', ['$http', '$l
             );
         };   
         
+        this.closeMeeting = function(){
+            // Get the target part id from the parameter in the url
+            // using the $routerParams object
+
+            var data = {};
+            data.mID = thisCtrl.meetingId;
+            data.mstatus = "Inactive";
+            // Now create the url with the route to talk with the rest API
+            var reqURL = "http://localhost:5000/whitestone/meetingstatus";
+            //console.log("reqURL: " + reqURL);
+            var config = { headers : 
+                          {'Content-Type':'application/json;charset=utf-8;' }
+                         }
+        
+            // Now issue the http request to the rest API
+            $http.put(reqURL,data,config).then(
+                // Success function
+                function (response) {
+                    console.log("response: " + JSON.stringify(response.data))
+                    // assing the part details to the variable in the controller
+                    thisCtrl.active = false;
+                    
+                }, //Error function
+                function (response) {
+                    // This is the error function
+                    // If we get here, some error occurred.
+                    // Verify which was the cause and show an alert.
+                    var status = response.status;
+                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
+                    //console.log("Error: " + reqURL);
+                    //alert("Cristo");
+                    if (status == 0) {
+                        alert("No hay conexion a Internet");
+                    }
+                    else if (status == 401) {
+                        alert("Su sesion expiro. Conectese de nuevo.");
+                    }
+                    else if (status == 403) {
+                        alert("No esta autorizado a usar el sistema.");
+                    }
+                    else if (status == 404) {
+                        alert("No se encontro la informacion solicitada.");
+                    }
+                    else {
+                        alert("Error interno del sistema.");
+                    }
+                }
+            );
+        };
         this.loadActiveMeeting = function(){
             
 
@@ -114,20 +152,14 @@ angular.module('Whitestone').controller('createMeetingController', ['$http', '$l
                 function (response) {
                     console.log("response: " + JSON.stringify(response.data))
                     // assing the part details to the variable in the controller
-                    //alert("New user added with id: " +response.data.User.cid);
-                    
-                    //thisCtrl.id = response.data.User.cid
                     
                     console.log("response "+response.data);
-                    
-                    //thisCtrl.credentialList = response.data.User;
-                    
-                    //console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialList))
-                    
-                    //console.log("second sign in")
-                    
-                    //thisCtrl.signUpUser();
-                    
+                    //if(response.data.Meeting[0].mstatus==="Active"){
+                    thisCtrl.meeting = response.data.Meeting[0];
+                    thisCtrl.active = true;
+                    thisCtrl.meetingId = response.data.Meeting[0].mID;
+                    //}
+
                 }, //Error function
                 function (response) {
                     // This is the error function
