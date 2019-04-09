@@ -143,7 +143,7 @@ class UsersDAO:
     def deleteUser(self, uID):
         # Delete a user object and its credentials
         cursor = self.conn.cursor()
-        query = "DELETE FROM Users " \
+        query = "DELETE FROM Users CASCADE " \
                 "WHERE uID= %s RETURNING cID; "
         cursor.execute(query, (uID,))
         cID = cursor.fetchone()[0]
