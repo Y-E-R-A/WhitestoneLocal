@@ -157,6 +157,10 @@ angular.module('Whitestone').controller('createMeetingController', ['$http', '$l
         };
         this.loadActiveMeeting();
         this.voteRedirect = function(){
+            console.log("uid: "+$routeParams.uid);
+            console.log("role1: "+$routeParams.role);
+            console.log("role2: "+$routeParams.Secretary);
+        
             $location.url('/Vote/'+$routeParams.role+'/'+$routeParams.uid);
         }
         this.activityLogRedirect = function(){

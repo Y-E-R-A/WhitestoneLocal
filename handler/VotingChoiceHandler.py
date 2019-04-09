@@ -42,10 +42,11 @@ class VotingChoiceHandler:
 
         vID = json.get('vID')
         choice = json.get('choice');
-        votes = json.get('votes')
-        if vID and choice and votes:
+        votes = 0;
 
-            altID = VotingChoiceDAO().insert(vID, choice, votes)
+        if vID and choice:
+
+            altID = VotingChoiceDAO().insertVotingChoice(vID, choice, votes)
             mapped_result = self.builtVotingChoiceDict(altID, vID, choice, votes)
             return jsonify(Choice=mapped_result), 201
 

@@ -16,7 +16,7 @@ class VotingChoiceDAO:
     def getVotingChoiceByVID(self, vID):
         # Return all the alternatives of a voting question with certain vID
         cursor = self.conn.cursor()
-        query = "SELECT altid, choice " \
+        query = "SELECT altid, choice, votes " \
                 "FROM VotingQuestion inner join VotingChoice " \
                 "ON VotingQuestion.vID = VotingChoice.vID " \
                 "WHERE VotingQuestion.vID = %s;"
@@ -27,12 +27,12 @@ class VotingChoiceDAO:
         return result
 
 
-    def insert(self, vid, choice):
-        # Insert a new voting choice or alternative fro a voting with an specific vID and return its altID
+    def insertVotingChoice(self, vid, choice, votes):
+        # Insert a new voting choice or alternative for a voting with an specific vID and return its altID
         cursor = self.conn.cursor()
-        query = "INSERT INTO VotingChoice(vid, choice) " \
-                "VALUES(%s, %s) RETURNING altID;"
-        cursor.execute(query, (vid, choice,))
+        query = "INSERT INTO VotingChoice(vid, choice, votes) " \
+                "VALUES(%s, %s, %s) RETURNING altID;"
+        cursor.execute(query, (vid, choice, votes))
         altID = cursor.fetchone()[0]
         self.conn.commit()
         return altID

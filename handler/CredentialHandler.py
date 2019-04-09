@@ -8,14 +8,14 @@ class CredentialHandler:
     def mapToCredentialDict(self, row):
         result = {}
         result['email'] = row[0]
-        result['localpassword'] = row[1]
+        result['pin'] = row[1]
         return result
 
-    def buildCredentialDict(self, ID, email, localpassword):
+    def buildCredentialDict(self, cID, email, pin):
         result = {}
-        result['ID'] = ID
+        result['cID'] = cID
         result['email'] = email
-        result['localpassword'] = localpassword
+        result['pin'] = pin
         return result
 
     def getAllCredentials(self):
@@ -24,17 +24,17 @@ class CredentialHandler:
         mapped_result = []
 
         if not result:
-            return jsonify(Error="NOT FOUND"), 404
+            return jsonify(Error="CREDENTIALS NOT FOUND"), 404
 
         else:
             for r in result:
                 mapped_result.append(self.mapToCredentialDict(r))
 
-            return jsonify(AllCredentials =mapped_result)
+            return jsonify(AllCredentials=mapped_result)
 
 
     def getCredentialByEmail(self, email):
-        # Handle credential information (ID, email, pin) of a user with certain email
+        # Handle credential information (cID, email, pin) of a user with certain email
         result = CredentialDAO().getCredentialById(email)
         if not result:
             return jsonify(Error="USER NOT FOUND"), 404
@@ -46,21 +46,21 @@ class CredentialHandler:
     def insertCredentialJSON(self,json):
         # Handle new user's credentials insertions
         email = json.get('email')
-        localpassword = json.get('localpassword')
+        pin = json.get('pin')
         if UsersDAO().getUserbyEmail(email):
 
             return jsonify(Error="Email already registered"),
         else:
-            if email and localpassword:
-                ID = CredentialDAO().insert(email, localpassword)
-                mapped_result = self.buildCredentialDict(ID,email, localpassword)
+            if email and pin:
+                cID = CredentialDAO().insert(email, pin)
+                mapped_result = self.buildCredentialDict(cID,email, pin)
                 return jsonify(Credential = mapped_result), 201
 
             else:
                 return jsonify(Error="Unexpected attributes in post request"), 404
 
     def updateCredential(self, form):
-        # Handle the email and pin updates for user with certain ID
+        # Handle the email and pin updates for user with certain cID
         credential = CredentialDAO().getCredentialByEmail(form['email'])
         if not credential:
             return jsonify(Error="User not registered."), 404
@@ -71,13 +71,13 @@ class CredentialHandler:
 
             else:
 
-                ID = form['ID']
+                cID = form['cID']
                 email = form['email']
-                pin = form['localpassword']
+                pin = form['pin']
 
-                if ID and email and pin:
-                    CredentialDAO().update(email, pin, ID)
-                    result = self.buildCredentialDict(ID, email, pin)
+                if cID and email and pin:
+                    CredentialDAO().update(email, pin, cID)
+                    result = self.buildCredentialDict(cID, email, pin)
                     return jsonify(Credential=result), 201
 
                 else:

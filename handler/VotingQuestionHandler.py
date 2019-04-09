@@ -4,15 +4,14 @@ from dao.VotingQuestionDAO import VotingQuestionDAO
 
 class VotingQuestionHandler:
 
-    def builtVotingQuestionDict(self, vID, creator, mID, vdescription, vdate, vtime, vquestion, selectionlimit, vstatus):
+    def builtVotingQuestionDict(self, vID, mID, vinstructions, vdate, vtime, vquestion, selectionlimit, vstatus):
         # Voting Info dictionary
         result = {}
         result['vID'] = vID
-        result['creator'] = creator
         result['mID'] = mID
-        result['vdescription'] = vdescription
-        result['vdate'] = vdate
-        result['vtime'] = vtime
+        result['vinstructions'] = vinstructions
+        result['vdate'] = str(vdate)
+        result['vtime'] = str(vtime)
         result['vquestion'] = vquestion
         result['selectionlimit'] = selectionlimit
         result['vtatus'] = vstatus
@@ -29,44 +28,28 @@ class VotingQuestionHandler:
         # Inactive Voting Question dictionary
         result = {}
         result['vID'] = row[0]
-        result['creator'] = row[1]
-        result['mID'] = row[2]
-        result['vdescription'] = row[3]
-        result['vdate'] = row[4]
-        result['vtime'] = row[5]
-        result['vquestion'] = row[6]
-        result['selectionlimit'] = row[7]
-        result['vstatus'] = row[8]
+        result['mID'] = row[1]
+        result['vinstructions'] = row[2]
+        result['vdate'] = str(row[3])
+        result['vtime'] = str(row[4])
+        result['vquestion'] = row[5]
+        result['selectionlimit'] = row[6]
+        result['vstatus'] = row[7]
         return result
 
     def mapToActiveVotingQuestionDict(self, row):
         # Voting Active Question dictionary (Question with choices)
         result = {}
         result['vID'] = row[0]
-        result['creator'] = row[1]
-        result['mID'] = row[2]
-        result['vdescription'] = row[3]
-        result['vdate'] = row[4]
-        result['vtime'] = row[5]
-        result['vquestion'] = row[6]
-        result['selectionlimit'] = row[7]
-        result['vstatus'] = row[8]
-        #result['altID'] = row[9]
-        #result['choice'] = row[10]
+        result['mID'] = row[1]
+        result['vinstructions'] = row[2]
+        result['vdate'] = str(row[3])
+        result['vtime'] = str(row[4])
+        result['vquestion'] = row[5]
+        result['selectionlimit'] = row[6]
+        result['vstatus'] = row[7]
         return result
 
-    # def mapToInactiveVotingQuestionDict(self, row):
-    #     # Voting Question dictionary
-    #     result = {}
-    #     result['vID'] = row[0]
-    #     result['vquestion'] = row[1]
-    #     result['altID'] = row[2]
-    #     result['choice'] = row[3]
-    #     result['votes'] = row[4]
-    #     result['vtime'] = row[5]
-    #     result['vdate'] = row[6]
-
-        return result
 
     def mapToVotingResultsDict(self, row):
         # Voting Result dictionary
@@ -117,21 +100,6 @@ class VotingQuestionHandler:
             return jsonify(Voting=mapped_result)
 
 
-    def getVotingResultsByvID(self, vID):
-        result = VotingQuestionDAO().getVotingResultsByvID(vID)
-        mapped_result = []
-
-        if not result:
-            return jsonify(Error="NOT FOUND"), 404
-
-        else:
-
-            for r in result:
-
-                mapped_result.append(self.mapToVotingResultsDict(r))
-
-            return jsonify(VotingResult=mapped_result)
-
 
     def updateVotingStatus(self, vID, form):
 
@@ -155,9 +123,8 @@ class VotingQuestionHandler:
 
     def insertVotingJSON(self, json):
 
-        creator = json.get('creator')
         mID = json.get('mID')
-        vdescription = json.get('vdescription')
+        vinstructions = json.get('vinstructions')
         vdate = json.get('vdate')
         vtime = json.get('vtime')
         vquestion = json.get('vquestion')
@@ -165,10 +132,10 @@ class VotingQuestionHandler:
         vstatus = json.get('vstatus')
 
 
-        if creator and mID and vdate and vtime and vquestion and selectionlimit and vstatus:
+        if mID and vdate and vtime and vquestion and selectionlimit and vstatus:
 
-            vID = VotingQuestionDAO().insert(creator, mID, vdescription, vdate, vtime, vquestion, selectionlimit, vstatus)
-            mapped_result = self.builtVotingQuestionDict(vID, creator, mID, vdescription, vdate, vtime, vquestion, selectionlimit, vstatus)
+            vID = VotingQuestionDAO().insertVotingQuestion(mID, vinstructions, vdate, vtime, vquestion, selectionlimit, vstatus)
+            mapped_result = self.builtVotingQuestionDict(vID, mID, vinstructions, vdate, vtime, vquestion, selectionlimit, vstatus)
             return jsonify(Voting=mapped_result), 201
 
         else:

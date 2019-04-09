@@ -15,7 +15,7 @@ class UsersDAO:
     def getUserbyEmail(self, email):
         # Return the user information corresponding to an email.
         cursor = self.conn.cursor()
-        query = "SELECT uid, id, ufirstname, ulastname, udescription, urole, uclassification, email, localpassword " \
+        query = "SELECT uid, cid, ufirstname, ulastname, udescription, urole, uclassification, email, pin " \
                 "FROM Users natural inner join Credential " \
                 "WHERE email= %s;"
         cursor.execute(query, (email,))
@@ -25,7 +25,7 @@ class UsersDAO:
     def getUserByuID(self, uID):
         # Return the user information corresponding to a uID.
         cursor = self.conn.cursor()
-        query = "SELECT ufirstname, ulastname, udescription, urole, uclassification, email, localpassword " \
+        query = "SELECT ufirstname, ulastname, udescription, urole, uclassification, email, pin " \
                 "FROM Users natural inner join Credential " \
                 "WHERE uID= %s;"
         cursor.execute(query, (uID,))
@@ -34,9 +34,9 @@ class UsersDAO:
 
 
     def getAllUsersInfo(self):
-        # Return a list of all registered users with an specific name and lastname.
+        # Return a list of all registered users.
         cursor = self.conn.cursor()
-        query= "SELECT uid, id, ufirstname, ulastname, udescription, urole, uclassification, email, localpassword " \
+        query= "SELECT uid, cid, ufirstname, ulastname, udescription, urole, uclassification, email, pin " \
                "FROM Users natural inner join Credential"
         cursor.execute(query)
         result = []
@@ -46,7 +46,7 @@ class UsersDAO:
         return result
 
     def getAllSenators(self):
-        # Return all users that have urole= senators including the chancellor (senator too)
+        # Return all users with urole= senators including the chancellor (senator too)
 
         cursor = self.conn.cursor()
         query = "SELECT uid " \
@@ -121,7 +121,7 @@ class UsersDAO:
     def insert(self,credentialID, ufirstname, ulastname, udescription, urole, uclassification):
         # Insert a new User and return its uID
         cursor = self.conn.cursor()
-        query= "INSERT into Users(id, ufirstname, ulastname, udescription, urole, uclassification) " \
+        query= "INSERT into Users(cid, ufirstname, ulastname, udescription, urole, uclassification) " \
                "values(%s, %s, %s, %s, %s, %s) RETURNING uID;"
         cursor.execute(query, (credentialID, ufirstname, ulastname, udescription, urole, uclassification,))
         uID = cursor.fetchone()[0]
@@ -129,7 +129,7 @@ class UsersDAO:
         return uID
 
 
-    def update(self, uID,  ufirstname, ulastname, udescription, urole, uclassification):
+    def updateUser(self, uID, ufirstname, ulastname, udescription, urole, uclassification):
         # Update user information using the uid
         cursor = self.conn.cursor()
         query= "UPDATE Users "\
@@ -141,16 +141,16 @@ class UsersDAO:
 
 
     def deleteUser(self, uID):
-
+        # Delete a user object and its credentials
         cursor = self.conn.cursor()
         query = "DELETE FROM Users " \
-                "WHERE uID= %s RETURNING ID; "
+                "WHERE uID= %s RETURNING cID; "
         cursor.execute(query, (uID,))
-        ID = cursor.fetchone()[0]
+        cID = cursor.fetchone()[0]
 
         query = "DELETE FROM Credential " \
-                "WHERE ID= %s; "
-        cursor.execute(query, (ID,))
+                "WHERE cID= %s; "
+        cursor.execute(query, (cID,))
 
         self.conn.commit()
         return

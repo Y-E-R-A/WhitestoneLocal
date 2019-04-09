@@ -29,7 +29,7 @@ class VotingQuestionDAO:
         cursor = self.conn.cursor()
         query = "SELECT * " \
                 "FROM VotingQuestion " \
-                "WHERE mID = 2 AND vstatus = 'Inactive' " \
+                "WHERE mID = %s AND vstatus = 'Inactive' " \
                 "ORDER BY vtime DESC"
 
         cursor.execute(query, (mID,))
@@ -46,33 +46,13 @@ class VotingQuestionDAO:
                 "WHERE mID = %s " \
                 "and vstatus= 'Active';"
 
-        # query = "SELECT * " \
-        #         "FROM VotingQuestion NATURAL INNER JOIN VotingChoice " \
-        #         "WHERE mID = %s " \
-        #         "and vstatus= 'Active';"
+
         cursor.execute(query, (mID,))
         result = []
         for row in cursor:
             result.append(row)
         return result
 
-
-    def getVotingResultsByvID(self, vID):
-        # Return the alternatives and their votes obtained
-        cursor = self.conn.cursor()
-        query = "SELECT choice, COUNT(*) " \
-                "FROM(SELECT * FROM VotingChoice NATURAL INNER JOIN Choose) AS Results " \
-                "NATURAL INNER JOIN VotingQuestion " \
-                "WHERE VotingQuestion.vID= %s " \
-                "and vstatus = 'Inactive' " \
-                "GROUP BY choice " \
-                "ORDER BY choice DESC;"
-
-        cursor.execute(query, (vID,))
-        result = []
-        for row in cursor:
-            result.append(row)
-        return result
 
 
     def updateVotingStatus(self, vID, vstatus):
@@ -85,12 +65,12 @@ class VotingQuestionDAO:
         self.conn.commit()
 
 
-    def insert(self, creator, mID, vdescription, vdate, vtime, vquestion, selectionlimit, vstatus):
+    def insertVotingQuestion(self, mID, vinstructions, vdate, vtime, vquestion, selectionlimit, vstatus):
         # Insert new voting question and return its vID
         cursor = self.conn.cursor()
-        query = "INSERT INTO VotingQuestion(creator, mid, vdate, vtime, vdescription, vquestion, selectionlimit, vstatus) " \
-                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING vID;"
-        cursor.execute(query, (creator, mID, vdate, vtime,vdescription, vquestion, selectionlimit, vstatus,))
+        query = "INSERT INTO VotingQuestion(mid, vdate, vtime, vinstructions, vquestion, selectionlimit, vstatus) " \
+                "VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING vID;"
+        cursor.execute(query, (mID, vdate, vtime,vinstructions, vquestion, selectionlimit, vstatus,))
         vID= cursor.fetchone()[0]
         self.conn.commit()
         return vID

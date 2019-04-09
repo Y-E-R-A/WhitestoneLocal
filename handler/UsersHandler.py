@@ -141,15 +141,16 @@ class UsersHandler:
 
 
 
-    def getUserByEmail(self, email):
+    def getUserByEmail(self, json):
 
+        email = json.get('email')
         result = UsersDAO().getUserbyEmail(email)
         if not result:
             return jsonify(Error="NOT FOUND"), 404
 
         else:
-            mapped_result = self.mapToUserInfoDict(result)
 
+            mapped_result = self.mapToUserInfoDict(result)
             return jsonify(User=mapped_result)
 
 
@@ -157,15 +158,12 @@ class UsersHandler:
     def getUserByuID(self, uID):
 
         result = UsersDAO().getUserByuID(uID)
-        mapped_result = []
-
         if not result:
             return jsonify(Error="NOT FOUND"), 404
 
         else:
-            for r in result:
-                mapped_result.append(self.mapToUserInfoDict(r))
 
+            mapped_result = self.mapToUserInfoDict(result)
             return jsonify(User=mapped_result)
 
     def insertUserJSON(self, json):
@@ -206,7 +204,7 @@ class UsersHandler:
 
 
                 if ufirstname and ulastname and urole and uclassification:
-                    UsersDAO().update(uID, ufirstname, ulastname, udescription, urole, uclassification)
+                    UsersDAO().updateUser(uID, ufirstname, ulastname, udescription, urole, uclassification)
                     result = self.editUserDict(uID, ufirstname, ulastname, udescription, urole, uclassification)
                     return jsonify(User=result), 201
                 else:

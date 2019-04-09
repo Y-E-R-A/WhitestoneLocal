@@ -14,18 +14,6 @@ class VoteInDAO:
 
 
 
-    def getVotingParticipants(self, vID):
-        # Get the information of the users which are permitted to participate in a voting
-        cursor = self.conn.cursor()
-        query = "SELECT uID, ufirstname, ulastname, email, exercised_vote " \
-                "FROM VoteIn natural inner join Users natural inner join Credential " \
-                "WHERE VoteIn.vID = %s ;"
-        cursor.execute(query, (vID,))
-        result = []
-        for row in cursor:
-            result.append(row)
-
-        return result
 
     def getParticipant(self, vID, uID):
         # Check if the user with uID participates in a particular voting
@@ -52,7 +40,7 @@ class VoteInDAO:
         # Change the exercise_vote flag to TRUE
         cursor = self.conn.cursor()
         query = "UPDATE VoteIN " \
-                "SET exercise_vote = %s " \
+                "SET exercised_vote = %s " \
                 "WHERE uID= %s " \
                 "AND vID= %s; "
         cursor.execute(query, (True, uid, vid,))

@@ -27,27 +27,30 @@
                 <div class="col-sm-4">
                 </div>
                     <div class="col-sm-4">
+                    <form name="loginCtrl.loginForm">
 	                   <table>
                            <tbody>
                             <tr>                                     
                                
                             <th> 
-                                <input ng-model="loginCtrl.email" class="form-control" placeholder="Email address"  required autofocus></th>
+                                <input ng-model="loginCtrl.email" class="form-control" placeholder="Email address" ng-pattern ="/^[a-z\D]+\.[a-z]*\d*@upr\.edu$/" required>
+                                </th>
                             </tr>
                             <tr>
                                                           
                             <th>
-                                <input ng-model="loginCtrl.password" class="form-control" placeholder="Password"></th>
+                                <input ng-model="loginCtrl.password" class="form-control" placeholder="Password" required></th>
                             </tr>
 
                             <tr>
                                 <th>
                                 <br>
-                                <button class="btn btn-primary btn-block" type="submit" name="action" ng-click="loginCtrl.loginUser()">Log in</button> 
+                                <button class="btn btn-primary btn-block" type="submit" name="action" ng-click="loginCtrl.checkForm()">Log in</button> 
                             </th>
                             </tr>
                         </tbody>
                     </table>
+                        </form>
     </div>
     <div class="col-sm-4">
     </div>
