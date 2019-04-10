@@ -99,9 +99,6 @@
               <th>
                 <br>
                 <button class="btn btn-primary" style="float:left;padding:5px 25px;border-radius: 12px;" type="submit" name="action" ng-click="votingCtrl.createVote()">Create</button>
-                 <button style="float:right;padding:5px 30px;border-radius: 12px;" type="submit" name="action" ng-click="votingCtrl.selectParticipant()">Select</button>
-                
-                  <button style="float:right;padding:5px 30px;border-radius: 12px;" type="submit" name="action" ng-click="votingCtrl.createChoices()">Choice</button>
                 <button class="btn btn-danger" style="float:right;padding:5px 25px;border-radius: 12px;" type="reset" name="action" ng-click="votingCtrl.loginUser()">Cancel</button>
               </th>
               </tr>
@@ -125,6 +122,7 @@
                   {{choices.votes}}
             </div>
             <button style="float:right;padding:5px 30px;border-radius: 12px;" type="submit" name="action" ng-click="votingCtrl.closeVotingQuestion()">Close</button>
+            <br>
         </div>
         <div ng-if="votingCtrl.activeMeeting">
             <h3>Meeting's Votings</h3>

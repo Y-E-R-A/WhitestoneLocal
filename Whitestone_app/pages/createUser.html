@@ -34,60 +34,73 @@
             <div class="card-header">
 				<h3>Create New User</h3>
             </div>
+<form name="createUserCtrl.userForm">
 <table bgcolor="#FFFFFF">
     <tbody>
         <tr>
-            <th><input ng-model="createUserCtrl.first_name" class="form-control" placeholder="Enter First Name"></th>
+            <th>
+                <input name="fn" ng-model="createUserCtrl.first_name" class="form-control" placeholder="Enter First Name" ng-pattern ="/^[a-zA-Z]+$/" required>
+                <p ng-if="createUserCtrl.userForm.fn.$invalid && !createUserCtrl.userForm.fn.$pristine" class="help-block">First name cannot contain numbers or special characters</p>
+            </th>
         </tr>
         <tr>
-            <th><input ng-model="createUserCtrl.last_name" class="form-control" placeholder="Enter Last Name" ></th>
+            <th><input name="ln"ng-model="createUserCtrl.last_name" class="form-control" placeholder="Enter Last Name" ng-pattern ="/^[a-zA-Z]+$/" required>
+                <p ng-if="createUserCtrl.userForm.ln.$invalid && !createUserCtrl.userForm.ln.$pristine" class="help-block">Lirst name cannot contain numebers or special characters</p>
+            </th>
         </tr>
         <tr>
-            <th><input ng-model="createUserCtrl.about" class="form-control" placeholder= "About User" ></th>
+            <th><input name="ab" ng-model="createUserCtrl.about" class="form-control" placeholder= "About User" required>
+                <p ng-if="createUserCtrl.userForm.ab.$invalid && !createUserCtrl.userForm.ab.$pristine" class="help-block">about is required</p>
+            </th>
         </tr>
         <tr>
-            <th><input ng-model="createUserCtrl.password" class="form-control"  placeholder= "Password" ></th>
+            <th><input name="pswd" ng-model="createUserCtrl.password" class="form-control"  placeholder= "Pin" ng-pattern="/^[0-9]{1,4}$/" required>
+                <p ng-if="createUserCtrl.userForm.pswd.$invalid && !createUserCtrl.userForm.pswd.$pristine" class="help-block">pin can only be 4 numbers</p>
+            </th>
         </tr>
         <tr>
-            <th><input ng-model="createUserCtrl.email" class="form-control"  placeholder="UPRM Email "></th>
+            <th><input name="eml" ng-model="createUserCtrl.email" class="form-control"  placeholder="UPRM Email" ng-pattern ="/^[a-z]+\.[a-z]*\d*@upr\.edu$/" required>
+                <p ng-if="createUserCtrl.userForm.eml.$invalid && !createUserCtrl.userForm.eml.$pristine" class="help-block">incorret email format</p>
+            </th>
         </tr>
         <tr>
             
             <th><label> <b><br>Select The User Role:  </b></label><br>
 
-                <input type="radio" ng-model="createUserCtrl.role" value="Senator">Senator
+                <input name="role" type="radio" ng-model="createUserCtrl.role" value="Senator" required>Senator
                 <br>
-                <input type="radio" ng-model="createUserCtrl.role" value="Chancellor">Chancellor
+                <input name="role" type="radio" ng-model="createUserCtrl.role" value="Chancellor">Chancellor
                 <br>
-                <input type="radio" ng-model="createUserCtrl.role" value="Secretary">Secretary
+                <input name="role" type="radio" ng-model="createUserCtrl.role" value="Secretary">Secretary
                 <br>
-                <input type="radio" ng-model="createUserCtrl.role" value="Administrator">Administrator
+                <input name="role" type="radio" ng-model="createUserCtrl.role" value="Administrator">Administrator
 
             </th>
         </tr>
         <tr>
             <th><label> <b><br>Select The User Classification:  </b></label><br>
 
-                <input type="radio" ng-model="createUserCtrl.title" value="Ex-Officio Student">Ex-Officio Student
+                <input name="title" type="radio" ng-model="createUserCtrl.title" value="Ex-Officio Student" required>Ex-Officio Student
                 <br>
-                <input type="radio" ng-model="createUserCtrl.title" value="Elect Student">Elect Student
+                <input name="title" type="radio" ng-model="createUserCtrl.title" value="Elect Student">Elect Student
                 <br>
-                <input type="radio" ng-model="createUserCtrl.title" value="Elect">Elect
+                <input name="title" type="radio" ng-model="createUserCtrl.title" value="Elect">Elect
                 <br>
-                <input type="radio" ng-model="createUserCtrl.title" value="Ex-Officio">Ex-Officio
+                <input name="title" type="radio" ng-model="createUserCtrl.title" value="Ex-Officio">Ex-Officio
                 <br>
-                <input type="radio" ng-model="createUserCtrl.title" value="Staff">Staff
+                <input name="title" type="radio" ng-model="createUserCtrl.title" value="Staff">Staff
 
             </th>
         </tr>
         <tr>
             <th><br>
-            <button class="btn btn-primary btn-block"  type="submit" name="action" ng-click="createUserCtrl.createNewCredentials()">Create</button> 
+            <button class="btn btn-primary btn-block"  type="submit" name="action" ng-click="createUserCtrl.checkForm()">Create</button> 
         </th>
         </tr>
         
     </tbody>
 </table>
+</form>
      
         
         </div>

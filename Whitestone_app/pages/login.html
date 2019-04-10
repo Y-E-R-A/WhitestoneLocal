@@ -33,13 +33,21 @@
                             <tr>                                     
                                
                             <th> 
-                                <input ng-model="loginCtrl.email" class="form-control" placeholder="Email address" ng-pattern ="/^[a-z\D]+\.[a-z]*\d*@upr\.edu$/" required>
+                                <input name="emailf" ng-model="loginCtrl.email" class="form-control" placeholder="UPRM Email address" ng-pattern ="/^[a-z]+\.[a-z]*\d*@upr\.edu$/" required>
                                 </th>
                             </tr>
+                               
+                               <!--^[a-z\D]+\.[a-z]*\d*@upr\.edu$-->
                             <tr>
                                                           
                             <th>
-                                <input ng-model="loginCtrl.password" class="form-control" placeholder="Password" required></th>
+                                <div name="passf" ng-if="loginCtrl.radiusLogin">
+                                <input type="password" ng-model="loginCtrl.password" class="form-control" placeholder="Password" required>
+                                </div>
+                                <div ng-if="!loginCtrl.radiusLogin">
+                                <input type="password"name="passf" ng-model="loginCtrl.password" class="form-control" placeholder="Pin" ng-pattern="/^[0-9]{1,4}$/"required>
+                                </div>
+                                </th>
                             </tr>
 
                             <tr>
