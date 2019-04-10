@@ -12,32 +12,7 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
         var title = "";
         this.selectedUser;
         this.uID = 0;
-        // $scope.users = [{
-        //     "id": 1,
-        //     "fist_name": "Javi",
-        //     "last_name": "Star",
-        //     "local_password": "1234",
-        //     "email": "jav.str@upr.edu",
-        //     "role": "Senator",
-        //     "classification": "Elect"
-        // }, {
-        //     "id": 2,
-        //     "fist_name": "Juan",
-        //     "last_name": "Cesar",
-        //     "email": "juan.c@gmail.com",
-        //     "local_password": "5678",
-        //     "role": "Senator",
-        //     "classification": "Ex-Officio"
-        // }, {
-        //     "id": 3,
-        //     "fist_name": "Javi",
-        //     "last_name": "Ramos",
-        //     "email": "j.ramos@gmail.com",
-        //     "local_password": "4680",
-        //     "role": "Secretary",
-        //     "classification": "Staff"
-        // }];
-
+        this.cID = 0;
         this.roleSelect = { selected: '' };
         this.titleSelect = { selected: '' };
 
@@ -45,9 +20,10 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
         this.showMessage = false;
 
         this.titles = [{ title: 'Elect Student Senator', selected: false },
-        { title: 'Ex-Officio Student', selected: false },
-        { title: 'Elect', selected: false },
-        { title: 'Ex-Officio', selected: false }];
+        { title: 'Ex-Officio Student Senator', selected: false },
+        { title: 'Elect Senator', selected: false },
+        { title: 'Ex-Officio Senator', selected: false },
+                       { title: 'Staff', selected: false }];
 
         this.roles = [{ role: 'Secretary', selected: false },
         { role: 'Senator', selected: false },
@@ -69,14 +45,17 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
                 this.email = "";
                 this.about = "";
                 thisCtrl.uID = 0;
+                thisCtrl.cID = 0;
                 this.showForm = false;
                 
             }else{
                 this.roleSelect.selected = thisCtrl.selectedUser.role;
                 this.titleSelect.selected = thisCtrl.selectedUser.classification;
                 this.uID = thisCtrl.selectedUser.uid;
+                this.cID = thisCtrl.selectedUser.cid;
                 this.first_name = thisCtrl.selectedUser.firstname;
                 this.last_name = thisCtrl.selectedUser.lastname;
+                this.about = thisCtrl.selectedUser.about;
                 this.email = thisCtrl.selectedUser.email;
                 this.password = thisCtrl.selectedUser.localpassword;
                 thisCtrl.showForm = true;
@@ -99,6 +78,58 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
             data.uclassification = this.titleSelect.selected;   
             console.log("data test: "+JSON.stringify(data));
         }
+        this.editCredentials = function () {
+
+            var data = {};
+
+            data.email = this.email;
+            data.pin = this.password;
+            data.cID = thisCtrl.cID;
+            // Now create the url with the route to talk with the rest API
+            console.log("data: "+JSON.stringify(data));
+            var reqURL = "http://localhost:5000/whitestone/credentials";
+
+            var config = {
+                headers:
+                    { 'Content-Type': 'application/json;charset=utf-8;' }
+            }
+
+            // Now issue the http request to the rest API
+            $http.put(reqURL, data, config).then(
+                // Success function
+                function (response) {
+                    console.log("response: " + JSON.stringify(response.data))
+                    // assing the part details to the variable in the controller
+                    thisCtrl.editUser();
+
+                }, //Error function
+                function (response) {
+                    // This is the error function
+                    // If we get here, some error occurred.
+                    // Verify which was the cause and show an alert.
+                    var status = response.status;
+                    
+                    //console.log("Error: " + reqURL);
+                    //alert("Cristo");
+                    if (status == 0) {
+                        alert("No hay conexion a Internet");
+                    }
+                    else if (status == 401) {
+                        alert("Su sesion expiro. Conectese de nuevo.");
+                    }
+                    else if (status == 403) {
+                        alert("No esta autorizado a usar el sistema.");
+                    }
+                    else if (status == 404) {
+                        alert("No se encontro la informacion solicitada.");
+                    }
+                    else {
+                        alert("Error interno del sistema.");
+                    }
+                }
+            );
+        };
+        
         this.editUser = function () {
 
             var data = {};
@@ -106,10 +137,8 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
             data.ufirstname = this.first_name;
             data.ulastname = this.last_name;
             data.udescription = this.about;
-            //data.uemail = this.email;
             data.urole = this.roleSelect.selected;
             data.uclassification = this.titleSelect.selected;
-
             //Resetting data
             thisCtrl.titleSelect.selected = '';
             thisCtrl.roleSelect.selected = '';
@@ -131,7 +160,7 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
                 function (response) {
                     console.log("response: " + JSON.stringify(response.data))
                     // assing the part details to the variable in the controller
-
+                    thisCtrl.loadUsers();
 
                 }, //Error function
                 function (response) {

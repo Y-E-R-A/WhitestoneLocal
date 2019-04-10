@@ -17,7 +17,7 @@ angular.module('Whitestone').controller('createUserController', ['$http', '$log'
         
         var role = "";
 
-        
+        this.userForm;
 
         var title = "";
 
@@ -30,7 +30,26 @@ angular.module('Whitestone').controller('createUserController', ['$http', '$log'
         // as read from the REST API
         var credentialList = {};
         
-    
+        this.checkForm = function(){
+            if(this.userForm.$valid){
+                if(this.role=="Secretary" && this.title!="Staff"){
+                    alert("Secretaries can only have the 'Staff' classification");
+                }else if(this.role=="Senator" && this.title=="Staff"){
+                    alert("Senators cannot have the 'Staff' classification");
+                }else if(this.role=="Chancellor" && this.title!="Ex-Officio"){
+                         alert("Chancellors can only have the 'Ex-Officio' classification");
+                }else if(this.role=="Administrator" && this.title!="Staff"){
+                    alert("Administrators can only have the 'Staff' classification")
+                }else{
+                    console.log(this.role+this.title);
+                    //thisCtrl.createNewCredentials();
+                }
+                
+            }else{
+                alert("Please fill the fields correctly");
+            }
+        }
+        
         this.createNewCredentials = function(){
             // Get the target part id from the parameter in the url
             console.log("Creating Credentials");
@@ -38,7 +57,7 @@ angular.module('Whitestone').controller('createUserController', ['$http', '$log'
         
         
             data.email = this.email;
-            data.localpassword = this.password;
+            data.pin = this.password;
 
 
             console.log("data: " + JSON.stringify(data));
@@ -61,7 +80,7 @@ angular.module('Whitestone').controller('createUserController', ['$http', '$log'
                     console.log("response createCredentials: " + JSON.stringify(response.data))
                     // assing the part details to the variable in the controller
                     //alert("New user added with id: " +response.data.User.cid);
-                    var cID = response.data.Credential.ID;
+                    var cID = response.data.Credential.cID;
                     console.log("cID: "+cID);
                     thisCtrl.createNewUser(cID);
 
@@ -72,9 +91,7 @@ angular.module('Whitestone').controller('createUserController', ['$http', '$log'
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
                     if (status == 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -143,9 +160,7 @@ angular.module('Whitestone').controller('createUserController', ['$http', '$log'
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
                     if (status == 0) {
                         alert("No hay conexion a Internet");
                     }

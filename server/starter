@@ -1,0 +1,11 @@
+#!/bin/bash
+# This script is intended to be executed in order to start the
+# Whitestone installation process.
+# Make sure to have sudo privileges before executing it.
+
+echo "Starting the Whitestone installtion process."
+
+# Insert call to other scripts or commands to execute.
+
+# sudo yum install -y https://centos7.iuscommunity.org/ius-release.rpm
+# && sudo yum update && sudo yum install -y python 35u python35u-libs python35u-devel python35u-pip
