@@ -101,6 +101,7 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
             );
         };
         this.loadInActiveVotingQuestions = function(meetingId){
+            thisCtrl.votingQuestionList =  [];
             thisCtrl.votingChoiceList = {};
             console.log("Meeting Id: "+meetingId);
             var reqURL = "http://localhost:5000/whitestone/inactivevotings/"+meetingId;
@@ -118,7 +119,7 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
                     for(var i=0;i<response.data.Voting.length;i++){
                         thisCtrl.loadChoices(response.data.Voting[i].vID);
                     }
-                    
+                    //thisCtrl.loadChoices(1)
                 }, //Error function
                 function (response) {
                     // This is the error function
@@ -138,7 +139,7 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
                         alert("No esta autorizado a usar el sistema.");
                     }
                     else if (status == 404) {
-                        alert("No se encontro la informacion solicitada.");
+                        alert("The meeting does not have any questions");
                         thisCtrl.votingQuestionList = [];
                     }
                     else {
@@ -162,7 +163,8 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
                 function (response) {
                     console.log("response Choices: " + JSON.stringify(response.data))
                     
-                    thisCtrl.loadResults(vid,response.data.Choice)
+                    thisCtrl.votingChoiceList[vid] = response.data.Choice;
+                    //thisCtrl.loadResults(vid,response.data.Choice)
 
                     
                 }, //Error function
@@ -184,7 +186,7 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
                         alert("No esta autorizado a usar el sistema.");
                     }
                     else if (status == 404) {
-                        alert("No se encontro la informacion solicitada.");
+                        alert("The question does not have any choices");
                     }
                     else {
                         alert("Error interno del sistema.");

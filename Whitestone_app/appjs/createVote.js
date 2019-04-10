@@ -5,11 +5,12 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
 
         var thisCtrl = this;
         
-        //List of voting voting questions from database
+        //List of active voting questions from database
         this.votingQuestion = [];
         this.votingChoices = [];
+        //List of inactive voting question and choices
         this.inActiveVotingQuestion = [];
-        this.inActiveVotingChoices = [];
+        this.inActiveVotingChoices = {};
         this.inActiveVotingResult = {};
 
         //The voting question
@@ -32,24 +33,33 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
         //The limit of answers
         var vLimit = "";
         this.meetingId =0;
-        //
+        
         var vid = 0;
+        
+        //The current active voting question
         this.activeVID = 0;
+        //Variable that determines if there is an active voting question
+        this.activeVotingQuestion = false;
+        //variable that determines if there is an active meeting
+        this.activeMeeting = false;
+        //List of Users that can participate in voting question
         this.electSenatorList = [];
         this.electStudentSenatosList = [];
         this.exofficioSenatorList = [];
         this.exofficioStudentSenatorList = [];
+        
         //Check box selection
         this.titles = [{title:'Elect Student Senator', selected:false},
         {title:'Ex-Officio Student',selected:false},
         {title:'Elect',selected:false},
         {title:'Ex-Officio',selected:false}];
-
+        
+        //Table that stores the selected participants
         this.selection = [];
-        this.activeMeeting = false;
-        //Alternative Handler////////////////////////////////
+        //Dictionary that stores the different alternatives
         this.votingAlternatives = [{altId:"alt1", valt:''}]
         
+        //Add the participants of a voting question to a list
         this.addToSelection = function(title){
             console.log("title"+title)
           if(this.selection.includes(title)){
@@ -60,11 +70,13 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
             console.log("selection: "+this.selection)
         }
         
+        //Adds the different alternatives
         this.addAlternative = function(){
           var newAlt = this.votingAlternatives.length+1;
           this.votingAlternatives.push({altId:"alt"+newAlt});
           console.log("voting alternatives: "+this.votingAlternatives)
         }
+        //Removes an alternative
         this.removeAlternative = function(index){
           //remove($index) en html
           this.votingAlternatives.splice(index,1);
@@ -108,7 +120,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                     console.log("response: " + JSON.stringify(response.data))
                     
                     thisCtrl.votingQuestion = response.data.Voting;
-                    thisCtrl.activeMeeting = true;
+                    thisCtrl.activeVotingQuestion = true;
                     thisCtrl.selectParticipant(response.data.Voting.vID);
                     thisCtrl.activeVID = response.data.Voting.vID;
                     console.log("choices: "+JSON.stringify(thisCtrl.votingAlternatives));
@@ -172,7 +184,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                     console.log("response: " + JSON.stringify(response.data))
                     // assing the part details to the variable in the controller
                     //alert("New user added with id: " +response.data.User.cid);
-                    thisCtrl.activeMeeting = false;
+                    thisCtrl.activeVotingQuestion = false;
                     
                 }, //Error function
                 function (response) {
@@ -429,7 +441,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
             //console.log("last name: "+this.last_name);
             // Now create the url with the route to talk with the rest API
             //Ruta para crear voting question y para obtener la voting question por meeting id
-            var reqURL = "http://localhost:5000/whitestone/votesIn/"+vid;
+            var reqURL = "http://localhost:5000/whitestone/"+uid+"/votesIn/"+vid;
             //console.log("reqURL: " + reqURL);
             var config = { headers : 
                           {'Content-Type':'application/json;charset=utf-8;' }
@@ -495,13 +507,14 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                     //console.log("second sign in")
                     
                     //thisCtrl.signUpUser();
+                    thisCtrl.activeMeeting = true;
                      console.log("thisCtrl: "+thisCtrl.meetingId);
                     thisCtrl.meetingId = JSON.stringify(response.data.Meeting[0].mID);
                     console.log("response.data.Meet: "+response.data.Meeting[0].mID)
                     console.log("mid: "+thisCtrl.meetingId)
-                    //thisCtrl.loadInActiveVotingQuestions();
+                    thisCtrl.loadInActiveVotingQuestions();
                     thisCtrl.loadActiveVotingQuestions(thisCtrl.meetingId);
-                    thisCtrl.activeMeeting = true;
+                    thisCtrl.activeVotingQuestion = true;
                     
                 }, //Error function
                 function (response) {
@@ -522,7 +535,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                         alert("No esta autorizado a usar el sistema.");
                     }
                     else if (status == 404) {
-                        alert("No se encontro la votacion activa.");
+                        alert("No active meeting was found.");
                     }
                     else {
                         alert("Error interno del sistema.");
@@ -571,7 +584,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                         alert("No esta autorizado a usar el sistema.");
                     }
                     else if (status == 404) {
-                        alert("No se encontro la informacion solicitada.");
+                        alert("No active voting question available.");
                     }
                     else {
                         alert("Error interno del sistema.");
@@ -670,7 +683,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                         alert("No esta autorizado a usar el sistema.");
                     }
                     else if (status == 404) {
-                        alert("No se encontro la informacion solicitada.");
+                        alert("There are no inactive voting questions");
                     }
                     else {
                         alert("Error interno del sistema.");
@@ -695,8 +708,8 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                 function (response) {
                     console.log("response Load Choices: " + JSON.stringify(response.data))
                     // assing the part details to the variable in the controller
-                    
-                    thisCtrl.loadResult(vid,response.data.Choice);
+                    thisCtrl.inActiveVotingChoices[vid] = response.data.Choice;
+                    //thisCtrl.loadResult(vid,response.data.Choice);
 
                     
                 }, //Error function
@@ -718,7 +731,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                         alert("No esta autorizado a usar el sistema.");
                     }
                     else if (status == 404) {
-                        alert("No se encontro la informacion solicitada.");
+                        alert("There are no choices available");
                     }
                     else {
                         alert("Error interno del sistema.");
@@ -798,7 +811,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                         alert("No esta autorizado a usar el sistema.");
                     }
                     else if (status == 404) {
-                        alert("No se encontro la informacion solicitada.");
+                        alert("The are no results available");
                     }
                     else {
                         alert("Error interno del sistema.");
@@ -869,6 +882,8 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
             $location.url("/meeting/"+$routeParams.role+'/'+$routeParams.uid);
         }
         this.oldMeetingRedirect = function(){
+            console.log("role"+$routeParams.role)
+            console.log("uid"+$routeParams.uid)
             $location.url('/oldMeeting/'+$routeParams.role+'/'+$routeParams.uid);
         }
         //this.loadInActiveVotingQuestions();

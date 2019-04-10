@@ -9,13 +9,18 @@ angular.module('Whitestone').controller('LoginController', ['$http', '$log', '$s
         
         var password = "";
         
+        this.radiusLogin = false;
         this.loginForm;
         this.emailInput;
         this.checkForm = function(){
             if(this.loginForm.$valid){
                 thisCtrl.loginUser();
             }else{
-                alert("Please fill the fields correctly");
+                if(this.radiusLogin){
+                    alert("Invalid email and/or password. Please try again.");
+                }else{
+                    alert("Invalid email and/or pin. Please try again.");   
+                }
             }
         }
 
@@ -41,7 +46,7 @@ angular.module('Whitestone').controller('LoginController', ['$http', '$log', '$s
         
             data.email = this.email;
             
-            data.password = this.password;
+            data.pin = this.password;
             
             console.log("data: " + JSON.stringify(data));
             console.log("email: "+this.email);
@@ -50,25 +55,14 @@ angular.module('Whitestone').controller('LoginController', ['$http', '$log', '$s
             // Now create the url with the route to talk with the rest API
             var reqURL = "http://localhost:5000/whitestone/credentials/user";
 
-            console.log("reqURL: " + reqURL);
             var config = { headers : 
                           {'Content-Type':'application/json;charset=utf-8;' }
                          }
-            console.log("bitch");
             // Now issue the http request to the rest API
             $http.post(reqURL,data,config).then(
                 // Success function
                 function (response) {
-                    
-                    // assing the part details to the variable in the controller
-                    thisCtrl.credentialsList = response.data.User;
-                    //console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList))
-                    console.log("uid without JSON: " + response.data)
-                    console.log("uid with JSON: " +JSON.stringify(response))
-                    
-                    //this.group(response.data.User.uid);
-                    //console.log("uid: " + JSON.stringify(response.data.User[0].uid))
-                    
+                    console.log("response: "+JSON.stringify(response.data));
                     //Get User Role
                     var role = response.data.User.role;
                     console.log("role"+role)
@@ -106,7 +100,11 @@ angular.module('Whitestone').controller('LoginController', ['$http', '$log', '$s
                     }
                     else if (status == 404) {
                         //Create Warning redirect
-                        alert("No se encontro la informacion solicitada.");
+                        if(thisCtrl.radius){
+                            alert("Invalid email and/or password. Please try again.");
+                        }else{
+                            alert("Invalid email and/or pin. Please try again.");
+                        }
                     }
                     else {
                         alert("Error interno del sistema.");
