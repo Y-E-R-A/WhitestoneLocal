@@ -9,20 +9,18 @@ class MeetingHandler:
         # Meeting info dictionary
         result = {}
         result['mID'] = row[0]
-        result['creator'] = row[1]
-        result['mdate'] = str(row[2])
-        result['mtime'] = str(row[3])
-        result['mname'] = str(row[4])
-        result['mdescription'] = row[5]
-        result['mstatus'] = row[6]
+        result['mdate'] = str(row[1])
+        result['mtime'] = str(row[2])
+        result['mname'] = str(row[3])
+        result['mdescription'] = row[4]
+        result['mstatus'] = row[5]
         return result
 
 
-    def buildMeetingDict(self, mID, creator, mdate, mtime, mname, mdescription, mstatus):
+    def buildMeetingDict(self, mID, mdate, mtime, mname, mdescription, mstatus):
 
         result = {}
         result['mID'] = mID
-        result['creator'] = creator
         result['mdate'] = str(mdate)
         result['mtime'] = str(mtime)
         result['mname'] = mname
@@ -89,17 +87,17 @@ class MeetingHandler:
 
     def insertMeetingJSON(self, json):
 
-        creator = json.get('creator')
+
         mdate = json.get('mdate')
         mtime = json.get('mtime');
         mname = json.get('mname');
         mdescription = json.get('mdescription');
         mstatus = json.get('mstatus');
 
-        if creator and mname and mdate and mtime and mstatus:
+        if mname and mdate and mtime and mstatus:
 
-            mID = MeetingDAO().insertMeeting(creator, mdate, mtime, mdescription, mstatus)
-            mapped_result = self.buildMeetingDict(mID, creator,mdate,mtime,mname, mdescription,mstatus)
+            mID = MeetingDAO().insertMeeting(mdate, mtime, mdescription, mstatus)
+            mapped_result = self.buildMeetingDict(mID, mdate,mtime,mname, mdescription,mstatus)
             return jsonify(Meeting = mapped_result), 201
 
         else:

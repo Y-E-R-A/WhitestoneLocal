@@ -28,7 +28,7 @@ class MeetingDAO:
     def getActiveMeeting(self):
         # Return all the old or inactive meeting information
         cursor = self.conn.cursor()
-        query = " SELECT * " \
+        query = "SELECT * " \
                 "FROM Meeting " \
                 "WHERE mstatus = 'Active';"
         cursor.execute(query)
@@ -47,12 +47,12 @@ class MeetingDAO:
         self.conn.commit()
 
 
-    def insertMeeting(self, creator, mdate, mtime, mname, mdescription, mstatus):
+    def insertMeeting(self, mdate, mtime, mname, mdescription, mstatus):
         # Insert a new meeting session in the table Meeting
         cursor = self.conn.cursor()
-        query = "INSERT INTO Meeting(creator, mdate, mtime, mname, mdescription, mstatus) " \
+        query = "INSERT INTO Meeting(mdate, mtime, mname, mdescription, mstatus) " \
             "VALUES (%s, %s, %s, %s, %s, %s) RETURNING mID;"
-        cursor.execute(query, (creator, mdate, mtime, mname, mdescription, mstatus,))
+        cursor.execute(query, (mdate, mtime, mname, mdescription, mstatus,))
         mid = cursor.fetchone()[0]
         self.conn.commit()
         return mid
