@@ -61,9 +61,13 @@ class CredentialHandler:
 
     def updateCredential(self, form):
         # Handle the email and pin updates for user with certain cID
-        credential = CredentialDAO().getCredentialByEmail(form['email'])
-        if not credential:
-            return jsonify(Error="User not registered."), 404
+        user = UsersDAO().getUserbyEmail(form['email'])
+
+        if user:
+
+            if not(user[7] == form['email'] and user[0] == form['cID']):
+                return jsonify(Error="Email is already registered."), 404
+
         else:
             if len(form) != 3:
 
