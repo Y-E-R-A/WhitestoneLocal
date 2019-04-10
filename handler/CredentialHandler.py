@@ -47,28 +47,26 @@ class CredentialHandler:
         # Handle new user's credentials insertions
         email = json.get('email')
         pin = json.get('pin')
-        if UsersDAO().getUserbyEmail(email):
 
-            return jsonify(Error="Email already registered"),
+        if CredentialDAO().getCredentialByEmail(email):
+
+            return jsonify(Error="Email already registered"), 400
         else:
             if email and pin:
                 cID = CredentialDAO().insert(email, pin)
                 mapped_result = self.buildCredentialDict(cID,email, pin)
-                return jsonify(Credential = mapped_result), 201
+                return jsonify(Credential=mapped_result), 201
 
             else:
-                return jsonify(Error="Unexpected attributes in post request"), 404
+                return jsonify(Error="Unexpected attributes in post request"), 400
+
 
     def updateCredential(self, form):
         # Handle the email and pin updates for user with certain cID
         user = UsersDAO().getUserbyEmail(form['email'])
 
-        if user:
 
-            if not(user[7] == form['email'] and user[0] == form['cID']):
-                return jsonify(Error="Email is already registered."), 404
-
-        else:
+        if (user and (user[7] == form['email'] and user[0] == form['cID'])) or not user:
             if len(form) != 3:
 
                 return jsonify(Error="Malformed update request"), 400
@@ -80,12 +78,14 @@ class CredentialHandler:
                 pin = form['pin']
 
                 if cID and email and pin:
-                    CredentialDAO().update(email, pin, cID)
+                    CredentialDAO().updateCredentials(email, pin, cID)
                     result = self.buildCredentialDict(cID, email, pin)
                     return jsonify(Credential=result), 201
 
                 else:
                     return jsonify(Error="Unexpected attributes in update request"), 400
+        else:
+            return jsonify(Error="Email is already registered."), 400
 
     # def updateAllPins(self):
     #     credential = CredentialDAO().getAllCredentials()

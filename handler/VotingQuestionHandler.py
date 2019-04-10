@@ -101,17 +101,17 @@ class VotingQuestionHandler:
 
 
 
-    def updateVotingStatus(self, vID, form):
+    def updateVotingStatus(self, form):
 
-        if not VotingQuestionHandler().getVotingQuestionByID(vID):
+        vID = form['vID']
+        vstatus = "Inactive"
+
+        if not VotingQuestionDAO().getVotingQuestionByID(vID):
             return jsonify(Error="Voting not found."), 404
         else:
-            if len(form) != 2:
+            if len(form) != 1:
                 return jsonify(Error="Malformed update request"), 400
             else:
-
-                vID= form['vID']
-                vstatus= form['vstatus']
 
                 if vID and vstatus:
                     VotingQuestionDAO().updateVotingStatus(vID, vstatus)

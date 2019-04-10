@@ -16,7 +16,7 @@ class UsersHandler:
         result['role'] = row[5]
         result['classification'] = row[6]
         result['email'] = row[7]
-        result['localpassword'] = row[8]
+        result['pin'] = row[8]
         return result
 
     def mapToUserNamesDict(self, row):
@@ -151,7 +151,7 @@ class UsersHandler:
         else:
 
             mapped_result = self.mapToUserInfoDict(result)
-            return jsonify(User=mapped_result)
+            return jsonify(User=mapped_result), 200
 
 
 

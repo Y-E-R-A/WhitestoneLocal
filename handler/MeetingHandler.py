@@ -70,6 +70,7 @@ class MeetingHandler:
 
         if not MeetingHandler().getActiveMeeting():
             return jsonify(Error="Meeting is already inactive or not exist"), 404
+
         else:
             if len(form) != 1:
                 return jsonify(Error="Malformed update request"), 400
@@ -97,7 +98,7 @@ class MeetingHandler:
 
         if creator and mname and mdate and mtime and mstatus:
 
-            mID = MeetingDAO().insert(creator,mdate,mtime,mdescription,mstatus)
+            mID = MeetingDAO().insertMeeting(creator, mdate, mtime, mdescription, mstatus)
             mapped_result = self.buildMeetingDict(mID, creator,mdate,mtime,mname, mdescription,mstatus)
             return jsonify(Meeting = mapped_result), 201
 
