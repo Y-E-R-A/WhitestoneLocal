@@ -47,12 +47,12 @@ class MeetingDAO:
         self.conn.commit()
 
 
-    def insert(self, creator, mdate, mtime, mdescription, mstatus):
+    def insertMeeting(self, creator, mdate, mtime, mname, mdescription, mstatus):
         # Insert a new meeting session in the table Meeting
         cursor = self.conn.cursor()
-        query = "INSERT INTO Meeting(creator, mdate, mtime, mdescription, mstatus) " \
-            "VALUES (%s, %s, %s, %s, %s) RETURNING mID;"
-        cursor.execute(query, (creator, mdate, mtime, mdescription, mstatus,))
+        query = "INSERT INTO Meeting(creator, mdate, mtime, mname, mdescription, mstatus) " \
+            "VALUES (%s, %s, %s, %s, %s, %s) RETURNING mID;"
+        cursor.execute(query, (creator, mdate, mtime, mname, mdescription, mstatus,))
         mid = cursor.fetchone()[0]
         self.conn.commit()
         return mid

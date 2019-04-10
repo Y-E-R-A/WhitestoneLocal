@@ -47,7 +47,7 @@ class CredentialDAO:
         return cID
 
 
-    def update(self, email, pin, cID):
+    def updateCredentials(self, email, pin, cID):
         # Update email and pin which belongs to a user with certain cID
         cursor = self.conn.cursor()
         query = "UPDATE Credential " \

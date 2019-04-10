@@ -27,6 +27,21 @@ class VotingChoiceDAO:
         return result
 
 
+
+    def getActiveVotingChoiceByVID(self, vID):
+        # Return all the alternatives of a voting question with certain vID
+        cursor = self.conn.cursor()
+        query = "SELECT altid, choice, votes " \
+                "FROM VotingQuestion inner join VotingChoice " \
+                "ON VotingQuestion.vID = VotingChoice.vID " \
+                "WHERE VotingQuestion.vID = %s " \
+                "AND vstatus = 'Active';"
+        cursor.execute(query, (vID,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
     def insertVotingChoice(self, vid, choice, votes):
         # Insert a new voting choice or alternative for a voting with an specific vID and return its altID
         cursor = self.conn.cursor()
@@ -37,4 +52,12 @@ class VotingChoiceDAO:
         self.conn.commit()
         return altID
 
-
+    def updateVotingChoice(self, votes, altID):
+        # Update votes obtained per alternative at the final of the voting
+        cursor = self.conn.cursor()
+        query = "UPDATE VotingChoice " \
+                "SET votes= %s " \
+                "WHERE altID= %s; "
+        cursor.execute(query, (votes, altID,))
+        self.conn.commit()
+        return
