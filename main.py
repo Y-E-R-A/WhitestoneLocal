@@ -165,11 +165,12 @@ def getActiveVotingBymID(mID):
 def getVotingByvID(vid):
     return VotingQuestionHandler().getVotingQuestionByID(vid)
 
-#TODO
-# Search voting results by vID
-@app.route('/whitestone/voting/<int:vid>/results')
-def getVotingResultByvID(vid):
-    return VotingQuestionHandler().getVotingResultsByvID(vid)
+
+# Put the voting results by vID
+@app.route('/whitestone/votingresults', methods=['PUT'])
+def updateVotingResults():
+    print("REQUEST", request.json)
+    return VotingChoiceHandler().updateVotingChoice(request.json)
 
 
 # Post voting alternatives
@@ -185,12 +186,17 @@ def getAlternatives(vid):
     return VotingChoiceHandler().getVotingChoiceByVID(vid)
 
 
-# Update voting status
-@app.route('/whitestone/votingstatus/<int:vid>', methods=['PUT'])
-def updateVotingStatus(vid):
-    print("REQUEST", request.json)
-    return VotingQuestionHandler().updateVotingStatus(vid, request.json)
+# Search active voting choices and its altIDs by voting id
+@app.route('/whitestone/activevoting/<int:vid>/choices')
+def getActiveVotingAlternatives(vid):
+    return VotingChoiceHandler().getActiveVotingChoiceByvID(vid)
 
+
+# Update voting status to Inactive
+@app.route('/whitestone/closevoting', methods=['PUT'])
+def closeVoting():
+    print("REQUEST", request.json)
+    return VotingQuestionHandler().updateVotingStatus(request.json)
 
 
 # Post or get audio by mID
