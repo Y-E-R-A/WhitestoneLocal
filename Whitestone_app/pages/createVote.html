@@ -19,7 +19,7 @@
     
       </ul>
       <ul></ul>
-      <li style = "float:right"><a class="active" type="submit" name="action" ng-click="votingCtrl.activityLogRedirect()">Logout</a>
+      <li style = "float:right"><a class="active" type="submit" name="action" ng-click="votingCtrl.logout()">Logout</a>
   </div>
 </nav>    
     
@@ -98,7 +98,7 @@
               <tr>
               <th>
                 <br>
-                <button class="btn btn-primary" style="float:left;padding:5px 25px;border-radius: 12px;" type="submit" name="action" ng-click="votingCtrl.createVote()">Create</button>
+                <button class="btn btn-primary" style="float:left;padding:5px 25px;border-radius: 12px;" type="submit" name="action" ng-click="votingCtrl.checkcreate()">Create</button>
                 <button class="btn btn-danger" style="float:right;padding:5px 25px;border-radius: 12px;" type="reset" name="action" ng-click="votingCtrl.loginUser()">Cancel</button>
               </th>
               </tr>
@@ -122,6 +122,7 @@
                   {{choices.votes}}
             </div>
             <button style="float:right;padding:5px 30px;border-radius: 12px;" type="submit" name="action" ng-click="votingCtrl.closeVotingQuestion()">Close</button>
+            <!--<button style="float:right;padding:5px 30px;border-radius: 12px;" type="submit" name="action" ng-click="votingCtrl.getVotingChoiceResults()">GET</button>-->
             <br>
         </div>
         <div ng-if="votingCtrl.activeMeeting">
@@ -136,7 +137,7 @@
                 {{v.vdescription}}
                 {{v.vdate}}{{v.vtime}}
               </p>
-          <div ng-repeat="c in votingCtrl.inActiveVotingResult[v.vID]">
+          <div ng-repeat="c in votingCtrl.inActiveVotingChoices[v.vID]">
               <p>
                 {{c.choice}}
                   {{c.votes}}

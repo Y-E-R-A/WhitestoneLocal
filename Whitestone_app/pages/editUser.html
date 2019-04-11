@@ -21,7 +21,7 @@
       </ul>
       <ul></ul>
       
-      <li style = "float:right"><a class="active" type="submit" name="action" ng-click="editUserCtrl.logOut()">Logout</a></li>
+      <li style = "float:right"><a class="active" type="submit" name="action" ng-click="editUserCtrl.logout()">Logout</a></li>
       
   </div>
 </nav>
@@ -45,30 +45,35 @@
                 <tr>
                     <th>
                        
-                        <input ng-model="editUserCtrl.first_name" class="form-control" placeholder="First Name">
+                        <input name="fn" ng-model="editUserCtrl.first_name" class="form-control" placeholder="First Name">
+                        <div ng-if="editUserCtrl.firstnameVal">first name does not contain</div>
                     </th>
                 </tr>
                 <tr>
                     <th>
                        
-                        <input ng-model="editUserCtrl.last_name" class="form-control" placeholder="Last Name">
+                        <input name="ln" ng-model="editUserCtrl.last_name" class="form-control" placeholder="Last Name">
+                        <div ng-if="editUserCtrl.lastnameVal">last name does not contain</div>
                     </th>
                 </tr>
                 <tr>
                     <th>
                         
-                        <input ng-model="editUserCtrl.about" class="form-control" placeholder="About User">
+                        <input name="ab" ng-model="editUserCtrl.about" class="form-control" placeholder="About User">
+                        
                     </th>
                 </tr>
                  <tr>
                     <th>
-                       <input ng-model="editUserCtrl.email" class="form-control"
+                       <input name="eml" ng-model="editUserCtrl.email" class="form-control"
                        placeholder="UPRM Email">
+                        <div ng-if="editUserCtrl.emailVal">email has wrong format</div>
                     </th>
                 </tr>
                 <tr>
                     <th>
-                       <input ng-model="editUserCtrl.password" class="form-control" placeholder="Pin">
+                       <input name="pswd" ng-model="editUserCtrl.password" class="form-control" type="password" placeholder="Pin">
+                        <div ng-if="editUserCtrl.pinVal">pin can only have 4 numbers</div>
                     </th>
                 </tr>
                
@@ -98,14 +103,13 @@
                 </tr>
                 <tr>
                     <th><br>
-                        <button type="submit" name="action" ng-click="editUserCtrl.editCredentials()">Save</button>
+                        <button type="submit" name="action" ng-click="editUserCtrl.checkForm()">Save</button>
                         <button type="submit" name="action" ng-click="editUserCtrl.deleteUser()">Delete</button>
                         <button type="reset" name="action">Cancel</button>
                     </th>
                 </tr>
             </tbody>
         </table>
-
     </div>
     <div ng-show="editUserCtrl.showMessage">
         <p>The user data has been edited</p>

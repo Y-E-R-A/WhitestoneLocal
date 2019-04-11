@@ -4,29 +4,29 @@
 </head>                    
 
 
-
-<body>
-    
-    
-    
-<nav class="navbar navbar-inverse">
+<header>
+    <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" href="#">Whitestone</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="active"><a href="#">Meeting</a></li>
+      <li class="active"><a class="active" type="submit" name="action" ng-click="#">Meeting</a></li>
       <li><a type="submit" name="action" ng-click="createMeetingCtrl.voteRedirect()">Voting</a></li>
-      <li><a type="submit" name="action" ng-click="#">Old Meetings</a></li>
+      <li><a type="submit" name="action" ng-click="createMeetingCtrl.oldMeetingRedirect()">Old Meetings</a></li>
     
       </ul>
       <ul></ul>
-      <li style = "float:right"><a class="active" type="submit" name="action" ng-click="createUserCtrl.logOut()">Logout</a>
+      <li style = "float:right"><a class="active" type="submit" name="action" ng-click="createMeetingCtrl.logout()">Logout</a>
   </div>
 </nav>
+</header>
+
+<body>
+    
     <center>
     <div ng-if="createMeetingCtrl.active">
-        <h4 style="text-align: center">The meeting: "{{createMeetingCtrl.meeting.mdescription}}" is a currently active.
+        <h4 style="text-align: center">The meeting: "{{createMeetingCtrl.meeting.mname}}" is a currently active.
         Do you want to close the meeting?</h4>
         <button class="btn btn-primary" type="submit" name="action" ng-click="createMeetingCtrl.closeMeeting()">Close</button> 
     </div>
@@ -46,16 +46,6 @@
                 </tr>
                 <tr>
                     <th><input ng-model="createMeetingCtrl.meeting_desc" class="form-control" placeholder="Meeting description" required></th>
-                </tr>
-                <tr>
-                    <th><input ng-model="createMeetingCtrl.meeting_month" class="form-control" placeholder= "MM" ></th>
-                </tr>
-                <tr>
-                    <th><input ng-model="createMeetingCtrl.meeting_date" class="form-control"  placeholder="DD"></th>
-                </tr>
-                <tr>
-
-                    <th><input ng-model="createMeetingCtrl.meeting_year" class="form-control" placeholder="YYYY"></th>
                 </tr>
                 <tr>
                     <th><br>

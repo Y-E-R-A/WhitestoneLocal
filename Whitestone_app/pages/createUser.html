@@ -20,7 +20,7 @@
       </ul>
       <ul></ul>
       
-      <li style = "float:right"><a class="active" type="submit" name="action" ng-click="createUserCtrl.logOut()">Logout</a></li>
+      <li style = "float:right"><a class="active" type="submit" name="action" ng-click="createUserCtrl.logout()">Logout</a></li>
       
   </div>
 </nav>
@@ -40,12 +40,12 @@
         <tr>
             <th>
                 <input name="fn" ng-model="createUserCtrl.first_name" class="form-control" placeholder="Enter First Name" ng-pattern ="/^[a-zA-Z]+$/" required>
-                <p ng-if="createUserCtrl.userForm.fn.$invalid && !createUserCtrl.userForm.fn.$pristine" class="help-block">First name cannot contain numbers or special characters</p>
+                <p ng-if="createUserCtrl.userForm.fn.$invalid && !createUserCtrl.userForm.fn.$pristine" class="help-block">cannot contain numbers or special characters</p>
             </th>
         </tr>
         <tr>
             <th><input name="ln"ng-model="createUserCtrl.last_name" class="form-control" placeholder="Enter Last Name" ng-pattern ="/^[a-zA-Z]+$/" required>
-                <p ng-if="createUserCtrl.userForm.ln.$invalid && !createUserCtrl.userForm.ln.$pristine" class="help-block">Lirst name cannot contain numebers or special characters</p>
+                <p ng-if="createUserCtrl.userForm.ln.$invalid && !createUserCtrl.userForm.ln.$pristine" class="help-block">cannot contain numebers or special characters</p>
             </th>
         </tr>
         <tr>
@@ -54,7 +54,7 @@
             </th>
         </tr>
         <tr>
-            <th><input name="pswd" ng-model="createUserCtrl.password" class="form-control"  placeholder= "Pin" ng-pattern="/^[0-9]{1,4}$/" required>
+            <th><input name="pswd" type="password" ng-model="createUserCtrl.password" class="form-control"  placeholder= "Pin" ng-pattern="/^[0-9]{1,4}$/" required>
                 <p ng-if="createUserCtrl.userForm.pswd.$invalid && !createUserCtrl.userForm.pswd.$pristine" class="help-block">pin can only be 4 numbers</p>
             </th>
         </tr>
@@ -80,13 +80,13 @@
         <tr>
             <th><label> <b><br>Select The User Classification:  </b></label><br>
 
-                <input name="title" type="radio" ng-model="createUserCtrl.title" value="Ex-Officio Student" required>Ex-Officio Student
+                <input name="title" type="radio" ng-model="createUserCtrl.title" value="Ex-Officio Student Senator" required>Ex-Officio Student Senator
                 <br>
-                <input name="title" type="radio" ng-model="createUserCtrl.title" value="Elect Student">Elect Student
+                <input name="title" type="radio" ng-model="createUserCtrl.title" value="Elect Student Senator">Elect Student Senator
                 <br>
-                <input name="title" type="radio" ng-model="createUserCtrl.title" value="Elect">Elect
+                <input name="title" type="radio" ng-model="createUserCtrl.title" value="Elect Senator">Elect Senator
                 <br>
-                <input name="title" type="radio" ng-model="createUserCtrl.title" value="Ex-Officio">Ex-Officio
+                <input name="title" type="radio" ng-model="createUserCtrl.title" value="Ex-Officio Senator">Ex-Officio Senator
                 <br>
                 <input name="title" type="radio" ng-model="createUserCtrl.title" value="Staff">Staff
 
