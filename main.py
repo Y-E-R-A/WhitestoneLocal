@@ -1,3 +1,6 @@
+#!/usr/bin/python3.5
+print("Content-type:text/html\r\n\r\n")
+
 #############################################
 # Authors: (CodingGear)                     #
 #   Yomaira Rivera Albarran                 #
