@@ -129,7 +129,7 @@ def getMeeting():
 
     if request.method == 'POST':
 
-        print ("REQUEST", request.json)
+        print("REQUEST", request.json)
         return MeetingHandler().insertMeetingJSON(request.json)
 
     else:
