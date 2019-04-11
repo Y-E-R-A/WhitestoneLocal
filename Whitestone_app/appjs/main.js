@@ -27,7 +27,7 @@
             templateUrl: 'pages/submitVote.html',
             controller: 'submitVoteSenController',
             controllerAs : 'submitVoteSenCtrl'
-        }).when('/submitVoteChancellor/:role/uid', {
+        }).when('/votingChancellor/:role/:uid', {
             templateUrl: 'pages/submitVoteChan.html',
             controller: 'submitVoteChanController',
             controllerAs : 'submitVoteChanCtrl'

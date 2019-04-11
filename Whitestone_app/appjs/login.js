@@ -76,7 +76,7 @@ angular.module('Whitestone').controller('LoginController', ['$http', '$log', '$s
                     }else if(role == "Senator"){
                         $location.url('/voting/'+role+"/"+uid);
                     }else if(role == "Chancellor"){
-                        $location.url('/cDashboard/'+"Chancellor");
+                        $location.url('/votingChancellor/'+role+"/"+uid);
                     }
 
                     

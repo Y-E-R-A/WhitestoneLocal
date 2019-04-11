@@ -268,5 +268,15 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
                 }
             );
         };
+        this.meetingRedirect = function(){
+            $location.url("/meeting/"+$routeParams.role+'/'+$routeParams.uid);
+        }
+        
+        this.voteRedirect = function(){
+            $location.url('/Vote/'+$routeParams.role+'/'+$routeParams.uid);
+        }
+        this.logout= function(){
+            $location.url('/login');
+        };
         this.loadMeetings();
 }]);
