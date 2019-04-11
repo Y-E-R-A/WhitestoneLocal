@@ -42,15 +42,26 @@ class VotingChoiceDAO:
             result.append(row)
         return result
 
-    def insertVotingChoice(self, vid, choice, votes):
-        # Insert a new voting choice or alternative for a voting with an specific vID and return its altID
+    def getVotingChoiceByID(self, altID):
+        # Search a voting choice by the alternative ID
         cursor = self.conn.cursor()
-        query = "INSERT INTO VotingChoice(vid, choice, votes) " \
-                "VALUES(%s, %s, %s) RETURNING altID;"
-        cursor.execute(query, (vid, choice, votes))
-        altID = cursor.fetchone()[0]
-        self.conn.commit()
-        return altID
+        query = "SELECT altid, choice, votes " \
+                "FROM VotingChoice " \
+                "WHERE altID = %s;"
+        cursor.execute(query, (altID,))
+        result = cursor.fetchone()
+        return result
+
+
+    def insertVotingChoice(self, vid, choice, votes):
+            # Insert a new voting choice or alternative for a voting with an specific vID and return its altID
+            cursor = self.conn.cursor()
+            query = "INSERT INTO VotingChoice(vid, choice, votes) " \
+                    "VALUES(%s, %s, %s) RETURNING altID;"
+            cursor.execute(query, (vid, choice, votes))
+            altID = cursor.fetchone()[0]
+            self.conn.commit()
+            return altID
 
     def updateVotingChoice(self, votes, altID):
         # Update votes obtained per alternative at the final of the voting

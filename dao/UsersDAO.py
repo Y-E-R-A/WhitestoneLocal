@@ -22,6 +22,16 @@ class UsersDAO:
         result = cursor.fetchone()
         return result
 
+    def getUserBycID(self, cID):
+        # Return the user information corresponding to a uID.
+        cursor = self.conn.cursor()
+        query = "SELECT ufirstname, ulastname, udescription, urole, uclassification, email, pin " \
+                "FROM Users natural inner join Credential " \
+                "WHERE cID= %s;"
+        cursor.execute(query, (cID,))
+        result = cursor.fetchone()
+        return result
+
     def getUserByuID(self, uID):
         # Return the user information corresponding to a uID.
         cursor = self.conn.cursor()

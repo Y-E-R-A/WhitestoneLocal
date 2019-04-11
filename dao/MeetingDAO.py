@@ -37,6 +37,17 @@ class MeetingDAO:
             result.append(row)
         return result
 
+    def getMeetingBymID(self, mID):
+        # Return the meeting information by mID
+        cursor = self.conn.cursor()
+        query = "SELECT * " \
+                "FROM Meeting " \
+                "WHERE mID = %s;"
+        cursor.execute(query, (mID,))
+        result = cursor.fetchone()
+        return result
+
+
     def updateMeetingStatus(self, mID, mstatus):
         # Modify the meeting status (Active or Inactive)
         cursor = self.conn.cursor()
@@ -51,7 +62,7 @@ class MeetingDAO:
         # Insert a new meeting session in the table Meeting
         cursor = self.conn.cursor()
         query = "INSERT INTO Meeting(mdate, mtime, mname, mdescription, mstatus) " \
-            "VALUES (%s, %s, %s, %s, %s, %s) RETURNING mID;"
+            "VALUES (%s, %s, %s, %s, %s) RETURNING mID;"
         cursor.execute(query, (mdate, mtime, mname, mdescription, mstatus,))
         mid = cursor.fetchone()[0]
         self.conn.commit()
