@@ -1,5 +1,8 @@
 from flask import jsonify, request
+
+from dao.UsersDAO import UsersDAO
 from dao.VoteInDAO import VoteInDAO
+from dao.VotingQuestionDAO import VotingQuestionDAO
 
 
 class VoteInHandler:
@@ -25,7 +28,7 @@ class VoteInHandler:
 
         result = VoteInDAO().getParticipant(vID,uID)
         if not result:
-            return jsonify(Error="USER IS NOT PARTICIPANT"), 404
+            return jsonify(Error="USER IS NOT PARTICIPANT OR VOTING NOT FOUND"), 404
         else:
             mapped_result = self.mapVotingParticipantsToDict(result)
             return jsonify(Participant=mapped_result)
@@ -40,6 +43,9 @@ class VoteInHandler:
 
         if VoteInDAO().getParticipant(vID, uID):
             return jsonify(Error="User was previously registered for this voting.  Nothing to do"), 400
+
+        elif not VotingQuestionDAO().getVotingQuestionByID(vID) or not(UsersDAO().getUserByuID(uID)):
+            return jsonify(Error="NOT FOUND"), 404
 
         else:
             if uID and vID:
@@ -61,6 +67,7 @@ class VoteInHandler:
 
         if not VoteInDAO().getParticipant(vID, uID):
             return jsonify(Error="User is not participant."), 404
+
         else:
 
             if len(form) != 2:

@@ -1,5 +1,6 @@
 from flask import jsonify, request
 from dao.AudioDAO import AudioDAO
+from dao.MeetingDAO import MeetingDAO
 
 
 class AudioHandler:
@@ -76,12 +77,17 @@ class AudioHandler:
         aaddress = json.get('aaddress');
         atype = json.get('atype');
 
-        if mID and aname and aaddress and atype:
-
-            aID = AudioDAO().insert(mID, aname, aaddress, atype)
-            mapped_result = self.buildAudioToDict(aID, mID, aname, aaddress, atype)
-            return jsonify(Audio=mapped_result), 201
+        if not MeetingDAO().getMeetingBymID(mID):
+            return jsonify(Error="MEETING NOT EXIST"), 400
 
         else:
-            return jsonify(Error="Unexpected attributes in post request"), 404
+
+            if mID and aname and aaddress and atype:
+
+                aID = AudioDAO().insert(mID, aname, aaddress, atype)
+                mapped_result = self.buildAudioToDict(aID, mID, aname, aaddress, atype)
+                return jsonify(Audio=mapped_result), 201
+
+            else:
+                return jsonify(Error="Unexpected attributes in post request"), 400
 

@@ -175,26 +175,34 @@ class UsersHandler:
         urole = json.get('urole');
         uclassification = json.get('uclassification');
 
-        if cid and ufirstname and ulastname and urole and uclassification:
+        if UsersDAO().getUserBycID(cid):
 
-            uid = UsersDAO().insert(cid,ufirstname,ulastname,udescription,urole, uclassification)
-            mapped_result = self.buildUserDict(uid,cid,ufirstname,ulastname,udescription,urole, uclassification)
-            return jsonify(User = mapped_result), 201
+            return jsonify(Error="The credential ID belong to other user"), 400
+
 
         else:
-            return jsonify(Error="Unexpected attributes in post request"), 404
+
+            if cid and ufirstname and ulastname and urole and uclassification:
+
+                uid = UsersDAO().insert(cid,ufirstname,ulastname,udescription,urole, uclassification)
+                mapped_result = self.buildUserDict(uid,cid,ufirstname,ulastname,udescription,urole, uclassification)
+                return jsonify(User = mapped_result), 201
+
+            else:
+                return jsonify(Error="Unexpected attributes in post request"), 404
 
 
 
     def updateUser(self, uID, form):
 
         if not UsersDAO().getUserByuID(uID):
-            return jsonify(Error="User not found."), 404
+            return jsonify(Error="User not found"), 404
         else:
 
             if len(form) != 5:
                 return jsonify(Error="Malformed update request"), 400
             else:
+
 
                 ufirstname = form['ufirstname']
                 ulastname = form['ulastname']

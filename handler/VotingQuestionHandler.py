@@ -14,7 +14,7 @@ class VotingQuestionHandler:
         result['vtime'] = str(vtime)
         result['vquestion'] = vquestion
         result['selectionlimit'] = selectionlimit
-        result['vtatus'] = vstatus
+        result['vstatus'] = vstatus
         return result
 
     def builtVotingStatusDict(self, vID, vstatus):
@@ -67,7 +67,7 @@ class VotingQuestionHandler:
 
         else:
             mapped_result= self.mapToVotingQuestionDict(result)
-            return jsonify(Voting= mapped_result)
+            return jsonify(Voting= mapped_result), 200
 
 
 

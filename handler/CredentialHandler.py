@@ -66,7 +66,7 @@ class CredentialHandler:
         user = UsersDAO().getUserbyEmail(form['email'])
 
 
-        if (user and (user[7] == form['email'] and user[0] == form['cID'])) or not user:
+        if (user and (user[7] == form['email'] and user[1] == form['cID'])) or not user:
             if len(form) != 3:
 
                 return jsonify(Error="Malformed update request"), 400

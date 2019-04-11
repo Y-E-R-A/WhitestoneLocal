@@ -1,5 +1,6 @@
 from flask import jsonify, request
 from dao.VotingChoiceDAO import VotingChoiceDAO
+from dao.VotingQuestionDAO import VotingQuestionDAO
 
 
 class VotingChoiceHandler:
@@ -31,6 +32,7 @@ class VotingChoiceHandler:
         return result
 
     def getVotingChoiceByVID(self, vID):
+        # Handler for getting the voting choices of a voting
 
         result = VotingChoiceDAO().getVotingChoiceByVID(vID)
         mapped_result = []
@@ -47,36 +49,43 @@ class VotingChoiceHandler:
 
 
     def getActiveVotingChoiceByvID(self, vID):
+        # Handler for getting the active voting alternatives of a voting
 
         result = VotingChoiceDAO().getActiveVotingChoiceByVID(vID)
         mapped_result = []
 
         if not result:
-            return jsonify(Error="NOT FOUND"), 404
+            return jsonify(Error="ACTIVE VOTING NOT FOUND"), 404
 
         else:
             for r in result:
                 mapped_result.append(self.mapVotingChoiceByVID(r))
 
-            return jsonify(Choice=mapped_result)
+            return jsonify(Choice=mapped_result), 200
 
 
 
     def insertChoiceJSON(self, json):
+    # Insert voting alternative
 
         vID = json.get('vID')
         choice = json.get('choice');
         votes = 0;
 
-        if vID and choice:
+        if not VotingQuestionDAO().getVotingQuestionByID(vID):
+            return jsonify(Error="VOTING NOT FOUND"), 404
 
-            altID = VotingChoiceDAO().insertVotingChoice(vID, choice, votes)
-            mapped_result = self.builtVotingChoiceDict(altID, vID, choice, votes)
-            return jsonify(Choice=mapped_result), 201
 
         else:
+            if vID and choice:
 
-            return jsonify(Error="Unexpected attributes in post request"), 404
+                altID = VotingChoiceDAO().insertVotingChoice(vID, choice, votes)
+                mapped_result = self.builtVotingChoiceDict(altID, vID, choice, votes)
+                return jsonify(Choice=mapped_result), 201
+
+            else:
+
+                return jsonify(Error="Unexpected attributes in post request"), 404
 
 
 
@@ -86,8 +95,8 @@ class VotingChoiceHandler:
         vID = form['vID']
         votes = form['votes']
 
-        if not VotingChoiceDAO().getVotingChoiceByVID(vID):
-            return jsonify(Error="Voting Choices not found."), 404
+        if not VotingChoiceDAO().getVotingChoiceByID(altID):
+            return jsonify(Error="Voting Choice not found."), 404
         else:
 
             if len(form) != 3:
