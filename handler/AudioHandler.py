@@ -6,6 +6,7 @@ from dao.MeetingDAO import MeetingDAO
 class AudioHandler:
 
     def mapToAudioDict(self, row):
+        # Map the audio information to dictionary
         result = {}
         result['aID'] = row[0]
         result['mID'] = row[1]
@@ -16,6 +17,7 @@ class AudioHandler:
 
 
     def buildAudioToDict(self, aID, mID, aname, aaddress, atype):
+        # Built the audio information to dictionary
         result ={}
         result['aID'] = aID
         result['mID'] = mID
@@ -35,7 +37,7 @@ class AudioHandler:
         else:
             mapped_result = self.mapToAudioDict(result)
 
-            return jsonify(Audio=mapped_result)
+            return jsonify(Audio=mapped_result), 200
 
 
     def getAudioBymID(self, mID):
@@ -52,7 +54,7 @@ class AudioHandler:
             for r in result:
                 mapped_result.append(self.mapToAudioDict(r))
 
-            return jsonify(Audio=mapped_result)
+            return jsonify(Audio=mapped_result), 200
 
 
     def getAudioByAddress(self, address):
@@ -67,7 +69,7 @@ class AudioHandler:
             for r in result:
                 mapped_result.append(self.mapToAudioDict(r))
 
-            return jsonify(Audio=mapped_result)
+            return jsonify(Audio=mapped_result), 200
 
 
     def insertAudioJSON(self, json):

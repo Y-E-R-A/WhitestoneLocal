@@ -18,7 +18,7 @@ class MeetingHandler:
 
 
     def buildMeetingDict(self, mID, mdate, mtime, mname, mdescription, mstatus):
-
+        # Built meeting information dictionary
         result = {}
         result['mID'] = mID
         result['mdate'] = str(mdate)
@@ -30,6 +30,7 @@ class MeetingHandler:
 
 
     def buildMeetingStatusDict(self, mID, mstatus):
+        # Built the meeting status information to dictionary
         result = {}
         result['mID'] = mID
         result['mstatus'] = mstatus
@@ -37,7 +38,7 @@ class MeetingHandler:
 
 
     def getOldMeetings(self):
-
+        # Handle the search of the old or inactive meetings
         result = MeetingDAO().getOldMeetings()
         mapped_result = []
 
@@ -48,10 +49,10 @@ class MeetingHandler:
             for r in result:
                 mapped_result.append(self.mapToMeetingInfoDict(r))
 
-            return jsonify(Meeting=mapped_result)
+            return jsonify(Meeting=mapped_result), 200
 
     def getActiveMeeting(self):
-
+        # Handle the search of the active meeting
         result = MeetingDAO().getActiveMeeting()
         mapped_result = []
 
@@ -65,7 +66,7 @@ class MeetingHandler:
 
 
     def updateMeetingStatus(self, form):
-
+        # Handle the update of the meeting status to set as inactive (closed)
         mID = form['mID']
         mstatus = "Inactive"
 
@@ -80,14 +81,13 @@ class MeetingHandler:
                 if mID and mstatus:
                     MeetingDAO().updateMeetingStatus(mID, mstatus)
                     result = self.buildMeetingStatusDict(mID, mstatus)
-                    return jsonify(Meeting=result), 201
+                    return jsonify(Meeting=result), 200
                 else:
                     return jsonify(Error="Unexpected attributes in update request"), 400
 
 
     def insertMeetingJSON(self, json):
-
-
+        # Handle the insertion of a new meeting
         mdate = json.get('mdate')
         mtime = json.get('mtime');
         mname = json.get('mname');
@@ -102,4 +102,4 @@ class MeetingHandler:
             return jsonify(Meeting = mapped_result), 201
 
         else:
-            return jsonify(Error="Unexpected attributes in post request"), 404
+            return jsonify(Error="Unexpected attributes in post request"), 400

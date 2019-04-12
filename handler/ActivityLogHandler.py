@@ -5,7 +5,7 @@ from dao.ActivityLogDAO import ActivityLogDAO
 class ActivityLogHandler:
 
     def mapToActivityLogDict(self, row):
-
+        # Map the activity log information to dictionary
         result = {}
         result['date'] = row[0]
         result['time'] = str(row[1])
@@ -16,6 +16,7 @@ class ActivityLogHandler:
 
 
     def builtActivityLogDict(self, logID, urole, email, time, date, logmessage):
+        # Built the activity log information to dictionary, includes logID
         result = {}
         result['logID'] = logID
         result['urole'] = urole
@@ -27,7 +28,7 @@ class ActivityLogHandler:
 
 
     def getActivityLogByDate(self, date):
-
+        # Handle the search of the activity log by date
         result = ActivityLogDAO().getActivityLogByDate(date)
         mapped_result = []
 
@@ -37,11 +38,11 @@ class ActivityLogHandler:
         else:
             for r in result:
                 mapped_result.append(self.mapToActivityLogDict(r))
-            return jsonify(Log = mapped_result)
+            return jsonify(Log=mapped_result), 200
 
 
     def insertActivityLogJSON(self, json):
-
+        # Handle the insertion of a new activity log
         urole = json.get('urole')
         uemail = json.get('uemail')
         date= json.get('date')
@@ -54,4 +55,4 @@ class ActivityLogHandler:
             return jsonify(Log=mapped_result), 201
         else:
 
-            return jsonify(Error="Unexpected attributes in post request"), 404
+            return jsonify(Error="Unexpected attributes in post request"), 400

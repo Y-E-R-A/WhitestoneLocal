@@ -1,5 +1,4 @@
 from flask import jsonify, request
-
 from dao.UsersDAO import UsersDAO
 from dao.VoteInDAO import VoteInDAO
 from dao.VotingQuestionDAO import VotingQuestionDAO
@@ -9,6 +8,7 @@ class VoteInHandler:
 
 
     def buildVoteInDict(self, vID, uID, exercise_vote):
+        # Built the voting participants (vote in) dictionary
         result = {}
         result['vID'] = vID
         result['uID'] = uID
@@ -17,6 +17,7 @@ class VoteInHandler:
 
 
     def mapVotingParticipantsToDict(self, row):
+        # Voting participants dictionary
         result = {}
         result['vID'] = row[0]
         result['uID'] = row[1]
@@ -25,18 +26,19 @@ class VoteInHandler:
 
 
     def getParticipant(self, vID, uID):
-
+        # Handle the verification request to check whether
+        # a user have permissions to participate in a voting.
         result = VoteInDAO().getParticipant(vID,uID)
         if not result:
             return jsonify(Error="USER IS NOT PARTICIPANT OR VOTING NOT FOUND"), 404
         else:
             mapped_result = self.mapVotingParticipantsToDict(result)
-            return jsonify(Participant=mapped_result)
+            return jsonify(Participant=mapped_result), 200
 
 
 
     def insertVoteInJSON(self, json):
-
+        # Handle the insertion of a voting participant
 
         uID = json.get('uID')
         vID = json.get('vID')
@@ -59,7 +61,7 @@ class VoteInHandler:
 
 
     def updateVoteInFlag(self, form):
-
+        # Handle the request to set the exercise_vote flag to TRUE
         vID = form['vID']
         uID = form['uID']
         exercise_vote = True
@@ -76,7 +78,7 @@ class VoteInHandler:
                 if vID and uID:
                     VoteInDAO().updateVoteInFlag(uID, vID)
                     result = self.buildVoteInDict(vID, uID, exercise_vote)
-                    return jsonify(VoteIN=result), 201
+                    return jsonify(VoteIN=result), 200
                 else:
                     return jsonify(Error="Unexpected attributes in put request"), 400
 

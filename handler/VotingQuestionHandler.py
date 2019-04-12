@@ -18,14 +18,14 @@ class VotingQuestionHandler:
         return result
 
     def builtVotingStatusDict(self, vID, vstatus):
+        # Built the voting status information dictionary
         result= {}
         result['vID']= vID
         result['vstatus']= vstatus
         return result
 
     def mapToVotingQuestionDict(self, row):
-
-        # Inactive Voting Question dictionary
+        # Map an inactive voting question to dictionary
         result = {}
         result['vID'] = row[0]
         result['mID'] = row[1]
@@ -38,7 +38,7 @@ class VotingQuestionHandler:
         return result
 
     def mapToActiveVotingQuestionDict(self, row):
-        # Voting Active Question dictionary (Question with choices)
+        # Map an active voting question to dictionary (Question with choices)
         result = {}
         result['vID'] = row[0]
         result['mID'] = row[1]
@@ -52,7 +52,7 @@ class VotingQuestionHandler:
 
 
     def mapToVotingResultsDict(self, row):
-        # Voting Result dictionary
+        # Map voting result to dictionary
         result = {}
         result['vchoice'] = row[0]
         result['votes']= row[1]
@@ -60,6 +60,7 @@ class VotingQuestionHandler:
 
 
     def getVotingQuestionByID(self, vID):
+        # Handle the search of the voting question by its vid
         result = VotingQuestionDAO().getVotingQuestionByID(vID)
 
         if not result:
@@ -67,11 +68,12 @@ class VotingQuestionHandler:
 
         else:
             mapped_result= self.mapToVotingQuestionDict(result)
-            return jsonify(Voting= mapped_result), 200
+            return jsonify(Voting=mapped_result), 200
 
 
 
     def getInactiveVotingQuestionBymID(self, mID):
+        # Handle the search of the voting question by its mid
         result = VotingQuestionDAO().getInactiveVotingQuestionBymID(mID)
         mapped_result = []
 
@@ -83,10 +85,11 @@ class VotingQuestionHandler:
                 mapped_result.append(self.mapToVotingQuestionDict(r))
             print("Result:", mapped_result)
 
-            return jsonify(Voting=mapped_result)
+            return jsonify(Voting=mapped_result), 200
 
 
     def getActiveVotingQuestionBymID(self, mID):
+        # Handle the search of the active voting question by the mid
         result = VotingQuestionDAO().getActiveVotingQuestionBymID(mID)
         mapped_result = []
 
@@ -97,12 +100,12 @@ class VotingQuestionHandler:
             for r in result:
                 mapped_result.append(self.mapToActiveVotingQuestionDict(r))
 
-            return jsonify(Voting=mapped_result)
+            return jsonify(Voting=mapped_result), 200
 
 
 
     def updateVotingStatus(self, form):
-
+        # Handle the update the closing of a voting by its vid
         vID = form['vID']
         vstatus = "Inactive"
 
@@ -116,13 +119,13 @@ class VotingQuestionHandler:
                 if vID and vstatus:
                     VotingQuestionDAO().updateVotingStatus(vID, vstatus)
                     result = self.builtVotingStatusDict(vID, vstatus)
-                    return jsonify(Voting=result), 201
+                    return jsonify(Voting=result), 200
                 else:
                     return jsonify(Error="Unexpected attributes in update request"), 400
 
 
     def insertVotingJSON(self, json):
-
+        # Handle the insertion of a new voting question
         mID = json.get('mID')
         vinstructions = json.get('vinstructions')
         vdate = json.get('vdate')
@@ -140,4 +143,4 @@ class VotingQuestionHandler:
 
         else:
 
-            return jsonify(Error="Unexpected attributes in post request"), 404
+            return jsonify(Error="Unexpected attributes in post request"), 400

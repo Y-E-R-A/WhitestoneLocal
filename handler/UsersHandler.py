@@ -28,12 +28,13 @@ class UsersHandler:
 
 
     def mapToUserIDDict(self, row):
+        # User ID dictionary
         result = {}
         result['uID'] = row[0]
         return result
 
     def buildUserDict(self, uID, cID, ufirstname, ulastname, udescription, urole, uclassification):
-
+        # Built a user dictionary
         result = {}
         result['uID'] = uID
         result['cID'] = cID
@@ -45,7 +46,7 @@ class UsersHandler:
         return result
 
     def editUserDict(self, uID, ufirstname, ulastname, udescription, urole, uclassification):
-
+        # Built a edited user dictionary
         result = {}
         result['uID'] = uID
         result['ufirstname'] = ufirstname
@@ -56,6 +57,7 @@ class UsersHandler:
         return result
 
     def getAllUsersInfo(self):
+        # Handle the search of all users information
         result = UsersDAO().getAllUsersInfo()
         mapped_result = []
 
@@ -66,10 +68,11 @@ class UsersHandler:
             for r in result:
                 mapped_result.append(self.mapToUserInfoDict(r))
 
-            return jsonify(User=mapped_result)
+            return jsonify(User=mapped_result), 200
 
 
     def getAllSenator(self):
+        # Handle the search of all the uID of users with senator role
         result = UsersDAO().getAllSenators()
         mapped_result = []
 
@@ -80,10 +83,11 @@ class UsersHandler:
             for r in result:
                 mapped_result.append(self.mapToUserIDDict(r))
 
-            return jsonify(User=mapped_result)
+            return jsonify(User=mapped_result), 200
 
 
     def getAllElectSenator(self):
+        # Handle the search of uID with the elect senator classification
         result = UsersDAO().getAllElectSenators()
         mapped_result = []
 
@@ -94,9 +98,10 @@ class UsersHandler:
             for r in result:
                 mapped_result.append(self.mapToUserIDDict(r))
 
-            return jsonify(User=mapped_result)
+            return jsonify(User=mapped_result),200
 
     def getAllElectStudentsSenator(self):
+        # Handle the search of uID with the elect student senator classification
         result = UsersDAO().getAllElectStudentSenators()
         mapped_result = []
 
@@ -107,11 +112,12 @@ class UsersHandler:
             for r in result:
                 mapped_result.append(self.mapToUserIDDict(r))
 
-            return jsonify(User=mapped_result)
+            return jsonify(User=mapped_result), 200
 
 
 
     def getAllExOfficioSenator(self):
+        # Handle the search of uID with the ex-officio senator classification
         result = UsersDAO().getAllExOfficioSenators()
         mapped_result = []
 
@@ -122,11 +128,12 @@ class UsersHandler:
             for r in result:
                 mapped_result.append(self.mapToUserIDDict(r))
 
-            return jsonify(User=mapped_result)
+            return jsonify(User=mapped_result), 200
 
 
 
     def getAllExOfficioStudentsSenator(self):
+        # Handle the search of uID with the ex-officio student senator classification
         result = UsersDAO().getAllExOfficioStudentSenators()
         mapped_result = []
 
@@ -137,14 +144,41 @@ class UsersHandler:
             for r in result:
                 mapped_result.append(self.mapToUserIDDict(r))
 
-            return jsonify(User=mapped_result)
+            return jsonify(User=mapped_result), 200
 
 
 
-    def getUserByEmail(self, json):
-
+    def getUser(self, json):
+        # Handle the search of user information according to the login type
+        login = json.get("login")
         email = json.get('email')
-        result = UsersDAO().getUserbyEmail(email)
+        pin = json.get("pin")
+
+        if login == "LOCAL":
+            result = UsersDAO().getUser(email, pin)
+            if not result:
+                return jsonify(Error="NOT FOUND"), 404
+
+            else:
+
+                mapped_result = self.mapToUserInfoDict(result)
+                return jsonify(User=mapped_result), 200
+
+        else:
+            result = UsersDAO().getUserbyEmail(email)
+            if not result:
+                return jsonify(Error="NOT FOUND"), 404
+
+            else:
+
+                mapped_result = self.mapToUserInfoDict(result)
+                return jsonify(User=mapped_result), 200
+
+
+
+    def getUserByuID(self, uID):
+        # Handle the search of user information with certain uID
+        result = UsersDAO().getUserByuID(uID)
         if not result:
             return jsonify(Error="NOT FOUND"), 404
 
@@ -153,20 +187,8 @@ class UsersHandler:
             mapped_result = self.mapToUserInfoDict(result)
             return jsonify(User=mapped_result), 200
 
-
-
-    def getUserByuID(self, uID):
-
-        result = UsersDAO().getUserByuID(uID)
-        if not result:
-            return jsonify(Error="NOT FOUND"), 404
-
-        else:
-
-            mapped_result = self.mapToUserInfoDict(result)
-            return jsonify(User=mapped_result)
-
     def insertUserJSON(self, json):
+        # Handle the insertion of a new user
 
         cid = json.get('cID')
         ufirstname = json.get('ufirstname')
@@ -178,8 +200,6 @@ class UsersHandler:
         if UsersDAO().getUserBycID(cid):
 
             return jsonify(Error="The credential ID belong to other user"), 400
-
-
         else:
 
             if cid and ufirstname and ulastname and urole and uclassification:
@@ -189,12 +209,12 @@ class UsersHandler:
                 return jsonify(User = mapped_result), 201
 
             else:
-                return jsonify(Error="Unexpected attributes in post request"), 404
+                return jsonify(Error="Unexpected attributes in post request"), 400
 
 
 
     def updateUser(self, uID, form):
-
+        # Handle the update of user information with certain uID
         if not UsersDAO().getUserByuID(uID):
             return jsonify(Error="User not found"), 404
         else:
@@ -214,14 +234,14 @@ class UsersHandler:
                 if ufirstname and ulastname and urole and uclassification:
                     UsersDAO().updateUser(uID, ufirstname, ulastname, udescription, urole, uclassification)
                     result = self.editUserDict(uID, ufirstname, ulastname, udescription, urole, uclassification)
-                    return jsonify(User=result), 201
+                    return jsonify(User=result), 200
                 else:
                     return jsonify(Error="Unexpected attributes in update request"), 400
 
 
 
     def deleteUser(self, uID):
-
+        # Handle the cascade deletion of a user, its credentials, and vote in relations
         if not UsersDAO().getUserByuID(uID):
             return jsonify(Error="User not found"), 404
 

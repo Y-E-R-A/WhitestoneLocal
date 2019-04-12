@@ -6,12 +6,14 @@ from dao.UsersDAO import UsersDAO
 class CredentialHandler:
 
     def mapToCredentialDict(self, row):
+        # Map the credentials information to dictionary
         result = {}
         result['email'] = row[0]
         result['pin'] = row[1]
         return result
 
     def buildCredentialDict(self, cID, email, pin):
+        # Built the credentials dictionary
         result = {}
         result['cID'] = cID
         result['email'] = email
@@ -30,7 +32,7 @@ class CredentialHandler:
             for r in result:
                 mapped_result.append(self.mapToCredentialDict(r))
 
-            return jsonify(AllCredentials=mapped_result)
+            return jsonify(AllCredentials=mapped_result), 200
 
 
     def getCredentialByEmail(self, email):
@@ -40,7 +42,7 @@ class CredentialHandler:
             return jsonify(Error="USER NOT FOUND"), 404
         else:
             mapped_result = self.mapToCredentialDict(result)
-            return jsonify(Credential=mapped_result)
+            return jsonify(Credential=mapped_result), 200
 
 
     def insertCredentialJSON(self,json):
@@ -80,12 +82,15 @@ class CredentialHandler:
                 if cID and email and pin:
                     CredentialDAO().updateCredentials(email, pin, cID)
                     result = self.buildCredentialDict(cID, email, pin)
-                    return jsonify(Credential=result), 201
+                    return jsonify(Credential=result), 200
 
                 else:
                     return jsonify(Error="Unexpected attributes in update request"), 400
         else:
             return jsonify(Error="Email is already registered."), 400
+
+
+
 
     # def updateAllPins(self):
     #     credential = CredentialDAO().getAllCredentials()

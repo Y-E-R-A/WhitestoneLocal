@@ -6,7 +6,7 @@ from dao.VotingQuestionDAO import VotingQuestionDAO
 class VotingChoiceHandler:
 
     def builtVotingChoiceDict(self, altID, vID, choice, votes):
-        # Voting Choice Info dictionary
+        # Built voting choice information dictionary
         result = {}
         result['altID'] = altID
         result['vID'] = vID
@@ -16,11 +16,11 @@ class VotingChoiceHandler:
 
 
     def mapVotingChoiceByVID(self, row):
-
+        # Voting Choice dictionary
         result = {}
         result['altID'] = row[0]
         result['choice'] = row[1]
-        result['votes']= row[2]
+        result['votes'] = row[2]
         return result
 
     def mapToUpdateVotingChoiceDict(self, vID, altID, votes):
@@ -44,7 +44,7 @@ class VotingChoiceHandler:
             for r in result:
                 mapped_result.append(self.mapVotingChoiceByVID(r))
 
-            return jsonify(Choice=mapped_result)
+            return jsonify(Choice=mapped_result), 200
 
 
 
@@ -66,7 +66,7 @@ class VotingChoiceHandler:
 
 
     def insertChoiceJSON(self, json):
-    # Insert voting alternative
+        # Insert new voting alternative
 
         vID = json.get('vID')
         choice = json.get('choice');
@@ -85,12 +85,12 @@ class VotingChoiceHandler:
 
             else:
 
-                return jsonify(Error="Unexpected attributes in post request"), 404
+                return jsonify(Error="Unexpected attributes in post request"), 400
 
 
 
     def updateVotingChoice(self, form):
-
+        # Handle the update request to set the final results of a voting
         altID = form['altID']
         vID = form['vID']
         votes = form['votes']
@@ -105,6 +105,6 @@ class VotingChoiceHandler:
                 if votes and altID and vID:
                     VotingChoiceDAO().updateVotingChoice(votes, altID)
                     result = self.mapToUpdateVotingChoiceDict(vID, altID, votes)
-                    return jsonify(Choice=result), 201
+                    return jsonify(Choice=result), 200
                 else:
                     return jsonify(Error="Unexpected attributes in update request"), 400
