@@ -17,6 +17,8 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
         //The objective of the vote
         var voting_objective = "";
         
+        this.activeMeeting = false;
+        this.activeVotingQuestion = false;
         
         
         this.selectedChoice = [];
@@ -87,14 +89,10 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                 // Success function
                 function (response) {
                     console.log("response: " + JSON.stringify(response.data))
-                    // assing the part details to the variable in the controller
-                    //alert("New user added with id: " +response.data.User.cid);
-                    console.log("response "+response.data);
-
+                    
+                    thisCtrl.activeMeeting = true;
                     thisCtrl.activeMeetingId = response.data.Meeting[0].mID;
-                    //thisCtrl.meetingId = JSON.stringify(response.data.Meeting[0].mID);
-                    //console.log("response.data.Meet: "+response.data.Meeting[0].mID)
-                    //console.log("mid: "+thisCtrl.meetingId)
+
                     console.log("mID: "+thisCtrl.activeMeetingId);
                     thisCtrl.loadVotingQuestion(response.data.Meeting[0].mID);
                     
@@ -104,9 +102,7 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
                     if (status == 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -117,7 +113,7 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                         alert("No esta autorizado a usar el sistema.");
                     }
                     else if (status == 404) {
-                        alert("No se encontro la informacion solicitada.");
+                        alert("There is currently no active meeting");
                     }
                     else {
                         alert("Error interno del sistema.");
@@ -142,7 +138,7 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                 function (response) {
                     console.log("response Active VQ: " + JSON.stringify(response.data))
                     // assing the part details to the variable in the controller
-                    //alert("New user added with id: " +response.data.User.cid);
+                    thisCtrl.activeVotingQuestion = true;
                    thisCtrl.votingId = response.data.Voting[0].vID;
                     thisCtrl.checkParticipation(response.data.Voting[0].vID);
                     thisCtrl.VotingQuestion = response.data.Voting[0];
@@ -168,7 +164,7 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                         alert("No esta autorizado a usar el sistema.");
                     }
                     else if (status == 404) {
-                        alert("No se encontro la informacion solicitada.");
+                        alert("There is currently no active voting question");
                     }
                     else {
                         alert("Error interno del sistema.");
@@ -237,9 +233,7 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                 function (response) {
                     console.log("response: " + JSON.stringify(response.data))
                     // assing the part details to the variable in the controller
-                    //alert("New user added with id: " +response.data.User.cid);
-                    //this.newChoiceList = response.data;
-                    
+
                     thisCtrl.votingChoices = response.data.Choice;
                     console.log("votingChoices: "+JSON.stringify(thisCtrl.votingChoices));
                     for(var i=0;i<thisCtrl.votingChoices.length;i++){
@@ -253,8 +247,7 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                     // Verify which was the cause and show an alert.
                     var status = response.status;
                     console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
                     if (status === 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -301,8 +294,8 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                     // Verify which was the cause and show an alert.
                     var status = response.status;
                     console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
+
                     if (status === 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -349,8 +342,7 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                     // Verify which was the cause and show an alert.
                     var status = response.status;
                     console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
                     if (status === 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -368,6 +360,10 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                     }
                 }
             );
+        };
+        
+        this.logout= function(){
+            $location.url('/login');
         };
         
         this.loadActiveMeeting();

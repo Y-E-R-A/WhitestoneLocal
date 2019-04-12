@@ -9,23 +9,18 @@ angular.module('Whitestone').controller('createMeetingController', ['$http', '$l
         
         var meeting_desc = "";
         
-        var meeting_day = "";
-        
-        var meeting_month = "";
-        
-        var meeting_year = "";
-
         var meeting_status = "";
         
         this.active = false;
         this.meetingId = 0;
         var id = 0;
         
+        this.meetingNVal = false;
+        this.meetingDVal = false;
         this.meeting = [];
         // This variable hold the information on the part
         // as read from the REST API
         
-    
         this.createMeeting = function(){
             // Get the target part id from the parameter in the url
             // using the $routerParams object
@@ -33,9 +28,9 @@ angular.module('Whitestone').controller('createMeetingController', ['$http', '$l
             var d = new Date();
             var data = {};
         
-            data.creatorID = $routeParams.uid;       
+            //data.creatorID = $routeParams.uid;       
             
-            
+            data.mname = this.meeting_name;
             data.mdescription = this.meeting_desc;
             //data.mdate = this.meeting_month+'/'+this.meeting_date+'/'+this.meeting_year;
             data.mdate = d.getMonth()+"/"+d.getDate()+"/"+d.getFullYear();
@@ -57,6 +52,7 @@ angular.module('Whitestone').controller('createMeetingController', ['$http', '$l
                     // assing the part details to the variable in the controller
                     thisCtrl.active = true;
                     thisCtrl.meetingId = response.data.Meeting.mID;
+                    thisCtrl.meeting = response.data.Meeting;
                     //thisCtrl.active = true;
                     
                 }, //Error function
@@ -93,7 +89,7 @@ angular.module('Whitestone').controller('createMeetingController', ['$http', '$l
 
             var data = {};
             data.mID = thisCtrl.meetingId;
-            data.mstatus = "Inactive";
+            //data.mstatus = "Inactive";
             // Now create the url with the route to talk with the rest API
             var reqURL = "http://localhost:5000/whitestone/meetingstatus";
             //console.log("reqURL: " + reqURL);
@@ -179,7 +175,7 @@ angular.module('Whitestone').controller('createMeetingController', ['$http', '$l
                         alert("No esta autorizado a usar el sistema.");
                     }
                     else if (status == 404) {
-                        alert("No se encontro la informacion solicitada.");
+                        alert("There is no active meeting");
                     }
                     else {
                         alert("Error interno del sistema.");
@@ -195,7 +191,12 @@ angular.module('Whitestone').controller('createMeetingController', ['$http', '$l
         
             $location.url('/Vote/'+$routeParams.role+'/'+$routeParams.uid);
         }
-        this.activityLogRedirect = function(){
-            $location.url('/ActivityLog/'+$routeParams.role+'/'+$routeParams.uid);
+         this.oldMeetingRedirect = function(){
+            console.log("role"+$routeParams.role)
+            console.log("uid"+$routeParams.uid)
+            $location.url('/oldMeeting/'+$routeParams.role+'/'+$routeParams.uid);
         }
+        this.logout= function(){
+            $location.url('/login');
+        };
 }]);

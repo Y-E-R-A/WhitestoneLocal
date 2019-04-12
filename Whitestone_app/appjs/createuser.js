@@ -32,17 +32,18 @@ angular.module('Whitestone').controller('createUserController', ['$http', '$log'
         
         this.checkForm = function(){
             if(this.userForm.$valid){
+                console.log(this.role+this.title);
                 if(this.role=="Secretary" && this.title!="Staff"){
                     alert("Secretaries can only have the 'Staff' classification");
                 }else if(this.role=="Senator" && this.title=="Staff"){
                     alert("Senators cannot have the 'Staff' classification");
-                }else if(this.role=="Chancellor" && this.title!="Ex-Officio"){
+                }else if(this.role=="Chancellor" && this.title!="Ex-Officio Senator"){
                          alert("Chancellors can only have the 'Ex-Officio' classification");
                 }else if(this.role=="Administrator" && this.title!="Staff"){
                     alert("Administrators can only have the 'Staff' classification")
                 }else{
                     console.log(this.role+this.title);
-                    //thisCtrl.createNewCredentials();
+                    thisCtrl.createNewCredentials();
                 }
                 
             }else{
@@ -91,7 +92,7 @@ angular.module('Whitestone').controller('createUserController', ['$http', '$log'
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-
+                    console.log("response status: "+JSON.stringify(response.status))
                     if (status == 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -103,8 +104,9 @@ angular.module('Whitestone').controller('createUserController', ['$http', '$log'
                     }
                     else if (status == 404) {
                         alert("No se encontro la informacion solicitada.");
-                    }
-                    else {
+                    }else if(status == 400){
+                        alert("The email already exists")
+                    }else {
                         alert("Error interno del sistema.");
                     }
                 }
@@ -151,6 +153,7 @@ angular.module('Whitestone').controller('createUserController', ['$http', '$log'
                 // Success function
                 function (response) {
                     console.log("response createUser: " + JSON.stringify(response.data))
+                    alert("The User has been created")
                     // assing the part details to the variable in the controller
 
                     
@@ -189,4 +192,7 @@ angular.module('Whitestone').controller('createUserController', ['$http', '$log'
         this.redirectLogOut = function(){
             $location.url('/ActivityLog/'+$routeParams.role+'/'+$routeParams.uid);
         }
+        this.logout= function(){
+            $location.url('/login');
+        };
 }]);

@@ -65,4 +65,7 @@ angular.module('Whitestone').controller('activityLogController', ['$http', '$log
         this.editUserRedirect = function () {
             $location.url("/editUser/" + $routeParams.role + '/' + $routeParams.uid);
         }
+        this.logout= function(){
+            $location.url('/login');
+        };
     }]);

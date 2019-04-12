@@ -2,14 +2,31 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 </head>
-
+<header>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Whitestone</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a class="active" type="submit" name="action" ng-click="#">Vote</a></li>
+    
+      </ul>
+      <ul></ul>
+      <li style = "float:right"><a class="active" type="submit" name="action" ng-click="submitVoteCtrl.logout()">Logout</a>
+  </div>
+</nav>
+</header>
 <body>
     <center>
         <div class="card-header">
             <h3>Open Voting</h3>
         </div>
-        <div ng-if="submitVoteCtrl.participation">
-            <h2>You cannot participate in the voting</h2>
+        <div ng-if="!submitVoteCtrl.activeMeeting">
+        <h2 style="text-align: center">There is no active meeting</h2>
+        </div>
+        <div ng-if="submitVoteCtrl.participation && submitVoteCtrl.activeVotingQuestion">
+            <h2 style="text-align: center">You cannot participate in the voting</h2>
         </div>
     <div class="container">
 
@@ -19,6 +36,7 @@
             </div>
 
             <div class="col-sm-4">
+                <div ng-if="submitVoteCtrl.activeVotingQuestion">
                 <table>
                     <tbody>
                         <tr>
@@ -52,7 +70,7 @@
 
                     </tbody>
                 </table>
-
+                </div>
             </div>
 
             <div class="col-sm-4" style="background-color:rgba(246, 245, 250, 1);color:black;padding:20px 20px 20px 20px">
