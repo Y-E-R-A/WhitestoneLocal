@@ -56,7 +56,7 @@ def getAllCredentials():
 def getUser():
 
     print("Request", request.json)
-    return UsersHandler().getUserByEmail(request.json)
+    return UsersHandler().getUser(request.json)
 
 
 # Search all the user information using its email as identifier
@@ -240,7 +240,7 @@ def VotesIn(vid, uid):
 
 # Post new activity log
 @app.route('/whitestone/activitylog', methods=['POST'])
-def ActivityLog():
+def postActivityLog():
     print("REQUEST", request.json)
     return ActivityLogHandler().insertActivityLogJSON(request.json)
 
