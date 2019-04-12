@@ -4,12 +4,10 @@ import psycopg2
 class AudioDAO:
 
     def __init__(self):
+        # Database connection
         connection_url = "dbname=%s user=%s password=%s" % (pg_config['dbname'],
-
                                                             pg_config['user'],
-
                                                             pg_config['passwd'])
-
         self.conn = psycopg2._connect(connection_url)
 
 

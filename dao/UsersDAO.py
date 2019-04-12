@@ -4,12 +4,23 @@ import psycopg2
 class UsersDAO:
 
     def __init__(self):
-
+        # Database connection
         connection_url = "dbname=%s user=%s password=%s" % (pg_config['dbname'],
                                                             pg_config['user'],
                                                             pg_config['passwd'])
         self.conn = psycopg2._connect(connection_url)
 
+
+    def getUser(self, email, pin):
+        # Return the user information corresponding to an email.
+        cursor = self.conn.cursor()
+        query = "SELECT uid, cid, ufirstname, ulastname, udescription, urole, uclassification, email, pin " \
+                "FROM Users natural inner join Credential " \
+                "WHERE email= %s " \
+                "AND pin= %s;"
+        cursor.execute(query, (email, pin))
+        result = cursor.fetchone()
+        return result
 
 
     def getUserbyEmail(self, email):
@@ -21,6 +32,7 @@ class UsersDAO:
         cursor.execute(query, (email,))
         result = cursor.fetchone()
         return result
+
 
     def getUserBycID(self, cID):
         # Return the user information corresponding to a uID.

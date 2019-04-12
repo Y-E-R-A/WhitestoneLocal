@@ -7,7 +7,7 @@ import psycopg2
 class CredentialDAO:
 
     def __init__(self):
-
+        # Database connection
         connection_url = "dbname=%s user=%s password=%s" % (pg_config['dbname'],
                                                             pg_config['user'],
                                                             pg_config['passwd'])

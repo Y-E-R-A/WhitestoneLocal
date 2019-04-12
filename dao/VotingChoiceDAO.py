@@ -4,6 +4,7 @@ import psycopg2
 class VotingChoiceDAO:
 
     def __init__(self):
+        # Database connection
         connection_url = "dbname=%s user=%s password=%s" % (pg_config['dbname'],
 
                                                             pg_config['user'],
