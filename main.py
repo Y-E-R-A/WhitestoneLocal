@@ -56,7 +56,7 @@ def getAllCredentials():
 def getUser():
 
     print("Request", request.json)
-    return UsersHandler().getUser(request.json)
+    return UsersHandler().getUserByEmail(request.json)
 
 
 # Search all the user information using its email as identifier
@@ -194,6 +194,19 @@ def getAlternatives(vid):
 def getActiveVotingAlternatives(vid):
     return VotingChoiceHandler().getActiveVotingChoiceByvID(vid)
 
+############### NEW ###################################
+# Submit the users choice and updates the selected choice in the list of choices
+@app.route('/whitestone/voting/choicesnew', methods=['POST'])
+def updateChoice():
+    print("REQUEST", request.json)
+    return VotingChoiceHandler().updateChoiceArray(request.json)
+
+# Gets the choices from the active voting question with its results
+@app.route('/whitestone/voting/choicesResult', methods=['GET'])
+def getChoiceResults():
+    print("REQUEST", request.json)
+    return VotingChoiceHandler().getChoiceResult()
+######################################################
 
 # Update voting status to Inactive
 @app.route('/whitestone/closevoting', methods=['PUT'])
@@ -240,7 +253,7 @@ def VotesIn(vid, uid):
 
 # Post new activity log
 @app.route('/whitestone/activitylog', methods=['POST'])
-def postActivityLog():
+def ActivityLog():
     print("REQUEST", request.json)
     return ActivityLogHandler().insertActivityLogJSON(request.json)
 
