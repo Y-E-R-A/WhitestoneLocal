@@ -1,0 +1,120 @@
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    
+    
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Whitestone</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a type="submit" name="action" ng-click="editUserCtrl.createUserRedirect()">Create User</a></li>
+      <li class="active"><a type="submit" name="action" ng-click="editUserCtrl.editUserRedirect()"> Edit User</a></li>
+        
+      <li><a type="submit" name="action" ng-click="editUserCtrl.activityLogRedirect()">Activity Log</a></li>
+    
+      </ul>
+      <ul></ul>
+      
+      <li style = "float:right"><a class="active" type="submit" name="action" ng-click="editUserCtrl.logout()">Logout</a></li>
+      
+  </div>
+</nav>
+    
+    
+    
+ <center>
+     <div class="container" >
+
+    <div class="card-header">
+        <h3>Edit User</h3>
+    </div>
+    <br>
+    <select ng-change="editUserCtrl.loadForm()" ng-model="editUserCtrl.selectedUser" ng-options="user as (user.firstname+'&nbsp'+user.lastname) for user in editUserCtrl.newUserList">
+        <option value="">--Select User--</option>
+    </select>
+    <div ng-show="editUserCtrl.showForm">
+        <table>
+            <tbody style="text-align:center">
+                <br>
+                <tr>
+                    <th>
+                       
+                        <input name="fn" ng-model="editUserCtrl.first_name" class="form-control" placeholder="First Name">
+                        <div ng-if="editUserCtrl.firstnameVal">first name does not contain</div>
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                       
+                        <input name="ln" ng-model="editUserCtrl.last_name" class="form-control" placeholder="Last Name">
+                        <div ng-if="editUserCtrl.lastnameVal">last name does not contain</div>
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        
+                        <input name="ab" ng-model="editUserCtrl.about" class="form-control" placeholder="About User">
+                        
+                    </th>
+                </tr>
+                 <tr>
+                    <th>
+                       <input name="eml" ng-model="editUserCtrl.email" class="form-control"
+                       placeholder="UPRM Email">
+                        <div ng-if="editUserCtrl.emailVal">email has wrong format</div>
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                       <input name="pswd" ng-model="editUserCtrl.password" class="form-control" type="password" placeholder="Pin">
+                        <div ng-if="editUserCtrl.pinVal">pin can only have 4 numbers</div>
+                    </th>
+                </tr>
+               
+                <tr>
+
+                    <th><br>
+                        <label>
+                            <b>Select The User Role: </b>
+                        </label>
+                        <br>
+                        <div ng-repeat="r in editUserCtrl.roles">
+                            <input type="radio" ng-model="editUserCtrl.roleSelect.selected" ng-value="r.role"> {{r.role}}
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th><br>
+                        <label>
+                            <b>Select The User Classification: </b>
+                        </label>
+                        <br>
+                        <div ng-repeat="t in editUserCtrl.titles">
+                            <input type="radio" ng-model="editUserCtrl.titleSelect.selected" ng-value="t.title"> {{t.title}}
+
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th><br>
+                        <button type="submit" name="action" ng-click="editUserCtrl.checkForm()">Save</button>
+                        <button type="submit" name="action" ng-click="editUserCtrl.deleteUser()">Delete</button>
+                        <button type="reset" name="action">Cancel</button>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div ng-show="editUserCtrl.showMessage">
+        <p>The user data has been edited</p>
+        </div>
+    <br>
+     </div>
+    </center>
+</body>

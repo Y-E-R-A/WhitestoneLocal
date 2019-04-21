@@ -1,0 +1,82 @@
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+
+<header>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Whitestone</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a type="submit" name="action" ng-click="oldMeetingsCtrl.meetingRedirect()">Meeting</a></li>
+      <li><a type="submit" name="action" ng-click="oldMeetingsCtrl.voteRedirect()">Voting</a></li>
+      <li class="active"><a class="active" type="submit" name="action" ng-click="#">Old Meetings</a></li>
+    
+      </ul>
+      <ul></ul>
+      <li style = "float:right"><a class="active" type="submit" name="action" ng-click="oldMeetingsCtrl.logout()">Logout</a>
+  </div>
+</nav>
+</header>
+
+<body>
+    
+    
+
+    
+    
+  <div class="container">
+
+    <div class="row">
+      <div class="col-sm-4">
+
+      </div>
+      <div class="col-sm-4" style="background-color:rgba(246, 245, 250, 1);color:black;padding:20px 20px 20px 20px">
+        <table>
+          <tbody>
+            <tr>
+              <th>
+                  <h2>Old Meetings</h2>
+                <div ng-repeat="meetings in oldMeetingsCtrl.oldMeetingList">
+                  
+                  <input type="checkbox" name="mycheckbox" ng-model="meetings.checked" ng-click="oldMeetingsCtrl.checkMeeting(meetings)" ng-checked='meetings.checked'
+                  /><label>
+                    {{meetings.mdescription}} {{meetings.mdate}}{{meetings.mtime}}
+                  </label>
+                </div>
+              </th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-sm-4">
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4" style="background-color:rgba(246, 245, 250, 1);color:black;padding:20px 20px 20px 20px">
+        <div ng-show="oldMeetingsCtrl.selected">
+          <h2>Voting Questions</h2>
+          <div ng-repeat="votingQuestion in oldMeetingsCtrl.votingQuestionList">
+            <br>{{votingQuestion.vquestion}} {{votingQuestion.vtime}}{{votingQuestion.vdate}}
+            {{votingQuestion.vID}}<br>
+              
+              <div ng-repeat="choices in oldMeetingsCtrl.votingChoiceList[votingQuestion.vID]">
+                <br>{{choices.choice}} {{choices.votes}}<br>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+      </div>
+
+      <div class="col-sm-4" style="background-color:rgba(246, 245, 250, 1);color:black;padding:20px 20px 20px 20px">
+      </div>
+    </div>
+  </div>
+</body>
