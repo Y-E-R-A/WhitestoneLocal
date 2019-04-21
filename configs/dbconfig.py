@@ -2,7 +2,7 @@ pg_config = {
 
 
     'user' : 'whitestoneadmin',
-    'passwd' : 'colegio',
+    'passwd' : 'capstone',
     'dbname' : 'whitestone'
 
 
