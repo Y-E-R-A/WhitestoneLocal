@@ -18,7 +18,7 @@ print("Content-type:text/html\r\n\r\n")
 
 
 from flask_cors import CORS, cross_origin
-from flask import Flask, request
+from flask import Flask, request, render_template, make_response
 from handler.ActivityLogHandler import ActivityLogHandler
 from handler.AudioHandler import AudioHandler
 from handler.CredentialHandler import CredentialHandler
@@ -28,10 +28,17 @@ from handler.VoteInHandler import VoteInHandler
 from handler.VotingChoiceHandler import VotingChoiceHandler
 from handler.VotingQuestionHandler import VotingQuestionHandler
 
-app = Flask(__name__)
+app = Flask(__name__ ,template_folder='Whitestone_app')
 
 CORS(app)
+#@app.route("/")
+#def root():
+#    return "Hello"
 
+@app.route("/")
+def getHtml():
+    headers = {'Content-Type': 'text/html'}
+    return make_response(render_template('index.html'),200,headers)
 
 # Search list for emergency local access
 @app.route('/whitestone/credentials', methods=['GET', 'POST', 'PUT'])
