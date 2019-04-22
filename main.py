@@ -27,6 +27,7 @@ from handler.UsersHandler import UsersHandler
 from handler.VoteInHandler import VoteInHandler
 from handler.VotingChoiceHandler import VotingChoiceHandler
 from handler.VotingQuestionHandler import VotingQuestionHandler
+from werkzeug import secure_filename
 
 app = Flask(__name__ ,template_folder='Whitestone_app')
 
@@ -271,6 +272,16 @@ def ActivityLog():
 def getActivityLog():
     print("REQUEST", request.json)
     return ActivityLogHandler().getActivityLogByDate(request.json.get('date'))
+
+
+# Upload audio files to the server
+@app.route('/uploads', methods=['POST'])
+def uploadFile():
+    if request.method == 'POST':
+        file = request.files['file']
+        file.save(secure_filename(file.filename))
+        return "Uploaded file: " + file.filename
+
 
 
 if __name__ == '__main__':
