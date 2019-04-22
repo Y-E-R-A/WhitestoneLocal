@@ -113,8 +113,8 @@ function sendFile(){
   //  Append the blob.
   aFileForm.append('file', blob, aFullDateAndTime);
 
-  // Send the request to the PHP handler.
-  httpRequest.open("POST", "http://whitestone.uprm.edu/uploads.php");
+  // Send the request to the Flask handler.
+  httpRequest.open("POST", "http://whitestone.uprm.edu/uploads");
   httpRequest.onload =function(ev){
     console.log("Request opened.");
   }
