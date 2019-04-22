@@ -30,7 +30,7 @@ from handler.VotingQuestionHandler import VotingQuestionHandler
 from werkzeug import secure_filename
 
 app = Flask(__name__ ,template_folder='Whitestone_app')
-
+app.config['UPLOAD_FOLDER'] = '/audio'
 CORS(app)
 #@app.route("/")
 #def root():
