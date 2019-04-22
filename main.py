@@ -39,7 +39,7 @@ CORS(app)
 @app.route("/")
 def getHtml():
     headers = {'Content-Type': 'text/html'}
-    return make_response(render_template('index.html'),200,headers)
+    return make_response(render_template('AudioRecorder.html'),200,headers)
 
 # Search list for emergency local access
 @app.route('/whitestone/credentials', methods=['GET', 'POST', 'PUT'])
