@@ -43,6 +43,9 @@ angular.module('Whitestone').controller('activityLogController', ['$http', '$log
                     if (status == 0) {
                         alert("No hay conexion a Internet");
                     }
+                    else if (status == 400) {
+                        alert("Invalid date format");
+                    }
                     else if (status == 401) {
                         alert("Su sesion expiro. Conectese de nuevo.");
                     }
