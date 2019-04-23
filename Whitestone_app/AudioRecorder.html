@@ -122,6 +122,15 @@ function sendFile(){
   httpRequest.send(aFileForm);
   console.log("Request sent.");
   console.log(httpRequest.statusText);
+  
+  
+  var addToDatabase = new XMLHttpRequest();
+  var addToDatabaseForm = new FormData();
+
+  addToDatabase.open("POST", "http://whitestone.uprm.edu/whitestone/1/audio")
+  var audioData = '{"mid" : "1", "aid" : "5", "aname" : ' + aFullDateAndTime + ' ,"aaddress" : ' + aFullDateAndTime + ' "}';
+
+  addToDatabase.send(audioData);
 }
 </script>
 
