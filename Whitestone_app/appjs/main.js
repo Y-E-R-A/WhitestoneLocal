@@ -39,6 +39,10 @@
             templateUrl: 'pages/editUser.html',
             controller: 'editUserController',
             controllerAs : 'editUserCtrl'
+        }).when('/requestTurn/:role/:uid', {
+            templateUrl: 'pages/senator.html',
+            controller: 'senatorController',
+            controllerAs : 'senatorCtrl'
         }).when('/voting/:role/:uid', {
             templateUrl: 'pages/submitVote.html',
             controller: 'submitVoteController',
