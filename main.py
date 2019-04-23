@@ -28,9 +28,12 @@ from handler.VoteInHandler import VoteInHandler
 from handler.VotingChoiceHandler import VotingChoiceHandler
 from handler.VotingQuestionHandler import VotingQuestionHandler
 from werkzeug import secure_filename
+import os
+
+#print(os.path.abspath(os.path.dirname(__file__)))
 
 app = Flask(__name__ ,template_folder='Whitestone_app')
-app.config['UPLOAD_FOLDER'] = '/audio'
+#app.config['UPLOAD_FOLDER'] = '/audio'
 CORS(app)
 #@app.route("/")
 #def root():
@@ -275,11 +278,11 @@ def getActivityLog():
 
 
 # Upload audio files to the server
-@app.route('/uploads', methods=['POST'])
+@app.route('/audio', methods=['POST'])
 def uploadFile():
     if request.method == 'POST':
         file = request.files['file']
-        file.save(secure_filename(file.filename))
+        file.save(os.path.join('/audio', secure_filename(file.filename)))
         return "Uploaded file: " + file.filename
 
 
