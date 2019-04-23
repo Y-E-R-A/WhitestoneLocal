@@ -1,0 +1,55 @@
+<head>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>                    
+
+
+<header>
+    <nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Whitestone</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a class="active" type="submit" name="action" ng-click="#">Request Turn</a></li>
+      <li><a type="submit" name="action" ng-click="senatorCtrl.voteRedirect()">Voting</a></li>
+      </ul>
+      <ul></ul>
+      <li style = "float:right"><a class="active" type="submit" name="action" ng-click="senatorCtrl.logout()">Logout</a>
+  </div>
+</nav>
+</header>
+
+<body>
+    
+    <center>
+    <!--<div ng-if="senatorCtrl.activeMeeting">-->
+        <h4 style="text-align: center">There is currently no active meeting</h4>
+        <p style="text-align: center">Please log out until a meeting is created</p>
+    <!--</div>-->
+    </center>
+    <center>
+        <div ng-if="!senatorCtrl.activeMeeting">
+        <table>
+        <div class="container" >
+            <tbody>
+                <div class="card-header">
+                    <h3>Senator </h3>
+                </div>
+                
+                <tr>
+                    <th>
+                    <button class="btn btn-primary btn-block" type="submit" name="action" ng-click="senatorCtrl.requestTurn()" ng-disabled="senatorCtrl.requestedTurn">Request a turn to speak</button> 
+                </th>
+                </tr>
+                <div ng-if="senatorCtrl.requestedTurn">
+                    <button class="btn btn-primary btn-block" type="submit" name="action" ng-click="senatorCtrl.cancelTurn()">Cancel turn</button> 
+                    <p style="text-align: center">You are in the waiting list</p>
+                </div>
+              </tbody>
+            </div>
+            </table>
+        </div>
+       </center>
+    
+</body>
