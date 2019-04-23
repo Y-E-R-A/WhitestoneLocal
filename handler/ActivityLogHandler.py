@@ -1,6 +1,6 @@
 from flask import jsonify, request
 from dao.ActivityLogDAO import ActivityLogDAO
-
+import datetime
 
 class ActivityLogHandler:
 
@@ -29,16 +29,28 @@ class ActivityLogHandler:
 
     def getActivityLogByDate(self, date):
         # Handle the search of the activity log by date
-        result = ActivityLogDAO().getActivityLogByDate(date)
-        mapped_result = []
+        day, month, year = date.split('/')
 
-        if not result:
-            return jsonify(Error="NOT FOUND"), 404
+        isValidDate = True
+        try:
+            datetime.datetime(int(year), int(month), int(day))
+        except ValueError:
+            isValidDate = False
+
+        if (isValidDate):
+            result = ActivityLogDAO().getActivityLogByDate(date)
+            mapped_result = []
+
+            if not result:
+                return jsonify(Error="NOT FOUND"), 404
+
+            else:
+                for r in result:
+                    mapped_result.append(self.mapToActivityLogDict(r))
+                return jsonify(Log=mapped_result), 200
 
         else:
-            for r in result:
-                mapped_result.append(self.mapToActivityLogDict(r))
-            return jsonify(Log=mapped_result), 200
+            return jsonify(Error="Unexpected attributes in post request"), 400
 
 
     def insertActivityLogJSON(self, json):
