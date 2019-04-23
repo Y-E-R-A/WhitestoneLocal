@@ -282,7 +282,7 @@ def getActivityLog():
 def uploadFile():
     if request.method == 'POST':
         file = request.files['file']
-        file.save(os.path.join('/audio', secure_filename(file.filename)))
+        file.save(os.path.join('/var/www/html/Whitestone/audio', secure_filename(file.filename)))
         return "Uploaded file: " + file.filename
 
 
