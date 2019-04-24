@@ -67,7 +67,7 @@ def getAllCredentials():
 def getUser():
 
     print("Request", request.json)
-    return UsersHandler().getUserByEmail(request.json)
+    return UsersHandler().getUser(request.json)
 
 
 # Search all the user information using its email as identifier
