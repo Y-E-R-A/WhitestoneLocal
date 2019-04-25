@@ -68,6 +68,7 @@ angular.module('Whitestone').controller('LoginController', ['$http', '$log', '$s
                     console.log("role"+role)
                     var uid = response.data.User.uid;
                     console.log("uid"+uid)
+                    thisCtrl.recordActivity(role);
                     if(role == "Administrator"){
                         $location.url('/createUser/'+role+'/'+uid);
                     }else if(role == "Secretary"){
@@ -78,7 +79,7 @@ angular.module('Whitestone').controller('LoginController', ['$http', '$log', '$s
                     }else if(role == "Chancellor"){
                         $location.url('/votingChancellor/'+role+"/"+uid);
                     }
-
+                    
                     
                 }, //Error function
                 function (response) {
@@ -104,6 +105,7 @@ angular.module('Whitestone').controller('LoginController', ['$http', '$log', '$s
                             alert("Invalid email and/or password. Please try again.");
                         }else{
                             alert("Invalid email and/or pin. Please try again.");
+                            
                         }
                     }
                     else {
@@ -112,5 +114,60 @@ angular.module('Whitestone').controller('LoginController', ['$http', '$log', '$s
                 }
             );
         };
+
         
+        this.recordActivity = function(role){
+            
+            var d = new Date();
+            
+            //Dictionary that will store the data for the database
+            var data = {};
+            data.urole = role;
+            data.uemail = this.email;
+            data.date = d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear();
+            data.time = d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
+            data.logmessage = "Log in";
+
+            //url with the route to talk with the rest API
+            var reqURL = "http://localhost:5000/whitestone/activitylog";
+
+            var config = { headers : 
+                          {'Content-Type':'application/json;charset=utf-8;' }
+                         }
+        
+            // Now issue the http request to the rest API
+            $http.post(reqURL,data,config).then(
+                // Success function
+                function (response) {
+                    console.log("response record AL: " + JSON.stringify(response.data))
+
+                }, //Error function
+                function (response) {
+                    // This is the error function
+                    // If we get here, some error occurred.
+                    // Verify which was the cause and show an alert.
+                    var status = response.status;
+
+                    if (status == 0) {
+                        alert("No hay conexion a Internet");
+                    }
+                    else if (status == 401) {
+                        alert("Su sesion expiro. Conectese de nuevo.");
+                    }
+                    else if (status == 403) {
+                        alert("No esta autorizado a usar el sistema.");
+                    }
+                    else if (status == 404) {
+                        alert("Could not store the activity.");
+                    }
+                    else {
+                        alert("Error interno del sistema.");
+                    }
+                }
+            );
+        };
+        //$http.get("https://ipinfo.io/json").then(function (response) 
+		//{
+		//	$scope.ip = response.data.ip;
+		//});
 }]);

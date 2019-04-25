@@ -5,9 +5,10 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
 
         var thisCtrl = this;
         
-        //List of active voting questions from database
+        //Current Active voting question and choices
         this.votingQuestion = [];
         this.votingChoices = [];
+        
         //List of inactive voting question and choices
         this.inActiveVotingQuestion = [];
         this.inActiveVotingChoices = {};
@@ -19,29 +20,21 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
         //The objective of the vote
         var voting_objective = "";
         
-        //var fecha = $scope.nowdate;
-        
-        //Date in MM/DD/YYYY
-        var vMM = "";
-        var vDD = "";
-        var vYYYY = "";
-        
-        //Time: Hour:Minutes
-        var vHour = "";
-        var vMin = "";
-
         //The limit of answers
         var vLimit = "";
-        this.meetingId =0;
         
-        var vid = 0;
+        //The current active meeting Id
+        this.meetingId =0;
         
         //The current active voting question
         this.activeVID = 0;
+        
         //Variable that determines if there is an active voting question
         this.activeVotingQuestion = false;
+        
         //variable that determines if there is an active meeting
         this.activeMeeting = false;
+        
         //List of Users that can participate in voting question
         this.electSenatorList = [];
         this.electStudentSenatosList = [];
@@ -56,6 +49,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
         
         //Table that stores the selected participants
         this.selection = [];
+        
         //Dictionary that stores the different alternatives
         this.votingAlternatives = [{altId:"alt1", valt:''}]
         
@@ -76,12 +70,15 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
           this.votingAlternatives.push({altId:"alt"+newAlt});
           console.log("voting alternatives: "+this.votingAlternatives)
         }
+        
         //Removes an alternative
         this.removeAlternative = function(index){
           //remove($index) en html
           this.votingAlternatives.splice(index,1);
         }
+        
         //////////////////////////////////////////////////////
+        //Validates if the form is correct
         this.checkcreate = function(){
             if(thisCtrl.activeVotingQuestion){
                 alert("There is a running active voting question");
@@ -89,27 +86,19 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                 thisCtrl.createVote();
             }
         }
+        
+        //This function is to create a voting question
         this.createVote = function(){
-            // Get the target part id from the parameter in the url
-            // using the $routerParams object
-            //var userId = $routeParams.uid;
+            var d = new Date();
             
             var data = {};
-            var d = new Date();
             data.creatorID = $routeParams.uid;
-            //console.log("thisCtrl in create: "+thisCtrl.meetingId)
             data.mID = thisCtrl.meetingId;
             data.vquestion = this.voting_question;
-            
-            data.vdescription = this.voting_objective;
-            
-            //data.vdate = this.vMM+"/"+vDD+"/"+vYYYY;
+            data.vinstructions = this.voting_objective;
             data.vtime = d.getHours()+":"+d.getMinutes();
-            data.vdate = d.getMonth()+"/"+d.getDay()+"/"+d.getFullYear();
-            //data.vtime = this.vHour+":"+this.vMin+"pm";
-        
+            data.vdate = d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear();
             data.selectionlimit = this.vLimit;
-            
             data.vstatus = "Active";
 
             //Ruta para crear voting question y para obtener la voting question por meeting id
@@ -125,26 +114,30 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                 function (response) {
                     console.log("response: " + JSON.stringify(response.data))
                     
+                    //Storing the values of the created voting question
                     thisCtrl.votingQuestion = response.data.Voting;
                     thisCtrl.activeVotingQuestion = true;
                     thisCtrl.selectParticipant(response.data.Voting.vID);
                     thisCtrl.activeVID = response.data.Voting.vID;
+                    
+                    //testing purposes
                     console.log("choices: "+JSON.stringify(thisCtrl.votingAlternatives));
                     console.log("choices alt: "+thisCtrl.votingAlternatives[0].valt);
+                    
+                    //Creating the choices from the list of choices
                     for(var y=0;y<thisCtrl.votingAlternatives.length;y++){
                         console.log("choices valt loop: "+thisCtrl.votingAlternatives[y].valt);
                         thisCtrl.createChoices(thisCtrl.votingAlternatives[y].valt,response.data.Voting.vID);
                     }
-                    
+                    thisCtrl.recordActivity("Create");
                     
                 }, //Error function
                 function (response) {
                     // This is the error function
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
+                    
                     var status = response.status;
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
                     if (status === 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -163,23 +156,15 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                 }
             );
         };
-
+        
+        //This function closes an active voting question
         this.closeVotingQuestion = function(){
-            // Get the target part id from the parameter in the url
-            // using the $routerParams object
-            //var userId = $routeParams.uid;
+            //Storing the data to send to the database
+            var data = {};
+            data.vID = thisCtrl.activeVID;
             
-            var data = {};
-        
-                     
-            data.vID = thisCtrl.activeVID;
-        
-            data.vstatus = "Inactive";
-
-            var data = {};
-            data.vID = thisCtrl.activeVID;
             var reqURL = "http://localhost:5000/whitestone/closevoting";
-            //console.log("reqURL: " + reqURL);
+            
             var config = { headers : 
                           {'Content-Type':'application/json;charset=utf-8;' }
                          }
@@ -189,66 +174,17 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                 // Success function
                 function (response) {
                     console.log("response Close: " + JSON.stringify(response.data))
-                    // assing the part details to the variable in the controller
-                    //thisCtrl.getVotingChoiceResults();
+                    
+                    //Resetting the data
                     thisCtrl.activeVotingQuestion = false;
                     thisCtrl.votingQuestion = [];
                     thisCtrl.votingChoices = [];
                     thisCtrl.votingAlternatives = [{altId:"alt1", valt:''}]
+                    
                     console.log("vC: "+JSON.stringify(thisCtrl.votingChoices));
                     
-                }, //Error function
-                function (response) {
-                    // This is the error function
-                    // If we get here, some error occurred.
-                    // Verify which was the cause and show an alert.
-                    var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-
-                    if (status === 0) {
-                        alert("No hay conexion a Internet");
-                    }
-                    else if (status == 401) {
-                        alert("Su sesion expiro. Conectese de nuevo.");
-                    }
-                    else if (status == 403) {
-                        alert("No esta autorizado a usar el sistema.");
-                    }
-                    else if (status == 404) {
-                        alert("No se encontro la informacion solicitada.");
-                    }
-                    else {
-                        alert("Error interno del sistema.");
-                    }
-                }
-            );
-        };
-        //NEW
-        this.submitVotingChoices = function(choice){
-            // Get the target part id from the parameter in the url
-            // using the $routerParams object
-            //var userId = $routeParams.uid;
-            
-            var data = {};
-        
-                     
-            data.altID = choice.altID;
-        
-            data.vID = thisCtrl.activeVID;
-            data.votes = choice.votes;
-            console.log("data in submit choices: "+JSON.stringify(data))
-            var reqURL = "http://localhost:5000/whitestone/votingresults";
-            //console.log("reqURL: " + reqURL);
-            var config = { headers : 
-                          {'Content-Type':'application/json;charset=utf-8;' }
-                         }
-        
-            // Now issue the http request to the rest API
-            $http.put(reqURL,data,config).then(
-                // Success function
-                function (response) {
-                    console.log("response: " + JSON.stringify(response.data))
-                    // assing the part details to the variable in the controller
+                    thisCtrl.getVotingChoiceResults();
+                    thisCtrl.recordActivity("Close");
                     
                 }, //Error function
                 function (response) {
@@ -276,9 +212,9 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                 }
             );
         };
+        
         //NEW
         this.getVotingChoiceResults = function(){
-
 
             var reqURL = "http://localhost:5000/whitestone/voting/choicesResult";
             //console.log("reqURL: " + reqURL);
@@ -290,12 +226,13 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
             $http.get(reqURL).then(
                 // Success function
                 function (response) {
-                    console.log("response: " + JSON.stringify(response.data))
-                    // assing the part details to the variable in the controller
+                    console.log("response Get Vchoices Results: " + JSON.stringify(response.data))
+                    
+                    //Submitting the voting choices
                     for(var i=0;i<response.data.Choice.length;i++){
-                        thisCtrl.submitVotingChoices(response.data.Choice[i])
-                        
+                        thisCtrl.submitVotingChoices(response.data.Choice[i], thisCtrl.activeVID, i,response.data.Choice.length)
                     }
+                    thisCtrl.activeVID = 0;
                 }, //Error function
                 function (response) {
                     // This is the error function
@@ -324,9 +261,63 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                 }
             );
         };
-        this.selectParticipant = function(vid){
-            console.log("selection: "+this.selection);
+        
+        //NEW
+        this.submitVotingChoices = function(choice, vid, count,limit){
+            
+            // Get the target part id from the parameter in the url
+            console.log("vid: "+vid)
+            var data = {};
+            data.altID = choice.altID;
+            data.vID = vid;
+            data.votes = choice.votes;
+            console.log("Limit: "+limit)
+            console.log("count: "+count)
+            console.log("data in submit choices: "+JSON.stringify(data))
+            var reqURL = "http://localhost:5000/whitestone/votingresults";
+            //console.log("reqURL: " + reqURL);
+            var config = { headers : 
+                          {'Content-Type':'application/json;charset=utf-8;' }
+                         }
+        
+            // Now issue the http request to the rest API
+            $http.put(reqURL,data,config).then(
+                // Success function
+                function (response) {
+                    console.log("response submit Voting Choices: " + JSON.stringify(response.data))
+                    if(count==(limit-1)){
+                        thisCtrl.loadInActiveVotingQuestions();
+                    }
+                }, //Error function
+                function (response) {
+                    // This is the error function
+                    // If we get here, some error occurred.
+                    // Verify which was the cause and show an alert.
+                    var status = response.status;
 
+                    if (status === 0) {
+                        alert("No hay conexion a Internet");
+                    }
+                    else if (status == 401) {
+                        alert("Su sesion expiro. Conectese de nuevo.");
+                    }
+                    else if (status == 403) {
+                        alert("No esta autorizado a usar el sistema.");
+                    }
+                    else if (status == 404) {
+                        alert("No se encontro la informacion solicitada.");
+                    }
+                    else {
+                        alert("Error interno del sistema.");
+                    }
+                }
+            );
+        };
+        
+        //This functions gets all the users who can participate ina voting question
+        this.selectParticipant = function(vid){
+            
+            console.log("selection: "+this.selection);
             for(var i=0;i<this.selection.length;i++){
                 if(this.selection[i]==='Elect Student Senator'){
                     thisCtrl.getAllUsersByElectStudent(vid);
@@ -340,9 +331,11 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                 }
             }
         };
+        
+        //This function gets all the Elect Senators 
         this.getAllUsersByElectStudent = function(vid){
-            // Get the target part id from the parameter in the url
             console.log("Elect Students")
+            
             // Now create the url with the route to talk with the rest API
             var reqURL = "http://localhost:5000/whitestone/electstudentsenators";
             //console.log("reqURL: " + reqURL);
@@ -356,9 +349,9 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                 function (response) {
                     console.log("response Elect Student: " + JSON.stringify(response.data))
                     thisCtrl.electSenatorList = response.data.User;
+                    
                     for(var i=0;i<response.data.User.length;i++){
                         thisCtrl.createVoteIn(vid,response.data.User[i].uID);
-                        
                     }
                     
                 }, //Error function
@@ -367,9 +360,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+                    
                     if (status == 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -389,7 +380,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
             );
         };
         this.getAllUsersByExOfficioStudent = function(vid){
-            // Get the target part id from the parameter in the url
+
             console.log("ExOfficio Students");
             // Now create the url with the route to talk with the rest API
             var reqURL = "http://localhost:5000/whitestone/exofficiostudentsenators";
@@ -417,9 +408,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
                     if (status == 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -439,7 +428,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
             );
         };
         this.getAllUsersByElect = function(vid){
-            // Get the target part id from the parameter in the url
+
             console.log("Elect Senators");
             
             // Now create the url with the route to talk with the rest API
@@ -465,9 +454,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
                     if (status == 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -487,7 +474,6 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
             );
         };
         this.getAllUsersByExOfficio = function(vid){
-            // Get the target part id from the parameter in the url
             console.log("ExOfficio Senator");
             
             // Now create the url with the route to talk with the rest API
@@ -514,9 +500,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
                     if (status == 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -535,26 +519,19 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                 }
             );
         };
-
+        
+        //This function inserts all the users who can participate in a voting question into the database
         this.createVoteIn = function(vid,uid){
-            // Get the target part id from the parameter in the url
-            // using the $routerParams object
-            //var userId = $routeParams.uid;
-
-            //data.udescription = this.description;
             console.log("vID: "+vid);
             console.log("uID: "+uid);
-            var data = {};
             
+            var data = {};
             data.vID = vid;
             data.uID = uid;
-            //console.log("data: " + JSON.stringify(data));
-            //console.log("first name: "+this.first_name);
-            //console.log("last name: "+this.last_name);
+
             // Now create the url with the route to talk with the rest API
-            //Ruta para crear voting question y para obtener la voting question por meeting id
             var reqURL = "http://localhost:5000/whitestone/"+uid+"/votesIn/"+vid;
-            //console.log("reqURL: " + reqURL);
+
             var config = { headers : 
                           {'Content-Type':'application/json;charset=utf-8;' }
                          }
@@ -606,24 +583,13 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                 function (response) {
                     console.log("response: " + JSON.stringify(response.data))
                     // assing the part details to the variable in the controller
-                    //alert("New user added with id: " +response.data.User.cid);
-                    
-                    //thisCtrl.id = response.data.User.cid
-                    
-                    console.log("response "+response.data);
-                    
-                    //thisCtrl.credentialList = response.data.User;
-                    
-                    //console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialList))
-                    
-                    //console.log("second sign in")
-                    
-                    //thisCtrl.signUpUser();
+
                     thisCtrl.activeMeeting = true;
-                     console.log("thisCtrl: "+thisCtrl.meetingId);
                     thisCtrl.meetingId = JSON.stringify(response.data.Meeting[0].mID);
+                    
+                    
                     console.log("response.data.Meet: "+response.data.Meeting[0].mID)
-                    console.log("mid: "+thisCtrl.meetingId)
+                    
                     thisCtrl.loadInActiveVotingQuestions();
                     thisCtrl.loadActiveVotingQuestions(thisCtrl.meetingId);
                     
@@ -633,9 +599,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
                     if (status == 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -683,9 +647,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
                     if (status === 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -704,6 +666,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                 }
             );
         };
+        
         this.loadActiveChoices = function(vid){
 
         
@@ -730,9 +693,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
                     if (status === 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -782,9 +743,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
                     if (status === 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -830,9 +789,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
                     if (status === 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -860,7 +817,6 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
 
             // Now create the url with the route to talk with the rest API
             var reqURL = "http://localhost:5000/whitestone/voting/"+vid+"/results";
-            //console.log("reqURL: " + reqURL);
             var config = { headers : 
                           {'Content-Type':'application/json;charset=utf-8;' }
                          }
@@ -910,9 +866,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
                     if (status === 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -938,9 +892,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
 
             console.log("In createChoices: "+choice);
             var data = {};
-            //data.choice = thisCtrl.votingAlternatives[0].valt;
             data.choice = choice;
-            //data.vid = thisCtrl.activeVID;
             data.vID = vid;
             //console.log("data: " + JSON.stringify(data));
             
@@ -967,9 +919,7 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
                     if (status == 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -988,6 +938,63 @@ angular.module('Whitestone').controller('votingController', ['$http', '$log', '$
                 }
             );
         };
+        
+        this.recordActivity = function(action){
+            
+            var d = new Date();
+            
+            //Dictionary that will store the data for the database
+            var data = {};
+            data.urole = $routeParams.role;
+            data.uemail = "y.rivera@upr.edu";
+            data.date = d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear();
+            data.time = d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
+            if(action=="Create"){
+                data.logmessage = "Create Votin Question"
+            }else if(action=="Close"){
+                data.logmessage = "Close Voting Question"
+            }
+            data.logmessage = "Search Activity Log";
+
+            //url with the route to talk with the rest API
+            var reqURL = "http://localhost:5000/whitestone/activitylog";
+
+            var config = { headers : 
+                          {'Content-Type':'application/json;charset=utf-8;' }
+                         }
+        
+            // Now issue the http request to the rest API
+            $http.post(reqURL,data,config).then(
+                // Success function
+                function (response) {
+                    console.log("response record AL: " + JSON.stringify(response.data))
+
+                }, //Error function
+                function (response) {
+                    // This is the error function
+                    // If we get here, some error occurred.
+                    // Verify which was the cause and show an alert.
+                    var status = response.status;
+
+                    if (status == 0) {
+                        alert("No hay conexion a Internet");
+                    }
+                    else if (status == 401) {
+                        alert("Su sesion expiro. Conectese de nuevo.");
+                    }
+                    else if (status == 403) {
+                        alert("No esta autorizado a usar el sistema.");
+                    }
+                    else if (status == 404) {
+                        alert("Could not store the activity.");
+                    }
+                    else {
+                        alert("Error interno del sistema.");
+                    }
+                }
+            );
+        };
+        
         this.meetingRedirect = function(){
                                    console.log("role"+$routeParams.role)
             console.log("uid"+$routeParams.uid)

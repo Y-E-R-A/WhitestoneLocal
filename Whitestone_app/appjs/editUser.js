@@ -36,10 +36,6 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
         { role: 'Chancellor', selected: false },
         { role: 'Administrator', selected: false }];
 
-        //$scope.rol = '';
-        //$scope.selected = [];
-        //$parent.rol
-
          this.loadForm = function () {
             console.log("My User: "+JSON.stringify(thisCtrl.selectedUser));
             console.log("selected User: "+thisCtrl.selectedUser);
@@ -70,7 +66,7 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
             thisCtrl.showMessage = false;
             console.log("role"+this.role);
             console.log("title"+this.roleSelect.selected);
-             console.log("title"+this.titleSelect.selected);
+            console.log("title"+this.titleSelect.selected);
         }
          this.cancel = function(){
                 this.roleSelect.selected = '';
@@ -140,13 +136,14 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
             
         }
         this.editCredentials = function () {
-
+            
+            //Dictionary that will store the data for the database
             var data = {};
-
             data.email = this.email;
             data.pin = this.password;
             data.cID = thisCtrl.cID;
-            // Now create the url with the route to talk with the rest API
+            
+            //url with the route to talk with the rest API
             console.log("data: "+JSON.stringify(data));
             var reqURL = "http://localhost:5000/whitestone/credentials";
 
@@ -160,8 +157,6 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
                 // Success function
                 function (response) {
                     console.log("response: " + JSON.stringify(response.data))
-                    // assing the part details to the variable in the controller
-                    
                     thisCtrl.editUser();
 
                 }, //Error function
@@ -170,9 +165,7 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
                     if (status == 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -194,22 +187,21 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
         };
         
         this.editUser = function () {
-
+            //Dictionary that will store the data for the database
             var data = {};
-
             data.ufirstname = this.first_name;
             data.ulastname = this.last_name;
             data.udescription = this.about;
             data.urole = this.roleSelect.selected;
             data.uclassification = this.titleSelect.selected;
-            //Resetting data
-            thisCtrl.titleSelect.selected = '';
-            thisCtrl.roleSelect.selected = '';
-            thisCtrl.showForm = false;
-            thisCtrl.myUser = {};
             
-            // Now create the url with the route to talk with the rest API
-            console.log("data: "+JSON.stringify(data));
+            //Resetting data
+            //thisCtrl.titleSelect.selected = '';
+            //thisCtrl.roleSelect.selected = '';
+            //thisCtrl.showForm = false;
+            //thisCtrl.myUser = {};
+            
+            //url with the route to talk with the rest API
             var reqURL = "http://localhost:5000/whitestone/edituser/"+thisCtrl.uID;
 
             var config = {
@@ -225,17 +217,16 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
                     // assing the part details to the variable in the controller
                     thisCtrl.cancel();
                     thisCtrl.loadUsers();
+                    thisCtrl.recordActivity("Edit");
                     alert("The user has been edited");
-
+                    
                 }, //Error function
                 function (response) {
                     // This is the error function
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
                     if (status == 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -254,6 +245,13 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
                 }
             );
         };
+        
+        this.checkDelete = function(){
+            if (confirm("Are you sure you want to delete the user?")) {
+                thisCtrl.deleteUser();
+            }
+        }
+        
         this.deleteUser = function () {
 
             // Now create the url with the route to talk with the rest API
@@ -271,16 +269,15 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
                 function (response) {
                     console.log("response Delete: " + JSON.stringify(response.data))
                     thisCtrl.cancel();
-                    
+                    thisCtrl.loadUsers();
+                    thisCtrl.recordActivity("Delete");
                 }, //Error function
                 function (response) {
                     // This is the error function
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " + JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
                     if (status == 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -320,7 +317,7 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " + JSON.stringify(thisCtrl.credentialsList));
+
                     if (status == 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -339,6 +336,61 @@ angular.module('Whitestone').controller('editUserController', ['$http', '$log', 
                 }
             );
         };
+        
+        this.recordActivity = function(action){
+            
+            var d = new Date();
+            
+            //Dictionary that will store the data for the database
+            var data = {};
+            data.urole = $routeParams.role;
+            data.uemail = "m.melendez@upr.edu";
+            data.date = d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear();
+            data.time = d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
+            if(action=="Delete"){
+                data.logmessage = "Deleted User";
+            }else if(action=="Edit"){
+                data.logmessage = "Edit User";
+            }
+            //url with the route to talk with the rest API
+            var reqURL = "http://localhost:5000/whitestone/activitylog";
+
+            var config = { headers : 
+                          {'Content-Type':'application/json;charset=utf-8;' }
+                         }
+        
+            // Now issue the http request to the rest API
+            $http.post(reqURL,data,config).then(
+                // Success function
+                function (response) {
+                    console.log("response record AL: " + JSON.stringify(response.data))
+
+                }, //Error function
+                function (response) {
+                    // This is the error function
+                    // If we get here, some error occurred.
+                    // Verify which was the cause and show an alert.
+                    var status = response.status;
+
+                    if (status == 0) {
+                        alert("No hay conexion a Internet");
+                    }
+                    else if (status == 401) {
+                        alert("Su sesion expiro. Conectese de nuevo.");
+                    }
+                    else if (status == 403) {
+                        alert("No esta autorizado a usar el sistema.");
+                    }
+                    else if (status == 404) {
+                        alert("Could not store the activity.");
+                    }
+                    else {
+                        alert("Error interno del sistema.");
+                    }
+                }
+            );
+        };
+        
         this.loadUsers();
 
         this.createUserRedirect = function () {

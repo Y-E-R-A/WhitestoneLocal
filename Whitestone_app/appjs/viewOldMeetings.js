@@ -10,8 +10,9 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
         this.votingQuestionList = [];
         //Choice List
         this.votingChoiceList = {};
-
+        
         var meetingId = 0;
+
         var votingQuestionId = 0;
 
         var currentMeetingId = 0;
@@ -38,6 +39,7 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
                     meeting.checked = true;
                     thisCtrl.selected = true;
                     thisCtrl.loadInActiveVotingQuestions(meeting.mID);
+                    thisCtrl.recordActivity("View");
 					//thisCtrl.list = [];
 					
 				} else {
@@ -53,9 +55,6 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
 		};
        this.loadMeetings = function(){
 
-            // First set up the url for te route
-            var url = "";
-            // Now set up the $http object
             var reqURL = "http://localhost:5000/whitestone/meeting/oldmeetings";
 
             var config = { headers : 
@@ -70,9 +69,10 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
                 // Copy the list of parts in the data variable
                     
                     thisCtrl.oldMeetingList = response.data.Meeting;
-                for (var i=0;i<thisCtrl.oldMeetingList.length;i++){
-                    thisCtrl.oldMeetingList[i]["checked"] = false;
-                }
+                    //Adding a boolean value to determine afterwards which meeting is selected
+                    for (var i=0;i<thisCtrl.oldMeetingList.length;i++){
+                        thisCtrl.oldMeetingList[i]["checked"] = false;
+                    }
                     console.log("meeting list: "+JSON.stringify(thisCtrl.oldMeetingList))
 
                 }, // error callback
@@ -80,8 +80,8 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
                     // This is the error function
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
-                    console.log("response2: " + JSON.stringify(response));
                     var status = response.status;
+                    
                     if (status == 0){
                         alert("No hay conexion a Internet");
                     }
@@ -100,6 +100,7 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
                 }
             );
         };
+        
         this.loadInActiveVotingQuestions = function(meetingId){
             thisCtrl.votingQuestionList =  [];
             thisCtrl.votingChoiceList = {};
@@ -116,19 +117,18 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
                     console.log("response Voting Question: " + JSON.stringify(response.data))
                     // assing the part details to the variable in the controller
                     thisCtrl.votingQuestionList = response.data.Voting;
+                    
+                    //Loading the choices with respect to the loaded voting question
                     for(var i=0;i<response.data.Voting.length;i++){
                         thisCtrl.loadChoices(response.data.Voting[i].vID);
                     }
-                    //thisCtrl.loadChoices(1)
                 }, //Error function
                 function (response) {
                     // This is the error function
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
                     if (status === 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -151,6 +151,7 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
 
         this.loadChoices = function(vid){
             console.log("loadCh: "+vid)
+            
             var reqURL = "http://localhost:5000/whitestone/voting/"+vid+"/choices";
             //console.log("reqURL: " + reqURL);
             var config = { headers : 
@@ -164,7 +165,6 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
                     console.log("response Choices: " + JSON.stringify(response.data))
                     
                     thisCtrl.votingChoiceList[vid] = response.data.Choice;
-                    //thisCtrl.loadResults(vid,response.data.Choice)
 
                     
                 }, //Error function
@@ -173,9 +173,7 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
                     if (status === 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -261,6 +259,61 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
                     }
                     else if (status == 404) {
                         alert("No se encontro la informacion solicitada.");
+                    }
+                    else {
+                        alert("Error interno del sistema.");
+                    }
+                }
+            );
+        };
+        
+        this.recordActivity = function(action){
+            
+            var d = new Date();
+            
+            //Dictionary that will store the data for the database
+            var data = {};
+            data.urole = $routeParams.role;
+            data.uemail = this.email;
+            data.date = d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear();
+            data.time = d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
+            if(action=="View"){
+                data.logmessage= "View Old Meeting";
+            }else if(action=="Listen"){
+                data.logmessage = "Listened to Audio File";     
+            }
+
+            //url with the route to talk with the rest API
+            var reqURL = "http://localhost:5000/whitestone/activitylog";
+
+            var config = { headers : 
+                          {'Content-Type':'application/json;charset=utf-8;' }
+                         }
+        
+            // Now issue the http request to the rest API
+            $http.post(reqURL,data,config).then(
+                // Success function
+                function (response) {
+                    console.log("response record AL: " + JSON.stringify(response.data))
+
+                }, //Error function
+                function (response) {
+                    // This is the error function
+                    // If we get here, some error occurred.
+                    // Verify which was the cause and show an alert.
+                    var status = response.status;
+
+                    if (status == 0) {
+                        alert("No hay conexion a Internet");
+                    }
+                    else if (status == 401) {
+                        alert("Su sesion expiro. Conectese de nuevo.");
+                    }
+                    else if (status == 403) {
+                        alert("No esta autorizado a usar el sistema.");
+                    }
+                    else if (status == 404) {
+                        alert("Could not store the activity.");
                     }
                     else {
                         alert("Error interno del sistema.");

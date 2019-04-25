@@ -70,6 +70,7 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                     console.log("selected Choice Loop: "+thisCtrl.selectedChoice[i]);
                     thisCtrl.submitVote(thisCtrl.selectedChoice[i]);
                 }
+                thisCtrl.recordActivity();
                 thisCtrl.disableParticipation();
             } else {
             }
@@ -137,11 +138,16 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                 // Success function
                 function (response) {
                     console.log("response Active VQ: " + JSON.stringify(response.data))
-                    // assing the part details to the variable in the controller
+                    
+                    //An active voting question is running
                     thisCtrl.activeVotingQuestion = true;
-                   thisCtrl.votingId = response.data.Voting[0].vID;
+                    //Storing the voting ID of the voting question
+                    thisCtrl.votingId = response.data.Voting[0].vID;
+                    //
                     thisCtrl.checkParticipation(response.data.Voting[0].vID);
+                    //Storing the voting question
                     thisCtrl.VotingQuestion = response.data.Voting[0];
+                    //Storing the limit of choices
                     thisCtrl.limit = response.data.Voting[0].selectionlimit;
                     console.log("VQ: "+JSON.stringify(thisCtrl.VotingQuestion));
                     thisCtrl.loadChoices(response.data.Voting[0].vID);
@@ -172,6 +178,7 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                 }
             );
         };
+        //Function to determine if the user can participate in the voting question
         this.checkParticipation = function(vid){
 
             // Now create the url with the route to talk with the rest API
@@ -196,7 +203,6 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
 
                     if (status === 0) {
                         alert("No hay conexion a Internet");
@@ -208,7 +214,7 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                         alert("No esta autorizado a usar el sistema.");
                     }
                     else if (status == 404) {
-                        alert("No se encontro la informacion solicitada.");
+                        alert("User is not a participant in the voting question");
                     }
                     else {
                         alert("Error interno del sistema.");
@@ -236,6 +242,8 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
 
                     thisCtrl.votingChoices = response.data.Choice;
                     console.log("votingChoices: "+JSON.stringify(thisCtrl.votingChoices));
+                    
+                    //Adding a boolean parameter to determine afterwards which choices the user selects
                     for(var i=0;i<thisCtrl.votingChoices.length;i++){
                         thisCtrl.votingChoices[i]["checked"] = false;
                     }
@@ -245,8 +253,7 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                     // This is the error function
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
-                    var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
+                    var status = response.status;;
 
                     if (status === 0) {
                         alert("No hay conexion a Internet");
@@ -258,7 +265,7 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                         alert("No esta autorizado a usar el sistema.");
                     }
                     else if (status == 404) {
-                        alert("No se encontro la informacion solicitada.");
+                        alert("No voting choices were found");
                     }
                     else {
                         alert("Error interno del sistema.");
@@ -284,8 +291,8 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                 // Success function
                 function (response) {
                     console.log("response: " + JSON.stringify(response.data))
+                    alert("Your vote has been submitted");
                     // assing the part details to the variable in the controller
-
                     
                 }, //Error function
                 function (response) {
@@ -293,8 +300,6 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-
 
                     if (status === 0) {
                         alert("No hay conexion a Internet");
@@ -314,6 +319,7 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                 }
             );
         };
+        //Function to disable the participation once a user has submitted his/her vote
         this.disableParticipation = function(){
 
             var data = {};
@@ -341,7 +347,7 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
+
 
                     if (status === 0) {
                         alert("No hay conexion a Internet");
@@ -361,7 +367,56 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                 }
             );
         };
+        this.recordActivity = function(action){
+            
+            var d = new Date();
+            
+            //Dictionary that will store the data for the database
+            var data = {};
+            data.urole = $routeParams.role;
+            data.uemail = this.email;
+            data.date = d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear();
+            data.time = d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
+            data.logmessage = "Submitted Vote";
+
+            //url with the route to talk with the rest API
+            var reqURL = "http://localhost:5000/whitestone/activitylog";
+
+            var config = { headers : 
+                          {'Content-Type':'application/json;charset=utf-8;' }
+                         }
         
+            // Now issue the http request to the rest API
+            $http.post(reqURL,data,config).then(
+                // Success function
+                function (response) {
+                    console.log("response record AL: " + JSON.stringify(response.data))
+
+                }, //Error function
+                function (response) {
+                    // This is the error function
+                    // If we get here, some error occurred.
+                    // Verify which was the cause and show an alert.
+                    var status = response.status;
+
+                    if (status == 0) {
+                        alert("No hay conexion a Internet");
+                    }
+                    else if (status == 401) {
+                        alert("Su sesion expiro. Conectese de nuevo.");
+                    }
+                    else if (status == 403) {
+                        alert("No esta autorizado a usar el sistema.");
+                    }
+                    else if (status == 404) {
+                        alert("Could not store the activity.");
+                    }
+                    else {
+                        alert("Error interno del sistema.");
+                    }
+                }
+            );
+        };
         this.logout= function(){
             $location.url('/login');
         };

@@ -37,6 +37,18 @@ class VotingQuestionDAO:
             result.append(row)
         return result
 
+    def getLastInactiveQuestionBymID(self, mID):
+        #Return the last inactive question of a meeting for the monitor page
+        cursor = self.conn.cursor()
+        query = "SELECT * " \
+                "FROM VotingQuestion " \
+                "WHERE mID = %s AND vstatus = 'Inactive' " \
+                "ORDER BY vdate, vtime DESC " \
+                "LIMIT 1;"
+        cursor.execute(query, (mID,))
+        result = cursor.fetchone()
+        return result
+        
     def getActiveVotingQuestionBymID(self, mID):
         # Return the voting question corresponding to a specific meeting ID
         cursor = self.conn.cursor()
