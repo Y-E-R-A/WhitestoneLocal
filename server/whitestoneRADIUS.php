@@ -1,9 +1,15 @@
 <?php
-
+echo("Inside PHP.");
+header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Headers: X-Requested-With");
 require_once('radius.class.php');
+if (isset($_POST)){
+echo ("POST is set.");
+$uname = $_POST["email"];
+$upass = $_POST["password"];
 
-$uname = $_POST["uname"];
-$upass = $_POST["upass"];
+echo($uname);
+echo($upass);
 
 
 $radius = new Radius('radius.uprm.edu'  , 'whitestone');
@@ -15,3 +21,6 @@ $radius = new Radius('radius.uprm.edu'  , 'whitestone');
         {
             echo ("Failure");
         }
+
+
+}
