@@ -22,24 +22,20 @@ angular.module('Whitestone').controller('createMeetingController', ['$http', '$l
         // as read from the REST API
         
         this.createMeeting = function(){
-            // Get the target part id from the parameter in the url
-            // using the $routerParams object
-            //var userId = $routeParams.uid;
+
             var d = new Date();
-            var data = {};
-        
-            //data.creatorID = $routeParams.uid;       
+            var data = {};   
             
             data.mname = this.meeting_name;
             data.mdescription = this.meeting_desc;
-            //data.mdate = this.meeting_month+'/'+this.meeting_date+'/'+this.meeting_year;
-            data.mdate = d.getMonth()+"/"+d.getDate()+"/"+d.getFullYear();
-            //data.mtime = "11:07pm"
+            
+            data.mdate = d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear();
+
             data.mtime = d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
             data.mstatus = "Active";
             // Now create the url with the route to talk with the rest API
             var reqURL = "http://localhost:5000/whitestone/activemeeting";
-            //console.log("reqURL: " + reqURL);
+
             var config = { headers : 
                           {'Content-Type':'application/json;charset=utf-8;' }
                          }
@@ -53,17 +49,14 @@ angular.module('Whitestone').controller('createMeetingController', ['$http', '$l
                     thisCtrl.active = true;
                     thisCtrl.meetingId = response.data.Meeting.mID;
                     thisCtrl.meeting = response.data.Meeting;
-                    //thisCtrl.active = true;
-                    
+                    thisCtrl.recordActivity();
                 }, //Error function
                 function (response) {
                     // This is the error function
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
                     if (status == 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -84,15 +77,14 @@ angular.module('Whitestone').controller('createMeetingController', ['$http', '$l
         };   
         
         this.closeMeeting = function(){
-            // Get the target part id from the parameter in the url
-            // using the $routerParams object
+
 
             var data = {};
             data.mID = thisCtrl.meetingId;
-            //data.mstatus = "Inactive";
+
             // Now create the url with the route to talk with the rest API
             var reqURL = "http://localhost:5000/whitestone/meetingstatus";
-            //console.log("reqURL: " + reqURL);
+
             var config = { headers : 
                           {'Content-Type':'application/json;charset=utf-8;' }
                          }
@@ -111,9 +103,7 @@ angular.module('Whitestone').controller('createMeetingController', ['$http', '$l
                     // If we get here, some error occurred.
                     // Verify which was the cause and show an alert.
                     var status = response.status;
-                    console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
                     if (status == 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -163,8 +153,7 @@ angular.module('Whitestone').controller('createMeetingController', ['$http', '$l
                     // Verify which was the cause and show an alert.
                     var status = response.status;
                     console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
-                    //console.log("Error: " + reqURL);
-                    //alert("Cristo");
+
                     if (status == 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -176,6 +165,56 @@ angular.module('Whitestone').controller('createMeetingController', ['$http', '$l
                     }
                     else if (status == 404) {
                         alert("There is no active meeting");
+                    }
+                    else {
+                        alert("Error interno del sistema.");
+                    }
+                }
+            );
+        };
+        this.recordActivity = function(action){
+            
+            var d = new Date();
+            
+            //Dictionary that will store the data for the database
+            var data = {};
+            data.urole = $routeParams.role;
+            data.uemail = this.email;
+            data.date = d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear();
+            data.time = d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
+            data.logmessage = "Created Meeting";
+
+            //url with the route to talk with the rest API
+            var reqURL = "http://localhost:5000/whitestone/activitylog";
+
+            var config = { headers : 
+                          {'Content-Type':'application/json;charset=utf-8;' }
+                         }
+        
+            // Now issue the http request to the rest API
+            $http.post(reqURL,data,config).then(
+                // Success function
+                function (response) {
+                    console.log("response record AL: " + JSON.stringify(response.data))
+
+                }, //Error function
+                function (response) {
+                    // This is the error function
+                    // If we get here, some error occurred.
+                    // Verify which was the cause and show an alert.
+                    var status = response.status;
+
+                    if (status == 0) {
+                        alert("No hay conexion a Internet");
+                    }
+                    else if (status == 401) {
+                        alert("Su sesion expiro. Conectese de nuevo.");
+                    }
+                    else if (status == 403) {
+                        alert("No esta autorizado a usar el sistema.");
+                    }
+                    else if (status == 404) {
+                        alert("Could not store the activity.");
                     }
                     else {
                         alert("Error interno del sistema.");

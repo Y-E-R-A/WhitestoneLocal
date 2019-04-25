@@ -47,6 +47,10 @@
             templateUrl: 'pages/submitVote.html',
             controller: 'submitVoteController',
             controllerAs : 'submitVoteCtrl'
+        }).when('/monitor', {
+            templateUrl: 'pages/monitor.html',
+            controller: 'monitorController',
+            controllerAs : 'monitorCtrl'
         }).otherwise({
             redirectTo: '/login'
         });
