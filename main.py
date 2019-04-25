@@ -157,6 +157,12 @@ def getInactiveVotingBymID(mID):
     return VotingQuestionHandler().getInactiveVotingQuestionBymID(mID)
 
 
+# Get last inactive or closed voting question by mID
+@app.route('/whitestone/lastvoting/<int:mID>')
+def getLastInactiveVotingBymID(mID):
+    return VotingQuestionHandler().getLastInactiveVotingQuestionBymID(mID)
+
+
 # Get active or open voting question by mID
 @app.route('/whitestone/activevotings/<int:mID>', methods=['GET'])
 def getActiveVotingBymID(mID):

@@ -87,6 +87,17 @@ class VotingQuestionHandler:
 
             return jsonify(Voting=mapped_result), 200
 
+    def getLastInactiveVotingQuestionBymID(self, mID):
+        # Handle the search of the voting question by its mid
+        result = VotingQuestionDAO().getLastInactiveQuestionBymID(mID)
+        if not result:
+            return jsonify(Error="NOT FOUND"), 404
+
+        else:
+            mapped_result = self.mapToVotingQuestionDict(result)
+            print("Result:", mapped_result)
+
+            return jsonify(Voting=mapped_result), 200
 
     def getActiveVotingQuestionBymID(self, mID):
         # Handle the search of the active voting question by the mid
