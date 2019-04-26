@@ -29,6 +29,7 @@ from handler.VotingChoiceHandler import VotingChoiceHandler
 from handler.VotingQuestionHandler import VotingQuestionHandler
 from werkzeug import secure_filename
 import os
+#from urllib import parse, request
 
 #print(os.path.abspath(os.path.dirname(__file__)))
 
@@ -285,6 +286,16 @@ def uploadFile():
         file.save(os.path.join('/var/www/html/Whitestone/audio', secure_filename(file.filename)))
         return "Uploaded file: " + file.filename
 
+#@app.route('/radius', methods=['POST'])
+#def authenticateUser():
+#       if request.method == 'POST':
+#               url = 'https://whitestone.uprm.edu/static/php/whitestoneRADIUS.php'
+#               values = {'uname' : 'ariel.torres1', 'upass' : 'testpass' }
+#               data = urllib.parse.urlencode(values)
+#               req = urllib.request.Request(url, data)
+#               response = urllib.request.urlopen(req)
+#               the_page = response.read()
+#               return(the_page)
 
 
 if __name__ == '__main__':
