@@ -114,15 +114,28 @@ function sendFile(){
   aFileForm.append('file', blob, aFullDateAndTime);
 
   // Send the request to the Flask handler.
-  httpRequest.open("POST", "http://whitestone.uprm.edu/uploads");
+  httpRequest.open("POST", "https://whitestone.uprm.edu/uploads");
   httpRequest.onload =function(ev){
     console.log("Request opened.");
   }
   httpRequest.setRequestHeader("Enctype", "multipart/form-data");
   httpRequest.send(aFileForm);
   console.log("Request sent.");
+  console.log(httpRequest.responseText);
   console.log(httpRequest.statusText);
-}
+
+ //POST to database
+  var addToDatabase = new XMLHttpRequest();
+  var addToDatabaseForm = new FormData();
+  addToDatabase.open("POST", "https://whitestone.uprm.edu/whitestone/3/audio");
+  addToDatabase.setRequestHeader("Enctype", "multipart/form-data");
+  addToDatabase.onload = function(ev){
+
+    var audioData = '{"aid" : "4", "mid" : "3", "aname" : ' + aFullDateAndTime + ' ,"aaddress" : ' + aFullDateAndTime + '"atype" : "mp3"}';
+    addToDatabase.send(audioData);
+    console.log("audioData: " + audioData);
+  }
+
 </script>
 
 </body>
