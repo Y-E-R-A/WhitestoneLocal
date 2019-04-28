@@ -29,13 +29,14 @@
     <!--</div>-->
     </center>
     <center>
-        <div ng-if="!senatorCtrl.activeMeeting">
+        <button class="btn btn-primary btn-block" type="submit" name="action" ng-click="senatorCtrl.timedInterval()">Start Interval</button>
+                        <button class="btn btn-primary btn-block" type="submit" name="action" ng-click="senatorCtrl.cancelInterval()">Stop Interval</button>
+        <p ng-bind="senatorCtrl.time"></p>
+        <p id="time"></p>
+        <div ng-if="senatorCtrl.activeMeeting">
         <table>
         <div class="container" >
             <tbody>
-                <div class="card-header">
-                    <h3>Senator </h3>
-                </div>
                 
                 <tr>
                     <th>
