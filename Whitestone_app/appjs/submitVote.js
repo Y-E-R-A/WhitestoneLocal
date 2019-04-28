@@ -417,6 +417,9 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                 }
             );
         };
+        this.turnsRedirect = function(){
+            $location.url('/Turns/'+$routeParams.role+'/'+$routeParams.uid);
+        };
         this.logout= function(){
             $location.url('/login');
         };
