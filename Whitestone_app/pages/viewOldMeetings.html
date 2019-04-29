@@ -1,8 +1,3 @@
-<head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-</head>
-
 <header>
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
@@ -25,58 +20,100 @@
     
     
 
-    
-    
-  <div class="container">
-
-    <div class="row">
-      <div class="col-sm-4">
-
-      </div>
-      <div class="col-sm-4" style="background-color:rgba(246, 245, 250, 1);color:black;padding:20px 20px 20px 20px">
-        <table>
-          <tbody>
-            <tr>
-              <th>
-                  <h2>Old Meetings</h2>
-                <div ng-repeat="meetings in oldMeetingsCtrl.oldMeetingList">
-                  
-                  <input type="checkbox" name="mycheckbox" ng-model="meetings.checked" ng-click="oldMeetingsCtrl.checkMeeting(meetings)" ng-checked='meetings.checked'
-                  /><label>
-                    {{meetings.mdescription}} {{meetings.mdate}}{{meetings.mtime}}
-                  </label>
+  
+ <div class="row" style="padding: 2%  2% 2% 2% ">
+     <center>   
+      <div class="col-sm-1"></div>
+        
+      <div class="col-sm-4" style="background-color:rgb(224, 227, 229);color:black;padding:2%  2% 2% 2% ">
+           <h2 style="text-align: center"><b>Old Meetings</b>
+          </h2>
+          <br>
+          <p style="text-align: center">Select the meeting you want to review:
+          </p>
+          <br>
+               <div class="pre-scrollable" style="max-height: 55%">  
+              <div ng-repeat="meetings in oldMeetingsCtrl.oldMeetingList" style="text-align: left">
+                    
+                  <div class="col-sm-2" style="padding-top: 4%">
+                  <input type="checkbox" class="custom-control"  name="mycheckbox" ng-model="meetings.checked" ng-click="oldMeetingsCtrl.checkMeeting(meetings)" ng-checked='meetings.checked'/>
+                    </div> 
+                      <div class="col-sm-10" style="padding-bottom: 5">
+                     <div class="row">
+                    <h4><strong> {{meetings.mname}}</strong>
+                          </h4>
+                    
+                 {{meetings.mdescription}}
+                          <br>
+                    
+                    <small>Date: {{meetings.mdate}} 
+                        <br> Time: {{meetings.mtime}}</small>
+                         
+                 
+                             </div>
+                      </div>   
+                    </div>
+                    
                 </div>
-              </th>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="col-sm-4">
-      </div>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-4" style="background-color:rgba(246, 245, 250, 1);color:black;padding:20px 20px 20px 20px">
-        <div ng-show="oldMeetingsCtrl.selected">
-          <h2>Voting Questions</h2>
-          <div ng-repeat="votingQuestion in oldMeetingsCtrl.votingQuestionList">
-            <br>{{votingQuestion.vquestion}} {{votingQuestion.vtime}}{{votingQuestion.vdate}}
-            {{votingQuestion.vID}}<br>
-              
+          
+             
+     
+    
+  
+     
+    </center> 
+    
+    
+  
+     
+      
+      <div class="col-sm-7" style="background-color:rgba(246, 245, 250, 1);color:black;padding:2% 5% 2% 2%">
+          
+     
+    <div ng-show="oldMeetingsCtrl.selected">
+            
+         <div class= "row">
+     
+      <h2 style="text-align: center" ><b>Meeting Summary</b>
+             </h2>
+             <br>
+     
+     </div>
+    
+     
+     <div class= "row">   
+        <div class="col-sm-8" style="padding:2% 10% 2% 10%">  
+       
+          <h3>Voting Questions</h3><br>
+          <div class="pre-scrollable">
+          <div ng-repeat="votingQuestion in oldMeetingsCtrl.votingQuestionList" style="">
+            <h5><strong>Vote: {{votingQuestion.vquestion}}</strong></h5>
+              <small>Date: {{votingQuestion.vdate}} Time: {{votingQuestion.vtime}}</small>
+            <br><br>
+              <ol style="list-style: circle">
               <div ng-repeat="choices in oldMeetingsCtrl.votingChoiceList[votingQuestion.vID]">
-                <br>{{choices.choice}} {{choices.votes}}<br>
+                <li>{{choices.votes}} - {{choices.choice}} </li>
             </div>
+                  </ol>
+               </div>
+              <br><br>
           </div>
-        </div>
+            </div>
+            <div class="col-sm-4" style="padding:2% 2% 2% 2%"> 
+            
+           <h3>Audio Files</h3><br>
+              <div class="pre-scrollable">
+              </div>
+          </div>
+        
+        
+        </div> 
+          
       </div>
-      <div class="col-sm-4">
-      </div>
-
-      <div class="col-sm-4" style="background-color:rgba(246, 245, 250, 1);color:black;padding:20px 20px 20px 20px">
-      </div>
-    </div>
+   </div>   
+   
+  
   </div>
+   
+    
 </body>

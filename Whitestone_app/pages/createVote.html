@@ -1,175 +1,203 @@
-<head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-</head>
-
-
 <body>
-    
-    
+
+
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">Whitestone</a>
+      <a class="navbar-brand" href="#">Whitestone
+        </a>
     </div>
     <ul class="nav navbar-nav">
       <li><a type="submit" name="action" ng-click="votingCtrl.meetingRedirect()">Meeting</a></li>
       <li class="active"><a type="submit" name="action" ng-click="createMeetingCtrl.voteRedirect()">Voting</a></li>
       <li><a type="submit" name="action" ng-click="votingCtrl.oldMeetingRedirect()">Old Meetings</a></li>
-    
+
       </ul>
       <ul></ul>
       <li style = "float:right"><a class="active" type="submit" name="action" ng-click="votingCtrl.logout()">Logout</a>
   </div>
 </nav>    
-    
-    
-    <div ng-if="!votingCtrl.activeMeeting">
+
+
+    <div ng-if="!votingCtrl.activeMeeting" style="padding: 10% 0% 25% 0%"><br><br>
+
         <h2 style="text-align: center">There is currently no active meeting</h2>
+        <p style="text-align: center"> Please start a new meeting session in to enable the voting opions.</p>
     </div>
 
-       
-<div class="container">
-  
-  <div class="row">
-    <div class="col-sm-4"  style="background-color:rgba(246, 245, 250, 1);color:black;padding:20px 20px 20px 20px">
-        <center>
-	    <div ng-if="votingCtrl.activeMeeting">
-            <table>
-                <div class="card-header">
-                    <h3>Create new voting</h3>
-                </div>
-            
-            <tbody>
-              <tr>                                     
-              <th> 
-                <input ng-model="votingCtrl.voting_question" class= "form-control" placeholder="Voting Question"></th>
-              </tr>
-              <tr>
-                                                          
-              <th>
-                
-                <input ng-model="votingCtrl.voting_objective" class= "form-control" placeholder="Voting Instructions"></th>
-              </tr>
-              
-              <tr>
-              <th>
-                <label> <br><b>Date </b></label>
-                <br>
-                <input ng-model="votingCtrl.vMM" class= "form-control" placeholder="MM">
-                <input ng-model="votingCtrl.vDD" class= "form-control" placeholder="DD">
-                <input ng-model="votingCtrl.vYYYY" class= "form-control" placeholder="YYYY"></th>
-              </tr>
 
-              <tr>                                     
-              <th> 
-                <label><br><b>Time </b></label>
-                <br>
-                <!--<select ng-model="selectedName" ng-options="x for x in names"></select>-->
-                <input ng-model="votingCtrl.vHour" class= "form-control" placeholder="HH">
-                <input ng-model="votingCtrl.vMin" class= "form-control" placeholder="MM"></th>
-              </tr>
-              <tr>                                     
-              <th> 
-                <label><br><b>Select all the participants </b></label>
+
+
+<div class="container" >
+   
+  <div class="row" style="padding:2% 2% 2% 2%">
+      
+
+
+        
+        <div ng-if="votingCtrl.activeMeeting">
+            
+    <div class="col-sm-6"  style="background-color: #e0e3e5; padding:0% 5% 5% 5%">
+
+        <h2 style="text-align: center"><b>Create New Voting</b>
+            </h2>
+
+            
+            <br>
+            <p>Please fill all the fields and press "Create" button to start a new voting during the live session:
+            </p>
+
+            <div class="floating-label">
+
+                <div class="row" style="padding-bottom: 2%">
+                <input ng-model="votingCtrl.voting_question" class= "form-control" placeholder="Voting Question">   
+                    </div>
+
+                <div class="row" style="padding-bottom: 2%">
+                <input ng-model="votingCtrl.voting_objective" class= "form-control" placeholder="Voting Instructions">
+                   </div> 
+
+                <div class="row">
+                <label>
+                    <br>
+                    <b>Select all the participants 
+                    </b>
+                    </label>
                 <div ng-repeat="t in votingCtrl.titles">
                   <div class="action-checkbox">
                   <input id="{{t.title}}" type="checkbox" value="{{t.title}}" ng-checked="t.selected"  ng-click="votingCtrl.addToSelection(t.title)" />
-                  <label for="{{t.title}}"></label>
+                  <label for="{{t.title}}">
+                      </label>
                    {{t.title}}
                   </div>
                 </div>
-              </tr>
-              <tr>
-                                                          
-              <th>
-                <label><br> <b>Enter limit of selections </b></label>
-                <input ng-model="votingCtrl.vLimit" class= "form-control" placeholder="Limit"></th>
-              </tr>
-              <tr>
-                <th>
-                  <div><br>Enter voting Alternatives</div>
+                </div>
+
+                <div class="row" style="padding-bottom: 2%">
+                    <br>
+                <label>
+                    <b>Enter limit of selections 
+                    </b>
+                    </label>
+                <input ng-model="votingCtrl.vLimit" class= "form-control" placeholder="Limit">
+                </div>
+
+                <b>Enter voting Alternatives
+                </b>
                   <div ng-repeat="alt in votingCtrl.votingAlternatives">
+                      <div class="row" style="padding-bottom: 2%">
                     <input type="text" name="alternative" ng-model="alt.valt" class= "form-control" placeholder="Alternative">
-                  </div>
-                  <button style="padding:1px 10px;border-radius: 5px;" ng-click="votingCtrl.addAlternative()">Add Alternative</button>
-                </th>
-              </tr>
-              <tr>
-              <th>
-                <br>
-                <button class="btn btn-primary" style="float:left;padding:5px 25px;border-radius: 12px;" type="submit" name="action" ng-click="votingCtrl.checkcreate()">Create</button>
-                <button class="btn btn-danger" style="float:right;padding:5px 25px;border-radius: 12px;" type="reset" name="action" ng-click="votingCtrl.loginUser()">Cancel</button>
-              </th>
-              </tr>
-          </tbody>
-        </table>
+                  
+                   </div>  
+                </div>
+                
+                  <button class="row" style="object-position:right  padding-top:1px  " ng-click="votingCtrl.addAlternative()">Add Alternative
+                </button>
+                            
+                <div class="row" style="padding-top: 10%">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-4">  
+                        <button class="btn btn-primary btn-block" style=" float:right;border-radius: 12px;" type="submit" name="action" ng-click="votingCtrl.checkcreate()">Create</button>
+                     </div>     
+                
+                    <div class="col-sm-4"> 
+                        <button class="btn btn-default btn-block" style="float:right;border-radius: 12px;" type="reset" name="action" ng-click="votingCtrl.loginUser()">Cancel
+                        </button>
+                    </div>
+                    
+                </div>
+
+                </div>
             </div>
-        </center>
+
     </div>
-    <div class="col-sm-4">
-    </div>
-    
-    <div class="col-sm-4" style="background-color:rgba(246, 245, 250, 1);color:black;padding:20px 20px 20px 20px">
-        <div ng-if="votingCtrl.activeVotingQuestion">
-        <h3>Meeting's Active Votings</h3>
+
+
+
+
+
+
+
+
+
+
+      <div class="col-sm-1"></div>
+
+
+    <div class="col-sm-5" style="text-align: left; padding:5% 5% 5% 5%% " >
+        <div ng-if="votingCtrl.activeVotingQuestion" style="padding: 0% 5% 15% 3%">
         
-            {{votingCtrl.votingQuestion.vquestion}}
-            {{votingCtrl.votingQuestion.vdescription}}
-            {{votingCtrl.votingQuestion.vdate}}{{votingCtrl.votingQuestion.vtime}}
-            <div ng-repeat="choices in votingCtrl.votingChoices">
-                {{choices.choice}}
-                  {{choices.votes}}
+          
+            
+            <div class= "row" style="background-color: antiquewhite; padding: 0% 10% 5% 10%">
+            <h3 style="text-align: center"><b>Meeting's Active Votings</b>
+            </h3><br>
+                
+            <h4><strong>Vote: {{votingCtrl.votingQuestion.vquestion}}</strong></h4>
+             
+            <small>Date: {{votingCtrl.votingQuestion.vdate}} 
+            Time:{{votingCtrl.votingQuestion.vtime}}</small>
+            <br>{{votingCtrl.votingQuestion.vinstructions}}<br><br>
+
+            <ol style="list-style: circle">
+                <div ng-repeat="choices in votingCtrl.votingChoices">
+                <li>{{choices.votes}} - {{choices.choice}}
+                    </li> 
+                </div>
+            </ol>
+                <div class="col-sm-8"></div>
+            <div class="col-sm-4">
+            <button class="btn btn-danger btn-block" style="float:right;border-radius: 360px;" type="submit" name="action" ng-click="votingCtrl.closeVotingQuestion()">Close
+            </button>
             </div>
-            <button style="float:right;padding:5px 30px;border-radius: 12px;" type="submit" name="action" ng-click="votingCtrl.closeVotingQuestion()">Close</button>
+                
             <!--<button style="float:right;padding:5px 30px;border-radius: 12px;" type="submit" name="action" ng-click="votingCtrl.getVotingChoiceResults()">GET</button>-->
-            <br>
+           </div>
         </div>
-        <div ng-if="votingCtrl.activeMeeting">
-            <h3>Meeting's Votings</h3>
+
+
+         
         
-            <div ng-repeat="v in votingCtrl.inActiveVotingQuestion">
+       
+      
+          
+            <div ng-repeat="v in votingCtrl.inActiveVotingQuestion"> 
+                
+                  <div class= "row" style="background-color:#e0e3e5; padding: 0% 10% 5% 10%" ng-if="votingCtrl.activeMeeting">
+            <h3 style="text-align: center"><b>Closed Meeting's Votings</b>
+            </h3> <br>
+
+                <div class="pre-scrollable" style="max-height: 35%" >
             <!-- This card prodives space for the message and Like/dislike buttons -->
             <!-- Card Title is the person who write the message -->
             <!-- Here comes the message text -->
-              <p>
-                {{v.vquestion}}
-                {{v.vdescription}}
-                {{v.vdate}}{{v.vtime}}
-              </p>
-          <div ng-repeat="c in votingCtrl.inActiveVotingChoices[v.vID]">
-              <p>
-                {{c.choice}}
-                  {{c.votes}}
-              </p>
-            
-        </div>
+                <div class="col-sm-12">
+                <h4><strong>Vote: {{v.vquestion}}
+                </strong></h4>
+                  <small>Date: {{v.vdate}} Time: {{v.vtime}}
+                </small>
+                <p>{{v.vinstructions}}
+                    <br>
+                </p>
+                <ol style="list-style: circle" ng-repeat="c in votingCtrl.inActiveVotingChoices[v.vID]">
+                      <li>{{c.votes}}- {{c.choice}}                  
+                      </li>
+                </ol><br>
+                    </div>
             <!--<div ng-repeat="c in votingCtrl.inActiveVotingChoicesTest[v.vID][v.vID]">
               <p>
                 {{c.vchoice}}
                   {{c.votes}}
               </p>
-            
+
         </div>-->
         </div>
         </div>
+            </div>
     </div>
   </div>
 </div>
-<!-- Footer -->
-<footer class="page-footer font-small special-color-dark pt-4">
 
-    <!-- Footer Elements -->
-    <div class="container">
-        
-    <!-- Copyright -->
-    <div class="footer-copyright text-center py-3">© 2019:
-      <a href="https://mdbootstrap.com/education/bootstrap/"> By CodingGear</a>
-    </div>
-    <!-- Copyright -->
-    </div>
-  </footer>
-  <!-- Footer -->
 
 
 
