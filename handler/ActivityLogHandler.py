@@ -1,4 +1,6 @@
 from flask import jsonify, request
+from psycopg2._psycopg import Date
+
 from dao.ActivityLogDAO import ActivityLogDAO
 import datetime
 
@@ -38,6 +40,7 @@ class ActivityLogHandler:
             isValidDate = False
 
         if (isValidDate):
+            date = Date(int(year), int(month), int(day))
             result = ActivityLogDAO().getActivityLogByDate(date)
             mapped_result = []
 
@@ -53,6 +56,7 @@ class ActivityLogHandler:
             return jsonify(Error="Unexpected attributes in post request"), 400
 
 
+
     def insertActivityLogJSON(self, json):
         # Handle the insertion of a new activity log
         urole = json.get('urole')
@@ -60,6 +64,31 @@ class ActivityLogHandler:
         date= json.get('date')
         time= json.get('time')
         logmessage= json.get('logmessage')
+
+        day, month, year = date.split('/')
+        isValidDate = True
+        try:
+            datetime.datetime(int(year), int(month), int(day))
+        except ValueError:
+            isValidDate = False
+
+        if (isValidDate):
+            result = ActivityLogDAO().getActivityLogByDate(date)
+            mapped_result = []
+
+            if not result:
+                return jsonify(Error="NOT FOUND"), 404
+
+            else:
+                for r in result:
+                    mapped_result.append(self.mapToActivityLogDict(r))
+                return jsonify(Log=mapped_result), 200
+
+        else:
+            return jsonify(Error="Unexpected attributes in post request"), 400
+
+        date = Date(int(year), int(month), int(day))
+
 
         if urole and uemail and date and time and logmessage:
             logID = ActivityLogDAO().insertActivityLog(urole, uemail, date, time, logmessage)

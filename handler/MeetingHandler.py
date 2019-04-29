@@ -1,4 +1,8 @@
+import datetime
+
 from flask import jsonify, request
+from psycopg2._psycopg import Date
+
 from dao.MeetingDAO import MeetingDAO
 
 
@@ -94,12 +98,25 @@ class MeetingHandler:
         mdescription = json.get('mdescription');
         mstatus = json.get('mstatus');
 
+        day, month, year = (mdate.split('/'))
+        mdate = Date(int(year), int(month), int(day))
 
-        if mname and mdate and mtime and mstatus:
+        isValidDate = True
+        try:
+            datetime.datetime(int(year), int(month), int(day))
+        except ValueError:
+            isValidDate = False
 
-            mID = MeetingDAO().insertMeeting(mdate, mtime, mname, mdescription, mstatus)
-            mapped_result = self.buildMeetingDict(mID, mdate, mtime, mname, mdescription,mstatus)
-            return jsonify(Meeting = mapped_result), 201
+        if (isValidDate):
 
+            if mname and mdate and mtime and mstatus:
+
+                mID = MeetingDAO().insertMeeting(mdate, mtime, mname, mdescription, mstatus)
+                mapped_result = self.buildMeetingDict(mID, mdate, mtime, mname, mdescription,mstatus)
+                return jsonify(Meeting = mapped_result), 201
+
+            else:
+                return jsonify(Error="Unexpected attributes in post request"), 400
         else:
+
             return jsonify(Error="Unexpected attributes in post request"), 400

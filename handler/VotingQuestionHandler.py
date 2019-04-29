@@ -1,5 +1,6 @@
 from flask import jsonify, request
 from dao.VotingQuestionDAO import VotingQuestionDAO
+from psycopg2._psycopg import Date
 
 
 class VotingQuestionHandler:
@@ -145,7 +146,8 @@ class VotingQuestionHandler:
         selectionlimit = json.get('selectionlimit')
         vstatus = json.get('vstatus')
 
-
+        day, month, year = (vdate.split('/'))
+        vdate = Date(int(year), int(month), int(day))
         if mID and vdate and vtime and vquestion and selectionlimit and vstatus:
 
             vID = VotingQuestionDAO().insertVotingQuestion(mID, vinstructions, vdate, vtime, vquestion, selectionlimit, vstatus)
