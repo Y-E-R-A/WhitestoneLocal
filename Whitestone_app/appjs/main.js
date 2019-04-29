@@ -39,10 +39,14 @@
             templateUrl: 'pages/editUser.html',
             controller: 'editUserController',
             controllerAs : 'editUserCtrl'
-        }).when('/requestTurn/:role/:uid', {
+        }).when('/Turns/:role/:uid', {
             templateUrl: 'pages/senator.html',
             controller: 'senatorController',
             controllerAs : 'senatorCtrl'
+        }).when('/ChancellorTurns/:role/:uid', {
+            templateUrl: 'pages/chancellor.html',
+            controller: 'chancellorController',
+            controllerAs : 'chancellorCtrl'
         }).when('/voting/:role/:uid', {
             templateUrl: 'pages/submitVote.html',
             controller: 'submitVoteController',
