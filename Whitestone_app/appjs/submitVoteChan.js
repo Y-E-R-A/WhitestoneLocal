@@ -361,6 +361,9 @@ angular.module('Whitestone').controller('submitVoteChanController', ['$http', '$
                 }
             );
         };
+        this.turnsRedirect = function(){
+            $location.url('/ChancellorTurns/'+$routeParams.role+'/'+$routeParams.uid);
+        };
         
         this.logout= function(){
             $location.url('/login');
