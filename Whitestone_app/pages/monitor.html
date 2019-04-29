@@ -1,0 +1,82 @@
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+
+
+<body>
+    
+    
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Whitestone</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active">Monitor</li>
+      </ul>
+      <ul></ul>
+      <li style = "float:right"><a class="active" type="submit" name="action" ng-click="monitorCtrl.logout()">Logout</a>
+  </div>
+</nav>    
+    
+    
+    <div ng-if="!monitorCtrl.activeMeeting">
+        <h2 style="text-align: center">There is currently no active meeting</h2>
+    </div>
+
+       
+<div class="container">
+  
+  <div class="row">
+    <div class="col-sm-4">
+    </div>
+    <div class="col-sm-4">
+        <center>
+             <div ng-if="monitorCtrl.activeVotingQuestion">
+        <h3>Meeting's Active Votings</h3>
+                 <h2>{{monitorCtrl.votingQuestion.vquestion}}</h2>
+                 <p><font size="5">{{monitorCtrl.votingQuestion.vinstructions}}</font></p>
+                 <p><font size="2">{{monitorCtrl.votingQuestion.vdate}},{{monitorCtrl.votingQuestion.vtime}}</font></p>
+            <div ng-repeat="choices in monitorCtrl.votingChoices">
+                {{choices.choice}}
+            </div>
+            <br>
+        </div>
+            <div ng-if="monitorCtrl.lastVotingQuestion">
+        <h3>Meeting's Active Votings</h3>
+                 <h2>{{monitorCtrl.votingQuestion.vquestion}}</h2>
+                 <p><font size="5">{{monitorCtrl.votingQuestion.vinstructions}}</font></p>
+                 <p><font size="2">{{monitorCtrl.votingQuestion.vdate}},{{monitorCtrl.votingQuestion.vtime}}</font></p>
+            <div ng-repeat="choices in monitorCtrl.votingChoices">
+                {{choices.choice}}:{{choices.votes}}
+            </div>
+            <br>
+        </div>
+        </center>
+    </div>
+    
+    <div class="col-sm-4">
+       
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="page-footer font-small special-color-dark pt-4">
+
+    <!-- Footer Elements -->
+    <div class="container">
+        
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3">© 2019:
+      <a href="https://mdbootstrap.com/education/bootstrap/"> By CodingGear</a>
+    </div>
+    <!-- Copyright -->
+    </div>
+  </footer>
+  <!-- Footer -->
+
+
+
+</body>
+
