@@ -1,0 +1,52 @@
+<head>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>                    
+
+
+<header>
+    <nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Whitestone</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a class="active" type="submit" name="action" ng-click="#">Turns</a></li>
+      <li><a type="submit" name="action" ng-click="chancellorCtrl.voteRedirect()">Voting</a></li>
+      </ul>
+      <ul></ul>
+      <li style = "float:right"><a class="active" type="submit" name="action" ng-click="chancellorCtrl.logout()">Logout</a>
+  </div>
+</nav>
+</header>
+
+<body>
+    
+    <center>
+    <div ng-if="!chancellorCtrl.activeMeeting">
+        <h4 style="text-align: center">There is currently no active meeting</h4>
+        <p style="text-align: center">Please log out until a meeting is created</p>
+    </div>
+    </center>
+    
+    
+        <div ng-repeat="senator in chancellorCtrl.requestList">
+            <p>{{senator.fname}}{{senator.lname}}</p>
+            <button type="submit" name="action" ng-click="chancellorCtrl.grantTurn(senator.uid)">Allow</button>
+            <button type="submit" name="action" ng-click="chancellorCtrl.denyTurn(senator.uid)">Deny</button>
+        </div>
+    
+        <br>
+    <center>
+        <div ng-if="!chancellorCtrl.recordingAudio">
+            <button class="btn btn-primary btn-block" type="submit" name="action">Start Recording</button>
+        </div>
+        
+        <div ng-if="chancellorCtrl.recordingAudio">
+            <h4>Audio is currently being recorded</h4>
+            <button class="btn btn-primary btn-block" type="submit" name="action" ng-click="chancellor.cancelInterval()">Stop Recording</button>
+        </div>
+        
+       </center>
+    
+</body>
