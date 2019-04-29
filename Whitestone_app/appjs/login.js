@@ -75,9 +75,11 @@ angular.module('Whitestone').controller('LoginController', ['$http', '$log', '$s
                        console.log("Secretary")
                         $location.url("/meeting/"+role+'/'+uid);
                     }else if(role == "Senator"){
-                        $location.url('/voting/'+role+"/"+uid);
+                        //$location.url('/voting/'+role+"/"+uid);
+                        $location.url('/Turns/'+role+"/"+uid);
                     }else if(role == "Chancellor"){
-                        $location.url('/votingChancellor/'+role+"/"+uid);
+                        $location.url('/ChancellorTurns/'+role+"/"+uid);
+                        //$location.url('/votingChancellor/'+role+"/"+uid);
                     }
                     
                     
