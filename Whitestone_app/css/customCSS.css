@@ -1,0 +1,42 @@
+.loginStyle {
+  
+  width:auto;
+  min-height:100%;
+  height: auto;   
+  position:  relative; 
+  background-image: url("/Whitestone_app/css/media/senate.jpg");
+  box-shadow: 0 9px 0px 0px white, 0 -9px 0px 0px white, 12px 0 15px -4px rgba(25, 25, 25, 0.8), -12px 0 15px -4px rgba(25, 25, 25, 0.8);
+  background-size:  cover;
+  border-top-left-radius:  1px; 
+  border-bottom-left-radius:  1px; 
+  
+  svg {
+    height:  20px; 
+    width:  auto; 
+    margin:  20px; 
+  }
+}
+
+.pre-scrollable{
+    
+    max-height: 450px;
+    overflow-y:scroll;
+}
+
+/*
+.navbar-brand {
+  padding: 0px;
+}
+
+.navbar-brand>img {
+  height: 100%;
+  padding: 15px;
+  width: auto;
+}
+
+.navbar-brand{ 
+  background: url(/Whitestone_app/css/media/whitestone_logo.png)center / contain no-repeat;
+  width: 200px;
+}
+*/
+
