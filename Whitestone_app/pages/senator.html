@@ -1,9 +1,3 @@
-<head>
- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-</head>                    
-
-
 <header>
     <nav class="navbar navbar-inverse">
   <div class="container-fluid">
@@ -23,24 +17,33 @@
 <body>
     
     <center>
-    <!--<div ng-if="senatorCtrl.activeMeeting">-->
-        <h4 style="text-align: center">There is currently no active meeting</h4>
-        <p style="text-align: center">Please log out until a meeting is created</p>
-    <!--</div>-->
-    </center>
-    <center>
-        <button class="btn btn-primary btn-block" type="submit" name="action" ng-click="senatorCtrl.timedInterval()">Start Interval</button>
-                        <button class="btn btn-primary btn-block" type="submit" name="action" ng-click="senatorCtrl.cancelInterval()">Stop Interval</button>
-        <p ng-bind="senatorCtrl.time"></p>
-        <p id="time"></p>
+        <div class="container">
+            
+            <div class="col-sm-3"></div>
+                 <div class="col-sm-6" style="padding-top: 10%">
+                     
+        <h1 style="text-align: center"><b>Request to Speak System</b></h1><br>
+    <div ng-if="!senatorCtrl.activeMeeting">
+        <h3 style="text-align: center">There is currently no active meeting</h3>
+        <h3 style="text-align: center">Please log out until a meeting is created</h3>
+    </div>
+    
+     
+
         <div ng-if="senatorCtrl.activeMeeting">
+             
+        <h4 style="text-align: center">Press the button to request a turn to speak and wait for your turn to be granted.  Your speech will be recorded.</h4><br>
+            
+                    <p ng-bind="senatorCtrl.time"></p>
+        <p id="time"></p>
         <table>
         <div class="container" >
             <tbody>
                 
+                
                 <tr>
                     <th>
-                    <button class="btn btn-primary btn-block" type="submit" name="action" ng-click="senatorCtrl.requestTurn()" ng-disabled="senatorCtrl.requestedTurn">Request a turn to speak</button> 
+                    <button class="btn-mic" type="submit" name="action" ng-click="senatorCtrl.requestTurn()" ng-disabled="senatorCtrl.requestedTurn"></button> 
                 </th>
                 </tr>
                 <div ng-if="senatorCtrl.requestedTurn">
@@ -51,6 +54,10 @@
             </div>
             </table>
         </div>
+            </div>
+<div class="col-sm-3"></div>
+            </div>
+        
        </center>
     
 </body>

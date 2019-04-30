@@ -23,6 +23,22 @@
     overflow-y:scroll;
 }
 
+
+
+.btn-mic{
+    float: left;
+    height: 150px;
+    width: 150px;
+    background: url(/Whitestone_app/css/media/mic.png) repeat-x left top; background-position: center;
+    background-size: cover;
+    background-color:white;
+    border: none;
+    padding: 0 10px;
+    font-size: 1em;
+    text-decoration: none;
+}
+    
+   
 /*
 .navbar-brand {
   padding: 0px;

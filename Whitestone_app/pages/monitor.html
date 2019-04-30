@@ -1,8 +1,3 @@
-<head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-</head>
-
 
 <body>
     
@@ -11,6 +6,7 @@
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" href="#">Whitestone</a>
+        
     </div>
     <ul class="nav navbar-nav">
       <li class="active">Monitor</li>
@@ -21,61 +17,64 @@
 </nav>    
     
     
+       <div class="jumbotron" style="background-image: url(/Whitestone_app/css/media/rum-portico.jpg); background-size: cover; background-size:cover">
+    
+        <h1 style="color:white; font-family:cursive; padding-left: 2%">Whitestone</h1>
+     
+
+        </div>
+    
     <div ng-if="!monitorCtrl.activeMeeting">
         <h2 style="text-align: center">There is currently no active meeting</h2>
     </div>
 
-       
 <div class="container">
   
   <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-3">
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-6">
         <center>
              <div ng-if="monitorCtrl.activeVotingQuestion">
-        <h3>Meeting's Active Votings</h3>
-                 <h2>{{monitorCtrl.votingQuestion.vquestion}}</h2>
-                 <p><font size="5">{{monitorCtrl.votingQuestion.vinstructions}}</font></p>
-                 <p><font size="2">{{monitorCtrl.votingQuestion.vdate}},{{monitorCtrl.votingQuestion.vtime}}</font></p>
-            <div ng-repeat="choices in monitorCtrl.votingChoices">
-                {{choices.choice}}
-            </div>
+         <h3><b>UPRM ACADEMIC SENATE ACTIVITIES</b></h3>
+                  <p><font size="3">Date: {{monitorCtrl.currentDate}},Time: {{monitorCtrl.currentTime}}</font></p><br>
+                 
+                 
+                 <h3><b>Voting: {{monitorCtrl.votingQuestion.vquestion}}</h3>
+                 <p><font size="4">{{monitorCtrl.votingQuestion.vinstructions}}</font></p>
+                 
+             <ol style="list-style: circle; background-color: e0e3e5; padding: 2% 10% 2% 10%" ng-repeat="choices in monitorCtrl.votingChoices">
+                 <li><font size="4">{{choices.choice}}</font></li>
+                
+            </ol>
             <br>
         </div>
+        
+            
+            
             <div ng-if="monitorCtrl.lastVotingQuestion">
-        <h3>Meeting's Active Votings</h3>
-                 <h2>{{monitorCtrl.votingQuestion.vquestion}}</h2>
-                 <p><font size="5">{{monitorCtrl.votingQuestion.vinstructions}}</font></p>
-                 <p><font size="2">{{monitorCtrl.votingQuestion.vdate}},{{monitorCtrl.votingQuestion.vtime}}</font></p>
+        <h3><b>UPRM ACADEMIC SENATE ACTIVITIES</b></h3>
+                
+                <p><font size="3">Date: {{monitorCtrl.currentDate}},Time: {{monitorCtrl.currentTime}}</font></p><br>
+            <div  class="container" >
+                 <h3><b>Voting:  {{monitorCtrl.votingQuestion.vquestion}}</b></h3>
+                 <p><font size="4"> {{monitorCtrl.votingQuestion.vinstructions}}</font></p>
+                    
+                 
             <div ng-repeat="choices in monitorCtrl.votingChoices">
                 {{choices.choice}}:{{choices.votes}}
+                </div>
             </div>
             <br>
         </div>
         </center>
     </div>
     
-    <div class="col-sm-4">
+    <div class="col-sm-3">
        
     </div>
   </div>
 </div>
-<!-- Footer -->
-<footer class="page-footer font-small special-color-dark pt-4">
-
-    <!-- Footer Elements -->
-    <div class="container">
-        
-    <!-- Copyright -->
-    <div class="footer-copyright text-center py-3">© 2019:
-      <a href="https://mdbootstrap.com/education/bootstrap/"> By CodingGear</a>
-    </div>
-    <!-- Copyright -->
-    </div>
-  </footer>
-  <!-- Footer -->
-
 
 
 </body>
