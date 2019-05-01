@@ -96,6 +96,51 @@ angular.module('Whitestone').controller('createMeetingController', ['$http', '$l
                     console.log("response: " + JSON.stringify(response.data))
                     // assing the part details to the variable in the controller
                     thisCtrl.active = false;
+                    thisCtrl.clearWaitingList();
+                }, //Error function
+                function (response) {
+                    // This is the error function
+                    // If we get here, some error occurred.
+                    // Verify which was the cause and show an alert.
+                    var status = response.status;
+
+                    if (status == 0) {
+                        alert("No hay conexion a Internet");
+                    }
+                    else if (status == 401) {
+                        alert("Su sesion expiro. Conectese de nuevo.");
+                    }
+                    else if (status == 403) {
+                        alert("No esta autorizado a usar el sistema.");
+                    }
+                    else if (status == 404) {
+                        alert("No se encontro la informacion solicitada.");
+                    }
+                    else {
+                        alert("Error interno del sistema.");
+                    }
+                }
+            );
+        };
+        
+        this.clearWaitingList = function(){
+
+
+            var data = {};
+            data.mID = thisCtrl.meetingId;
+
+            // Now create the url with the route to talk with the rest API
+            var reqURL = "http://localhost:5000/whitestone/emptylist";
+
+            var config = { headers : 
+                          {'Content-Type':'application/json;charset=utf-8;' }
+                         }
+        
+            // Now issue the http request to the rest API
+            $http.post(reqURL,data,config).then(
+                // Success function
+                function (response) {
+                    console.log("response clear List: " + JSON.stringify(response.data))
                     
                 }, //Error function
                 function (response) {
@@ -122,6 +167,7 @@ angular.module('Whitestone').controller('createMeetingController', ['$http', '$l
                 }
             );
         };
+        
         this.loadActiveMeeting = function(){
             
 
