@@ -18,6 +18,97 @@ angular.module('Whitestone').controller('chancellorController', ['$http', '$log'
         //
         this.recordingAudio = false;
         
+        //button ids. This is for enabling and disabling buttons
+        this.startId = document.getElementById("start");
+        this.stopId = document.getElementById("stop");
+        
+        //Variables for the mediastream and mediarecorder 
+        this.media;
+        this.stream;
+        this.recorder;
+        this.chunks;
+        
+        //This function accesses the user microphone
+        this.allowMicrophone = function(){
+            //constraints
+            var d = new Date();
+            console.log(d)
+            var mediaOptions = {
+                audio: {
+                    tag: 'audio',
+                    type: 'audio/mpeg',
+                    ext: '.mp3',
+                    gUM: {audio: true}
+                }
+            };
+            thisCtrl.media = mediaOptions.audio;
+            //Storing the MediaStream object to access the user's microphone
+            navigator.mediaDevices.getUserMedia(thisCtrl.media.gUM).then(
+                //Success. There is a connected microphone.
+                //
+                function(mediaStream){
+                    //thisCtrl.enableStart = false;
+                    thisCtrl.startId.removeAttribute('disabled');
+                    console.log("Stream")
+                    thisCtrl.stream = mediaStream;
+                    console.log("Streamer"+thisCtrl.stream)
+                    thisCtrl.recorder = new MediaRecorder(thisCtrl.stream);
+                    console.log("recorder in allow"+thisCtrl.recorder);
+                    
+                    //This function listens to an event.
+                    //The event is triggered when the user stops recording
+                    thisCtrl.recorder.ondataavailable = function(e){
+                        thisCtrl.chunks.push(e.data);
+                        if(thisCtrl.recorder.state == 'inactive'){
+                            thisCtrl.sendFile();
+                        }
+                        
+                    };
+                    console.log("Got Media Succesfully");
+                }
+                //
+            );    
+        };
+        //This function starts recording
+        this.startRecording = function(){
+            console.log("Start")
+            this.startId.disabled = true;
+            this.stopId.removeAttribute('disabled');
+            thisCtrl.chunks = [];
+            thisCtrl.recorder.start();
+        };
+        
+        //This function stops recording
+        this.stopRecording = function(){
+            console.log("Stop")
+            this.stopId.disabled = true;
+            this.startId.removeAttribute('disabled');
+            thisCtrl.recorder.stop();
+            
+        };
+        
+        //This functions sends the audio file to server
+        this.sendFile = function(){
+            var blob = new Blob(thisCtrl.chunks, {type: thisCtrl.media.type});
+            console.log(blob);
+            
+            var d = new Date();
+            var date = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+            var time = d.getHours()+"-"+d.getMinutes()+"-"+d.getSeconds();
+            var DT = date+"-"+time;
+            console.log(DT)
+            var httpRequest = new XMLHttpRequest();
+            httpRequest.open("POST", "http://localhost:5000/audio");
+            var FileForm = new FormData();
+            
+            FileForm.append('file', blob, DT);
+            httpRequest.onload =function(ev){
+                console.log("Request opened.");
+            }
+            httpRequest.setRequestHeader("Enctype", "multipart/form-data");
+            httpRequest.send(FileForm);
+            console.log("response: "+JSON.stringify(httpRequest.response))
+        };
         
         //Testing time events
         this.cancelInterval = function(){
@@ -33,7 +124,12 @@ angular.module('Whitestone').controller('chancellorController', ['$http', '$log'
         };
         
         this.loadActiveMeeting = function(){
-    
+            
+            //Disabling the buttons to avoid errors
+            this.startId.disabled = true;
+            this.stopId.disabled = true;
+            console.log(this.startId)
+            console.log(this.stopId)
             // Now create the url with the route to talk with the rest API
             var reqURL = "http://localhost:5000/whitestone/activemeeting";
             //console.log("reqURL: " + reqURL);
@@ -225,7 +321,14 @@ angular.module('Whitestone').controller('chancellorController', ['$http', '$log'
         };
         
         this.loadActiveMeeting();
-        
+        this.disable = true;
+        this.disablebut = function(){
+            if(this.disable){
+                this.disable = false;
+            }else{
+                this.disable = true;
+            }
+        };
         this.voteRedirect = function(){
             //thisCtrl.cancelInterval();
             $location.url('/votingChancellor/'+$routeParams.role+'/'+$routeParams.uid);
