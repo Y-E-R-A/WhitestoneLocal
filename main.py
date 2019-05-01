@@ -18,7 +18,7 @@ print("Content-type:text/html\r\n\r\n")
 
 
 from flask_cors import CORS, cross_origin
-from flask import Flask, request
+from flask import Flask, request, render_template, make_response
 from handler.ActivityLogHandler import ActivityLogHandler
 from handler.AudioHandler import AudioHandler
 from handler.CredentialHandler import CredentialHandler
@@ -27,11 +27,20 @@ from handler.UsersHandler import UsersHandler
 from handler.VoteInHandler import VoteInHandler
 from handler.VotingChoiceHandler import VotingChoiceHandler
 from handler.VotingQuestionHandler import VotingQuestionHandler
+from werkzeug.utils import secure_filename##
+import os##
 
-app = Flask(__name__)
+app = Flask(__name__ )
 
 CORS(app)
+@app.route("/")
+def root():
+    return "Hello"
 
+#@app.route("/white")
+#def getHtml():
+#    headers = {'Content-Type': 'text/html'}
+#    return make_response(render_template('index.html'),200,headers)
 
 # Search list for emergency local access
 @app.route('/whitestone/credentials', methods=['GET', 'POST', 'PUT'])
@@ -56,7 +65,7 @@ def getAllCredentials():
 def getUser():
 
     print("Request", request.json)
-    return UsersHandler().getUser(request.json)
+    return UsersHandler().getUserByEmail(request.json)
 
 
 # Search all the user information using its email as identifier
@@ -157,12 +166,6 @@ def getInactiveVotingBymID(mID):
     return VotingQuestionHandler().getInactiveVotingQuestionBymID(mID)
 
 
-# Get last inactive or closed voting question by mID
-@app.route('/whitestone/lastvoting/<int:mID>')
-def getLastInactiveVotingBymID(mID):
-    return VotingQuestionHandler().getLastInactiveVotingQuestionBymID(mID)
-
-
 # Get active or open voting question by mID
 @app.route('/whitestone/activevotings/<int:mID>', methods=['GET'])
 def getActiveVotingBymID(mID):
@@ -256,6 +259,10 @@ def VotesIn(vid, uid):
         return VoteInHandler().getParticipant(vid, uid)
 
 
+# Get last inactive or closed voting question by mID
+@app.route('/whitestone/lastvoting/<int:mID>')
+def getLastInactiveVotingBymID(mID):
+    return VotingQuestionHandler().getLastInactiveVotingQuestionBymID(mID)
 
 # Post new activity log
 @app.route('/whitestone/activitylog', methods=['POST'])
@@ -263,7 +270,64 @@ def ActivityLog():
     print("REQUEST", request.json)
     return ActivityLogHandler().insertActivityLogJSON(request.json)
 
+# Get activity log by date
+@app.route('/whitestone/radius', methods=['POST'])
+def getRADIUS():
+    print("REQUEST", request.json)
+    return ActivityLogHandler().getActivityLogByDate(request.json.get('date'))
 
+#####################TURN METHODS########################
+# Update the waiting list
+@app.route('/whitestone/requestTurn', methods=['POST'])
+def postRequest():
+    print("REQUEST", request.json)
+    return AudioHandler().submitRequest(request.json)
+
+# Update the waiting list
+@app.route('/whitestone/cancelTurn', methods=['POST'])
+def cancelRequest():
+    print("REQUEST", request.json)
+    return AudioHandler().cancelRequest(request.json)
+
+
+# Update the waiting list
+@app.route('/whitestone/checkrequest/<int:uid>', methods=['GET'])
+def checkRequest(uid):
+    print("checkRequest")
+    print("uid", uid)
+    print(isinstance(uid,int))
+    return AudioHandler().checkRequest(uid)
+
+# Update the waiting list
+@app.route('/whitestone/checkapproval', methods=['POST'])
+def checkApproval():
+    print("REQUEST", request.json)
+    return AudioHandler().checkApproval(request.json)
+
+# Update the waiting list
+@app.route('/whitestone/emptylist', methods=['POST'])
+def clearList():
+    print("REQUEST", request.json)
+    return AudioHandler().clearList(request.json)
+
+# Update the waiting list
+@app.route('/whitestone/grantrequest', methods=['PUT'])
+def grantRequestToSenator():
+    print("REQUEST", request.json)
+    return AudioHandler().grantRequest(request.json)
+
+# Update the waiting list
+@app.route('/whitestone/denyrequest', methods=['PUT'])
+def denyRequestToSenator():
+    print("REQUEST", request.json)
+    return AudioHandler().denyRequest(request.json)
+
+# Update the waiting list
+@app.route('/whitestone/getrequestlist', methods=['GET'])
+def getRequestList():
+    print("REQUEST", request.json)
+    return AudioHandler().getRequestList()
+#########################################################
 
 # Get activity log by date
 @app.route('/whitestone/getactivitylog', methods=['POST'])
@@ -271,6 +335,15 @@ def getActivityLog():
     print("REQUEST", request.json)
     return ActivityLogHandler().getActivityLogByDate(request.json.get('date'))
 
+# Upload audio file folder
+@app.route('/audio', methods=['POST'])
+def uploadFile():
+    if request.method == 'POST':
+        print("REQUEST",request)
+        file = request.files['file']
+        #file.save(os.path.join('/var/www/html/Whitestone/audio', secure_filename(file.filename)))
+        file.save(os.path.join('/home/gustavo/PycharmProjects/whitestone_new/Whitestone_app/audio' ,secure_filename(file.filename)))
+        return "Uploaded file: " + file.filename
 
 if __name__ == '__main__':
 
