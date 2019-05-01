@@ -34,8 +34,8 @@
             <p>{{senator.fname}}{{senator.lname}}</p>
             <button type="submit" name="action" ng-click="chancellorCtrl.grantTurn(senator.uid)">Allow</button>
             <button type="submit" name="action" ng-click="chancellorCtrl.denyTurn(senator.uid)">Deny</button>
+            
         </div>
-    
         <br>
     <center>
         <div ng-if="!chancellorCtrl.recordingAudio">
@@ -44,9 +44,12 @@
         
         <div ng-if="chancellorCtrl.recordingAudio">
             <h4>Audio is currently being recorded</h4>
-            <button class="btn btn-primary btn-block" type="submit" name="action" ng-click="chancellor.cancelInterval()">Stop Recording</button>
+            <button class="btn btn-primary btn-block" type="submit" name="action" ng-click="chancellorCtrl.cancelInterval()">Stop Recording</button>
         </div>
         
+        <button class="btn btn-default"  type="submit" ng-click="chancellorCtrl.allowMicrophone()">Allow Microphone</button>
+        <button class="btn btn-default" type="submit" ng-click="chancellorCtrl.startRecording()" id="start">Start</button>
+        <button class="btn btn-default" type="submit" ng-click="chancellorCtrl.stopRecording()" id="stop">Stop</button>
        </center>
     
 </body>
