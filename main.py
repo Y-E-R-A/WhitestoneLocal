@@ -231,6 +231,16 @@ def closeVoting():
 @app.route('/whitestone/meeting/<int:mid>/audio', methods=['POST', 'GET'])
 def meetingAudio(mid):
     if request.method == 'POST':
+        #Added by Ariel
+        #Creates the folder inside server
+        parentPath = '/var/www/html/Whitestone/static/audio/'
+        audioFileFolder = os.path.join(parentPath, mid)
+        try:
+            os.mkdir(audioFileFolder,0o755)
+            print("Directory created.")
+        except FileExistsError:
+            print("Directory exists")
+        #End of added by Ariel
         print("REQUEST", request.json)
         return AudioHandler().insertAudioJSON(request.json)
     else:
