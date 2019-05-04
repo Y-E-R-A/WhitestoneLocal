@@ -10,6 +10,12 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
         this.votingQuestionList = [];
         //Choice List
         this.votingChoiceList = {};
+	
+	//Audio Files List
+	this.audioFilesList = [];
+
+	//Selected Audio Files List
+	this.selectedAudioFilesList = [];
 
         var meetingId = 0;
         var votingQuestionId = 0;
@@ -18,7 +24,7 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
 
         var vid = 0;
         
-        
+	var selectedAudioFile;        
         this.addToSelection = function(title){
             if(selection.includes(title)){
               this.selection.splice( this.selection.indexOf(title), 1 );
@@ -51,12 +57,42 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
 				};
 
 		};
+
+//Added by Ariel
+
+                this.checkAudio = function(Audio) {
+            console.log("checkAudio audio: "+JSON.stringify(audio))
+                                //if (audio.checked) {
+                            //            for(var i=0;i<thisCtrl.audioFilesList.length;i++){
+                                          //      thisCtrl.audioFilesList[i].checked = false;
+						//selectedAudioFile = thisCtrl.audioFilesList[i]
+//                                        }
+                    audio.value = true;
+			console.log(audio.value)
+              //      thisCtrl.selected = true;
+                    //thisCtrl.loadInActiveVotingQuestions(meeting.mID);
+                                        //thisCtrl.list = [];
+
+                    //            } else {
+                                        //$scope.checkedCount--;
+               //     thisCtrl.selected = false;
+                  //  audio.checked = false;
+                                        //var length = thisCtrl.list.length;
+                                        //for(var i = 0; i<length;i++){
+                                        //      thisCtrl.list.pop();
+                                        //}
+                      //          };
+
+                };
+
+//End of Added by Ariel
+
        this.loadMeetings = function(){
 
             // First set up the url for te route
             var url = "";
             // Now set up the $http object
-            var reqURL = "http://localhost:5000/whitestone/meeting/oldmeetings";
+            var reqURL = "https://whitestone.uprm.edu/whitestone/meeting/oldmeetings";
 
             var config = { headers : 
                 {'Content-Type':'application/json;charset=utf-8;' }
@@ -104,7 +140,7 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
             thisCtrl.votingQuestionList =  [];
             thisCtrl.votingChoiceList = {};
             console.log("Meeting Id: "+meetingId);
-            var reqURL = "http://localhost:5000/whitestone/inactivevotings/"+meetingId;
+            var reqURL = "https://whitestone.uprm.edu/whitestone/inactivevotings/"+meetingId;
             var config = { headers : 
                           {'Content-Type':'application/json;charset=utf-8;' }
                          }
@@ -119,6 +155,7 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
                     for(var i=0;i<response.data.Voting.length;i++){
                         thisCtrl.loadChoices(response.data.Voting[i].vID);
                     }
+			thisCtrl.loadAudioFiles(meetingId);//Added by Ariel
                     //thisCtrl.loadChoices(1)
                 }, //Error function
                 function (response) {
@@ -128,7 +165,6 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
                     var status = response.status;
                     console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
                     //console.log("Error: " + reqURL);
-                    //alert("Cristo");
                     if (status === 0) {
                         alert("No hay conexion a Internet");
                     }
@@ -141,6 +177,7 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
                     else if (status == 404) {
                         alert("The meeting does not have any questions");
                         thisCtrl.votingQuestionList = [];
+                        thisCtrl.audioFilesList = [];
                     }
                     else {
                         alert("Error interno del sistema.");
@@ -149,9 +186,54 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
             );
         };
 
+this.loadAudioFiles = function(mID){
+	 var reqURL = "https://whitestone.uprm.edu/whitestone/meeting/"+mID+"/audio";
+         var config = { headers :
+                          {'Content-Type':'application/json;charset=utf-8;' }
+			 }
+
+	//Now issue the http request to the rest API
+	$http.get(reqURL).then(function (response) {
+	console.log(JSON.stringify(response.data));
+	for(var i=0;i<response.data.Audio.length;i++){
+		thisCtrl.audioFilesList[i] = response.data.Audio[i];//.aname
+		console.log(thisCtrl.audioFilesList[i]);
+                //thisCtrl.loadChoices(response.data.Audio[i].aadress);
+                    }
+
+	//thisCtrl.audioFilesList[aadress] = response.data.Address;
+		}, //Error function
+                function (response) {
+                    // This is the error function
+                    // If we get here, some error occurred.
+                    // Verify which was the cause and show an alert.
+                    var status = response.status;
+                    //console.log("thiscredentialList: " +JSON.stringify(thisCtrl.credentialsList));
+                    //console.log("Error: " + reqURL);
+                    //alert("Cristo");
+                    if (status === 0) {
+                        alert("No hay conexion a Internet");
+                    }
+                    else if (status == 401) {
+                        alert("Su sesion expiro. Conectese de nuevo.");
+                    }
+                    else if (status == 403) {
+                        alert("No esta autorizado a usar el sistema.");
+                    }
+                    else if (status == 404) {
+                        alert("The meeting does not have any recordings.");
+                    }
+                    else {
+                        alert("Error interno del sistema.");
+                    }
+                }
+                         
+	);
+
+};
         this.loadChoices = function(vid){
             console.log("loadCh: "+vid)
-            var reqURL = "http://localhost:5000/whitestone/voting/"+vid+"/choices";
+            var reqURL = "https://whitestone.uprm.edu/whitestone/voting/"+vid+"/choices";
             //console.log("reqURL: " + reqURL);
             var config = { headers : 
                           {'Content-Type':'application/json;charset=utf-8;' }
@@ -199,7 +281,7 @@ angular.module('Whitestone').controller('oldMeetingsController', ['$http', '$log
             console.log("loadRes vid: "+vid);
             console.log("choice: "+JSON.stringify(choice))
             //Ruta de results de voting questions
-            var reqURL = "http://localhost:5000/whitestone/voting/"+vid+"/results";
+            var reqURL = "https://whitestone.uprm.edu/whitestone/voting/"+vid+"/results";
 
             //console.log("reqURL: " + reqURL);
             var config = { headers : 
