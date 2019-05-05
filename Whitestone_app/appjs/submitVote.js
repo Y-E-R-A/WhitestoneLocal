@@ -10,7 +10,11 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
         this.votingChoices = [];
         this.limit =0;
         this.count =0;
+        
+        //Checking if user can participate
         this.participation = true;
+        this.isParticipant = false;
+        
         //The voting question
         var voting_question = "";
         
@@ -43,19 +47,23 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
             console.log("Limit: "+thisCtrl.limit);
             
             console.log("voting Choice: "+JSON.stringify(thisCtrl.votingChoices));
-            if (thisCtrl.selectedChoice.includes(choice.choice)) {
+            //if (thisCtrl.selectedChoice.includes(choice.choice)) {
+            if (thisCtrl.selectedChoice.includes(choice.altID)) {
                 console.log("its included")
                     thisCtrl.count--;
                     //console.log('--');
                     //item.checked = false;
-                    var findId = thisCtrl.selectedChoice.indexOf(choice.choice);
+                    //var findId = thisCtrl.selectedChoice.indexOf(choice.choice);
+                    var findId = thisCtrl.selectedChoice.indexOf(choice.altID);
                     thisCtrl.selectedChoice.splice(findId, 1);
             } else {
                     console.log("not included")
                     //console.log('++' + item.name);
                     thisCtrl.count++;
                     //item.checked = true;
-                    thisCtrl.selectedChoice.push(choice.choice);
+                    //thisCtrl.selectedChoice.push(choice.choice);
+                    thisCtrl.selectedChoice.push(choice.altID);
+                
             };
             console.log("selectedChoice: "+JSON.stringify(thisCtrl.selectedChoice));
         };
@@ -196,6 +204,7 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                 function (response) {
                     console.log("response Participation: " + JSON.stringify(response.data))
                     thisCtrl.participation = response.data.Participant.exercise_vote;
+                    thisCtrl.isParticipant = true;
 
                 }, //Error function
                 function (response) {
@@ -214,10 +223,11 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                         alert("No esta autorizado a usar el sistema.");
                     }
                     else if (status == 404) {
-                        alert("User is not a participant in the voting question");
+                        console.log("User is not a participant in the voting question");
+                        thisCtrl.isParticipant = false;
                     }
                     else {
-                        alert("Error interno del sistema.");
+                        alert("Internal Error Server");
                     }
                 }
             );
@@ -273,21 +283,25 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                 }
             );
         };    
-        this.submitVote = function(choices){
+        //this.submitVote = function(choices){
+        this.submitVote = function(choiceID){
 
-            console.log("choice: "+choices);
+            //console.log("choice: "+choices);
+            console.log("choice: "+choiceID);
             var data = {};
-            data.choice = choices;
+            //data.choice = choices;
+            data.altID = choiceID;
             // Now create the url with the route to talk with the rest API
             console.log("data: "+JSON.stringify(data));
-            var reqURL = "http://localhost:5000/whitestone/voting/choicesnew";
+            //var reqURL = "http://localhost:5000/whitestone/voting/choicesnew"
+            var reqURL = "http://localhost:5000/whitestone/votingresults";
             //console.log("reqURL: " + reqURL);
             var config = { headers : 
                           {'Content-Type':'application/json;charset=utf-8;' }
                          }
         
             // Now issue the http request to the rest API
-            $http.post(reqURL,data,config).then(
+            $http.put(reqURL,data,config).then(
                 // Success function
                 function (response) {
                     console.log("response: " + JSON.stringify(response.data))
@@ -311,10 +325,13 @@ angular.module('Whitestone').controller('submitVoteController', ['$http', '$log'
                         alert("No esta autorizado a usar el sistema.");
                     }
                     else if (status == 404) {
-                        alert("No se encontro la informacion solicitada.");
+                        alert("Voting Choice not found");
+                    }
+                    else if (status == 400) {
+                        alert("Malformed update request");
                     }
                     else {
-                        alert("Error interno del sistema.");
+                        alert("Internal Server Error.");
                     }
                 }
             );
