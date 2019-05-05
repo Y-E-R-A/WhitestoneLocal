@@ -9,8 +9,8 @@
       <a class="navbar-brand" href="#">Whitestone</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="active"><a class="active" type="submit" name="action" ng-click="#">Vote</a></li>
         <li><a type="submit" name="action" ng-click="submitVoteChanCtrl.turnsRedirect()">Turns</a></li>
+      <li class="active"><a class="active" type="submit" name="action" ng-click="#">Vote</a></li>
       </ul>
       <ul></ul>
       <li style = "float:right"><a class="active" type="submit" name="action" ng-click="submitVoteChanCtrl.logout()">Logout</a>
@@ -25,8 +25,14 @@
         <div ng-if="!submitVoteChanCtrl.activeMeeting">
         <h2 style="text-align: center">There is no active meeting</h2>
         </div>
-        <div ng-if="submitVoteChanCtrl.participation && submitVoteChanCtrl.activeVotingQuestion">
-            <h2 style="text-align: center">You cannot participate in the voting</h2>
+        <div ng-if="submitVoteChanCtrl.activeMeeting && !submitVoteChanCtrl.activeVotingQuestion">
+        <h2 style="text-align: center">There is no active voting question</h2>
+        </div>
+        <div ng-if="submitVoteChanCtrl.participation && submitVoteChanCtrl.isParticipant && submitVoteChanCtrl.activeVotingQuestion">
+            <h2 style="text-align: center">You already submitted your vote</h2>
+        </div>
+        <div ng-if="!submitVoteChanCtrl.isParticipant && submitVoteChanCtrl.activeVotingQuestion">
+            <h2 style="text-align: center">You cannot participate in the voting question</h2>
         </div>
     <div class="container">
 
