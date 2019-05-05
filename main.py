@@ -27,6 +27,7 @@ from handler.UsersHandler import UsersHandler
 from handler.VoteInHandler import VoteInHandler
 from handler.VotingChoiceHandler import VotingChoiceHandler
 from handler.VotingQuestionHandler import VotingQuestionHandler
+from handler.RequestsHandler import RequestsHandler
 from werkzeug.utils import secure_filename##
 import os##
 
@@ -276,57 +277,104 @@ def getRADIUS():
     print("REQUEST", request.json)
     return ActivityLogHandler().getActivityLogByDate(request.json.get('date'))
 
-#####################TURN METHODS########################
+#####################NEW TURN METHODS###################
 # Update the waiting list
 @app.route('/whitestone/requestTurn', methods=['POST'])
 def postRequest():
     print("REQUEST", request.json)
-    return AudioHandler().submitRequest(request.json)
+    return RequestsHandler().submitRequest(request.json)
 
 # Update the waiting list
 @app.route('/whitestone/cancelTurn', methods=['POST'])
 def cancelRequest():
     print("REQUEST", request.json)
-    return AudioHandler().cancelRequest(request.json)
-
+    return RequestsHandler().cancelRequest(request.json)
 
 # Update the waiting list
 @app.route('/whitestone/checkrequest/<int:uid>', methods=['GET'])
 def checkRequest(uid):
     print("checkRequest")
-    print("uid", uid)
-    print(isinstance(uid,int))
-    return AudioHandler().checkRequest(uid)
+    return RequestsHandler().checkRequest(uid)
 
 # Update the waiting list
 @app.route('/whitestone/checkapproval', methods=['POST'])
 def checkApproval():
     print("REQUEST", request.json)
-    return AudioHandler().checkApproval(request.json)
+    return RequestsHandler().checkApproval(request.json)
 
 # Update the waiting list
 @app.route('/whitestone/emptylist', methods=['POST'])
 def clearList():
     print("REQUEST", request.json)
-    return AudioHandler().clearList(request.json)
+    return RequestsHandler().clearList(request.json)
 
 # Update the waiting list
 @app.route('/whitestone/grantrequest', methods=['PUT'])
 def grantRequestToSenator():
     print("REQUEST", request.json)
-    return AudioHandler().grantRequest(request.json)
+    return RequestsHandler().grantRequest(request.json)
 
 # Update the waiting list
 @app.route('/whitestone/denyrequest', methods=['PUT'])
 def denyRequestToSenator():
     print("REQUEST", request.json)
-    return AudioHandler().denyRequest(request.json)
+    return RequestsHandler().denyRequest(request.json)
 
 # Update the waiting list
 @app.route('/whitestone/getrequestlist', methods=['GET'])
 def getRequestList():
     print("REQUEST", request.json)
-    return AudioHandler().getRequestList()
+    return RequestsHandler().getRequestList()
+########################################################
+#####################TURN METHODS########################
+# Update the waiting list
+#@app.route('/whitestone/requestTurn', methods=['POST'])
+#def postRequest():
+#    print("REQUEST", request.json)
+#    return AudioHandler().submitRequest(request.json)
+
+# Update the waiting list
+#@app.route('/whitestone/cancelTurn', methods=['POST'])
+#def cancelRequest():
+#    print("REQUEST", request.json)
+#    return AudioHandler().cancelRequest(request.json)
+
+
+# Update the waiting list
+#@app.route('/whitestone/checkrequest/<int:uid>', methods=['GET'])
+#def checkRequest(uid):
+#    print("checkRequest")
+#    return AudioHandler().checkRequest(uid)
+
+# Update the waiting list
+#@app.route('/whitestone/checkapproval', methods=['POST'])
+#def checkApproval():
+#    print("REQUEST", request.json)
+#    return AudioHandler().checkApproval(request.json)
+
+# Update the waiting list
+#@app.route('/whitestone/emptylist', methods=['POST'])
+#def clearList():
+#    print("REQUEST", request.json)
+#    return AudioHandler().clearList(request.json)
+
+# Update the waiting list
+#@app.route('/whitestone/grantrequest', methods=['PUT'])
+#def grantRequestToSenator():
+#    print("REQUEST", request.json)
+#    return AudioHandler().grantRequest(request.json)
+
+# Update the waiting list
+#@app.route('/whitestone/denyrequest', methods=['PUT'])
+#def denyRequestToSenator():
+#    print("REQUEST", request.json)
+#    return AudioHandler().denyRequest(request.json)
+
+# Update the waiting list
+#@app.route('/whitestone/getrequestlist', methods=['GET'])
+#def getRequestList():
+#    print("REQUEST", request.json)
+#    return AudioHandler().getRequestList()
 #########################################################
 
 # Get activity log by date
