@@ -1,5 +1,6 @@
 from configs.dbconfig import pg_config
 import psycopg2
+from dao import CredentialDAO
 
 class UsersDAO:
 
@@ -11,14 +12,17 @@ class UsersDAO:
         self.conn = psycopg2._connect(connection_url)
 
 
+
     def getUser(self, email, pin):
         # Return the user information corresponding to an email.
+        print(CredentialDAO.AES_KEY);
         cursor = self.conn.cursor()
-        query = "SELECT uid, cid, ufirstname, ulastname, udescription, urole, uclassification, email, pin " \
+        query = "SELECT * " \
+                "FROM (SELECT uid, cid, ufirstname, ulastname, udescription, urole, uclassification, email, pin " \
                 "FROM Users natural inner join Credential " \
-                "WHERE email= %s " \
-                "AND pin= %s;"
-        cursor.execute(query, (email, pin))
+                "WHERE email= %s) AS Account " \
+                "Where pgp_sym_decrypt(Account.pin::bytea, %s) = %s; "
+        cursor.execute(query, (email, str(CredentialDAO.AES_KEY), str(pin),))
         result = cursor.fetchone()
         return result
 
