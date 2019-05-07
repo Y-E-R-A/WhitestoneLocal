@@ -79,12 +79,14 @@ installWhitestoneApplication(){
 
 getApacheConfiguration(){
     $whitestoneApacheFilesPath = "/var/www/html/Whitestone/server"
+    sudo cp /var/www/html/Whitestone/server/httpd.conf /etc/httpd/conf/httpd.conf
+    sudo cp /var/www/html/Whitedtone/server/ssl.conf /etc/httpd/conf.d/ssl.conf
 
 }
 
-getdatabaseFile(){         # Get the DB backup files path
-	read -p "Enter the Whitestone database backup file absolute path:" path
-	echo $path				# Return the Whitestone database backup file path
+getdatabaseFile(){         # Get the database files path
+	read -p "Enter the Whitestone database file absolute path:" path
+	echo $path				# Return the Whitestone database file path
     }
 
 createDatabase(){
