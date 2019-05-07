@@ -82,7 +82,7 @@ getApacheConfiguration(){
 
 }
 
-getdatabaseFile(){# Get the DB backup files path
+getdatabaseFile(){         # Get the DB backup files path
 	read -p "Enter the Whitestone database backup file absolute path:" path
 	echo $path				# Return the Whitestone database backup file path
     }
@@ -96,19 +96,19 @@ createDatabase(){
 
     }
 
-path=$(get_DB_Backup_File)
-while [ ! -f $path ]	 			# Loop until backup path exists
-do	
-	echo "ERROR: File $path not exists" 	# Otherwise the file does not exists
-	get_DB_Backup_File			# Call recursively the function until the input path is correct
-done 
+#path=$(get_DB_Backup_File)
+#while [ ! -f $path ]	 			# Loop until backup path exists
+#do	
+#	echo "ERROR: File $path not exists" 	# Otherwise the file does not exists
+#	get_DB_Backup_File			# Call recursively the function until the input path is correct
+#done 
 
 
 createDatabase 					# Call the function to drop and create a empty db to for the restore
-restoreDB $path					# Restore all the existing data from the .bak file
+#restoreDB $path					# Restore all the existing data from the .bak file
 
 
-}
+
 
 sudo systemctl start postgresql
 sudo systemctl start httpd
