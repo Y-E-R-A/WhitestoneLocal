@@ -19,33 +19,36 @@ fi
 
 echo "***WHITESTONE INSTALLATION***"
 echo "This script is used to install the Whitestone application (server-side) and the"
-echo "Whitestone database. You must execute this script inside a CentOS 7 or RHEL 7 server.\n"
+echo "Whitestone database. You must execute this script inside a CentOS 7 or RHEL 7 server."
+echo " "
+echo " "
 
 ##############################################################################################
 #                                     Whitestone Packages                                    #
 ##############################################################################################
 
-echo "Whitestone requires the installation of several packages in order to run"
+echo "Whitestone requires the installation of several packages in order to run."
 echo "It is recommended that you install all packages to ensure a successful installation."
-echo "Do you wish to install all the necessary packages? Enter yes or no:" input	 
+read -p "Do you wish to install all the necessary packages? Enter 'yes' or 'no':" input	 
 
-while [ $input ! = "yes" ] && [ $input ! = "no" ]	# Validate the input yes or no
+while [ $input != "yes" ] && [ $input != "no" ]	# Validate the input yes or no
 do
 	read -p "Do you wish to install all the necessary packages? Enter yes or no:" input
 done
 
-if [ $input = "yes" ]	then		# The user wants to install all packages
-	installPackages()
-	echo "All the necessary packages have been installed"
+if [[ $input = "yes" ]]	# The user wants to install all packages
+then		
+	installPackages
+	echo "All the necessary packages have been installed."
 
 else 
 
-	echo "The backup will be performed in the default directory"
+	echo "No packages will be installed."
 fi
 
 
 
-function installPackages(){
+installPackages(){
 	sudo yum install postgresql-server postgresql-contrib #Install PostgreSQL
 	sudo yum install git								  #Install Git
     sudo yum update httpd                                 #Install Apache
@@ -63,7 +66,8 @@ function installPackages(){
     sudo systemctl enable postgresql
 }
 
-function installWhitestoneApplication(){
+
+installWhitestoneApplication(){
 	sudo git clone https://whitestone.uprm.edu/Y-E-R-A/Whitestone.git #Downloads the Whitestone application
     sudo cp Whitestone /var/www/html/Whitestone
 
@@ -73,23 +77,24 @@ function installWhitestoneApplication(){
     sudo chmod 766 /var/www/html/Whitestone/static/audio
 }
 
+getApacheConfiguration(){
+    $whitestoneApacheFilesPath = "/var/www/html/Whitestone/server"
 
-function installDatabase(){
-    get_DB_Backup_File(){
-						# Get the DB backup files path
-	read -p "Enter the Whitestone database backup file absolute path:" path
-	echo $path				# Return the Whitestone database backup file path
 }
 
-createDB(){
+getdatabaseFile(){# Get the DB backup files path
+	read -p "Enter the Whitestone database backup file absolute path:" path
+	echo $path				# Return the Whitestone database backup file path
+    }
+
+createDatabase(){
 
 	DB_Name="whitestone"			# The database name
 	DB_Admin="whitestoneadmin"		# The database administrator
 	sudo -u postgres dropdb --if-exists $DB_Name	# Drop the whitetsone db if exist
 	sudo -u postgres createdb $DB_Name		# Create a new db named whitestone
 
-}
-
+    }
 
 path=$(get_DB_Backup_File)
 while [ ! -f $path ]	 			# Loop until backup path exists
@@ -99,11 +104,13 @@ do
 done 
 
 
-createDB 					# Call the function to drop and create a empty db to for the restore
+createDatabase 					# Call the function to drop and create a empty db to for the restore
 restoreDB $path					# Restore all the existing data from the .bak file
 
 
 }
 
+sudo systemctl start postgresql
+sudo systemctl start httpd
 
 exit 0
