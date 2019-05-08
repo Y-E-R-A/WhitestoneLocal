@@ -26,26 +26,6 @@ echo " "
 ##############################################################################################
 #                                     Whitestone Packages                                    #
 ##############################################################################################
-
-echo "Whitestone requires the installation of several packages in order to run."
-echo "It is recommended that you install all packages to ensure a successful installation."
-read -p "Do you wish to install all the necessary packages? Enter 'yes' or 'no':" input	 
-
-while [ $input != "yes" ] && [ $input != "no" ]	# Validate the input yes or no
-do
-	read -p "Do you wish to install all the necessary packages? Enter yes or no:" input
-done
-
-if [[ $input = "yes" ]]	# The user wants to install all packages
-then		
-	installPackages
-	echo "All the necessary packages have been installed."
-
-else 
-
-	echo "No packages will be installed."
-fi
-
 installPackages(){
 	sudo yum install postgresql-server postgresql-contrib
 	sudo yum install git								  
@@ -132,6 +112,25 @@ configureWhitestoneApplication(){
     sudo cp -avr /var/www/html/Whitestone/server/httpd /etc
 }
 
+
+echo "Whitestone requires the installation of several packages in order to run."
+echo "It is recommended that you install all packages to ensure a successful installation."
+read -p "Do you wish to install all the necessary packages? Enter 'yes' or 'no':" input	 
+
+while [ $input != "yes" ] && [ $input != "no" ]	# Validate the input yes or no
+do
+	read -p "Do you wish to install all the necessary packages? Enter yes or no:" input
+done
+
+if [[ $input = "yes" ]]	# The user wants to install all packages
+then		
+	installPackages
+	echo "All the necessary packages have been installed."
+
+else 
+
+	echo "No packages will be installed."
+fi
 
 path=$(get_Backup_File)
 while [ ! -f $path ]	 			# Loop until backup path exists
