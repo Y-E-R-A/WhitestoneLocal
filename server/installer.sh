@@ -126,11 +126,10 @@ configureWhitestoneApplication(){
     #Give ownership permissions to Apache over the audio folder
     sudo chown apache /var/www/html/Whitestone/static/audio
     sudo chgrp apache /var/www/html/Whitestone/static/audio
-    sudo chmod 766 /var/www/html/Whitestone/static/audio
+    sudo chmod 777 /var/www/html/Whitestone/static/audio
     
     #Configure Apache using the predefined files
-    sudo cp /var/www/html/Whitestone/server/httpd.conf /etc/httpd/conf/httpd.conf
-    sudo cp /var/www/html/Whitedtone/server/ssl.conf /etc/httpd/conf.d/ssl.conf
+    sudo cp -avr /var/www/html/Whitestone/server/httpd /etc
 }
 
 
